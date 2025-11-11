@@ -1,0 +1,20 @@
+# Node modules
+backend/node_modules/
+frontend/node_modules/
+
+# Environment variables
+backend/.env
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Uploads (optional — remove if you want to keep demo files)
+backend/uploads/
+
+# Build or dist folders
+frontend/dist/
+frontend/build/

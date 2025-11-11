@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Home — Instructor — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/home.css" />
+</head>
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <a href="#" class="logo-link" aria-label="Home">
+        <img id="site-logo" src="../src/images/site-logo.png" alt="logo placeholder" />
+      </a>
+      <div class="search">
+        <input id="search" placeholder="Search…" aria-label="Search" />
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="icon-btn" id="notifications" title="Notifications">🔔</button>
+      <button class="icon-btn" id="messages" title="Messages">💬</button>
+      <div class="profile" aria-hidden="true">
+        <div class="avatar avatar-sm" aria-hidden="true"></div>
+        <div class="profile-info">
+          <div id="fullNameTop" class="profile-name"></div>
+          <div id="roleTop" class="profile-role">Instructor</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout" role="main">
+    <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
+      <ul class="nav-list">
+        <li class="nav-item active">Dashboard</li>
+        <li class="nav-item" onclick="location.href='./courses-instructor.html'">Courses</li>
+        <li class="nav-item">Challenges</li>
+        <li class="nav-item">Leaderboard</li>
+        <li class="nav-item">Community</li>
+        <li class="nav-item">Settings</li>
+        <a id="logout"><li class="nav-item">Logout</li></a>
+      </ul>
+      <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
+    </nav>
+
+    <main class="content-area">
+      <!-- Welcome / Summary -->
+      <section class="card welcome" aria-labelledby="welcome-heading">
+        <h2 id="welcome-heading">Welcome, Instructor</h2>
+        <p class="muted">This is your instructor dashboard. Create and manage your courses.</p>
+        <div class="quick-actions">
+          <!-- Instructor primary action: Create Course -->
+          <button id="primaryAction" class="primary" onclick="location.href='./create-course.html'">Create Course</button>
+          <button id="secondaryAction" class="ghost">Manage Courses</button>
+        </div>
+      </section>
+
+      <!-- Stats: values initialized to 0 -->
+      <section class="stats-grid" aria-label="Stats summary">
+        <div class="stat card">
+          <div class="stat-title">Courses</div>
+          <div class="stat-value" data-value><span id="publishedCourseList"></span></div>
+          <div class="stat-sub muted">Published</div>
+        </div>
+        <div class="stat card">
+          <div class="stat-title">Students</div>
+          <div class="stat-value" data-value><span>0</span></div>
+          <div class="stat-sub muted">Enrolled</div>
+        </div>
+        <div class="stat card">
+          <div class="stat-title">Earnings</div>
+          <div class="stat-value" data-value><span>$0</span></div>
+          <div class="stat-sub muted">This period</div>
+        </div>
+        <div class="stat card">
+          <div class="stat-title">Feedback</div>
+          <div class="stat-value" data-value>0</div>
+          <div class="stat-sub muted">Avg rating</div>
+        </div>
+      </section>
+
+      <!-- Panels: empty containers for you to populate -->
+      <section class="panels">
+        <div class="left-column">
+          <div class="card courses" aria-labelledby="courses-heading">
+            <div class="card-header">
+              <h3 id="courses-heading">Your Courses</h3>
+              <a class="link" href="#">View all</a>
+            </div>
+            <ul class="course-list" aria-live="polite"></ul>
+          </div>
+          <div class="card activities" aria-labelledby="activity-heading">
+            <div class="card-header">
+              <h3 id="activity-heading">Recent Activity</h3>
+              <a class="link" href="#">See all</a>
+            </div>
+            <ul class="activity-list"></ul>
+          </div>
+        </div>
+
+        <aside class="right-column">
+          <div class="card leaderboard" aria-labelledby="leaderboard-heading">
+            <div class="card-header">
+              <h3 id="leaderboard-heading">Leaderboard</h3>
+            </div>
+            <ol class="leader-list"></ol>
+          </div>
+          <div class="card profile-card" aria-labelledby="profile-heading">
+            <h3 id="profile-heading">Profile</h3>
+            <div class="profile-large">
+              <div class="avatar-lg"></div>
+              <div class="profile-card-info">
+                <div id="fullNameProfile" class="name-lg">Instructor Name</div>
+                <div id="roleProfile" class="role-lg">Instructor</div>
+              </div>
+            </div>
+            <div class="profile-meta">
+              <div><strong>Courses:</strong> <span data-value>0</span></div>
+              <div><strong>Students:</strong> <span data-value>0</span></div>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script src="../src/js/home.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Edit Course — Instructor — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/edit-course.css">
+</head>
+<body>
+  <main class="layout">
+    <div class="card" id="course-edit">
+      <!-- Header -->
+      <div class="card-header">
+        <h2>Editing Course for <span id="courseTitleSpan"></span></h2>
+        <p>Update your course information below.</p>
+      </div>
+
+      <!-- Editable Fields -->
+      <section class="preview-section">
+        <h3>Course Details</h3>
+
+        <div class="preview-field">
+          <label for="courseTitle"><strong>Title</strong></label>
+          <input type="text" id="courseTitle" placeholder="Enter course title" required>
+        </div>
+
+        <div class="preview-field">
+          <label for="courseCategory"><strong>Category</strong></label>
+          <div class="textbox select">
+            <select id="courseCategory" name="category">
+              <option value="">Select category</option>
+              <option>Web Development</option>
+              <option>Object Oriented Programming</option>
+              <option>Data Structures and Algorithms</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="preview-field">
+          <label for="courseSubtitle"><strong>Subtitle</strong></label>
+          <input type="text" id="courseSubtitle" placeholder="Enter subtitle" required>
+        </div>
+
+        <div class="preview-field">
+            <label for="courseDescription"><strong>Description</strong></label>
+            <textarea id="courseDescription" rows="5" placeholder="Enter course description..." required></textarea>
+        </div>
+
+        <div class="preview-field">
+            <label for="courseThumbnail"><strong>Thumbnail</strong></label>
+            <div class="thumb-preview">
+              <img id="thumbnailPreview" src="" alt="Thumbnail Preview" style="display:none;">
+            </div>
+            <div class="file-upload">
+                <label for="courseThumbnail" class="file-upload-label">Choose Thumbnail</label>
+                <input type="file" id="courseThumbnail" accept="image/*">
+            </div>
+
+        </div>
+
+        <div class="preview-field">
+            <label for="courseExample"><strong>Example</strong></label>
+            <input type="text" id="courseExample" placeholder="Example project, lesson, or outcome">
+        </div>
+      </section>
+
+
+      <!-- Buttons -->
+      <div class="wizard-actions">
+        <button class="ghost" id="cancelBtn">← Cancel</button>
+        <button class="primary" id="saveBtn">Save Changes</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="../src/js/edit-course.js"></script>
+</body>
+</html>

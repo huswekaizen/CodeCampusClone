@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>View Course — Instructor — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/courses-view.css">
+</head>
+<body>
+  <main class="layout">
+    <div class="card" id="course-view">
+      <!-- Header -->
+      <div class="card-header">
+        <h2 id="course-title"></h2>
+        <p id="course-category"></p>
+      </div>
+
+      <!-- Course Details -->
+      <section class="preview-section">
+        <h3>Course Details</h3>
+
+        <div class="preview-field">
+          <strong>SubTitle</strong>
+          <span id="course-subTitle"></span>
+        </div>
+
+        <div class="preview-field">
+          <strong>Description</strong>
+          <span id="course-description"></span>
+        </div>
+
+        <div class="preview-field">
+          <strong>Thumbnail</strong>
+          <div class="thumb-preview">
+            <img id="course-thumbnail" src="" alt="Course Thumbnail" style="display:none;">
+          </div>
+        </div>
+
+        <div class="preview-field">
+          <strong>Example</strong>
+          <span id="course-example"></span>
+        </div>
+
+      </section>
+
+      <!-- Activities -->
+      <section class="preview-section">
+        <h3>Activities</h3>
+        <ul class="preview-activities-list" id="activities-list"></ul>
+      </section>
+
+      <!-- Buttons -->
+      <div class="wizard-actions">
+        <button class="ghost" id="backBtn">← Back</button>
+        <button class="primary" id="editBtn">Edit Course</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="../src/js/courses-view.js"></script>
+</body>
+</html>

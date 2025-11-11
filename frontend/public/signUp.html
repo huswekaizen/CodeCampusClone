@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Create Account — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/signUp.css">
+</head>
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+  <main class="container" role="main">
+    <section class="intro" aria-labelledby="welcome-heading">
+      <div class="intro-text">
+        <h1 id="welcome-heading">Welcome to CodeCampus</h1>
+        <p>Build your skills, challenge yourself, and earn your spot at the top of the leaderboard.</p>
+        <ul class="features" aria-hidden="false">
+          <li>📘 Join Courses</li>
+          <li>💻 Practice coding challenges</li>
+          <li>🏆 Compete on the leaderboard</li>
+        </ul>
+      </div>
+    </section>
+
+    <aside class="create-card" aria-labelledby="create-heading">
+      <h2 id="create-heading">Create your account</h2>
+
+      <form id="signupForm" class="form-box" autocomplete="on" novalidate>
+        <!-- Username / Email -->
+        <div class="field">
+          <label for="username">Username or Email</label>
+          <div class="textbox">
+            <input id="username" name="username" type="email" placeholder="you@example.com" required autocomplete="username">
+          </div>
+        </div>
+
+        <!-- First / Last name -->
+        <div class="two-cols">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <div class="textbox">
+              <input id="firstName" name="firstName" type="text" placeholder="First name" required autocomplete="given-name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <div class="textbox">
+              <input id="lastName" name="lastName" type="text" placeholder="Last name" required autocomplete="family-name">
+            </div>
+          </div>
+        </div>
+
+        <!-- Password / Confirm -->
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="textbox password-box">
+              <input id="password" name="password" type="password" placeholder="Create a password" required minlength="8">
+            </div>
+          </div>
+
+        <!-- Age / Role -->
+        <div class="two-cols">
+          <div class="field">
+            <label for="age">Age</label>
+            <div class="textbox">
+              <input id="age" name="age" type="number" placeholder="18" min="0" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="role">Role</label>
+            <div class="textbox">
+              <select id="role" name="role" required>
+                <option value="">Select role</option>
+                <option value="student">Student</option>
+                <option value="instructor">Instructor</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="field">
+          <label for="address">Address</label>
+          <div class="textbox">
+            <input id="address" name="address" type="text" placeholder="City, Country">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button id="createAccount" type="button" class="primary">Create account</button>
+          <a id="haveAccount" class="link-button" href="index.html">Already have an account?</a>
+        </div>
+
+        <p id="formMessage" class="form-message" role="status" aria-live="polite"></p>
+      </form>
+    </aside>
+  </main>
+  <script src="../src/js/signUp.js" defer></script>
+</body>
+</html>

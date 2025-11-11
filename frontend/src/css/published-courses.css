@@ -1,0 +1,104 @@
+/* ==== COURSES GRID ==== */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* ==== COURSE CARD ==== */
+.course-card {
+  background-color: #0f172c;
+  color: #fff;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* Thumbnail */
+.course-card .thumbnail {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background-color: #2a2a40;
+}
+
+/* Content */
+.course-card .card-content {
+  padding: 1rem 1.2rem;
+  flex: 1;
+}
+
+.course-card h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+
+.course-card h5 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #a0a0b5;
+  margin-bottom: 0.6rem;
+}
+
+.course-card p {
+  margin: 0.25rem 0;
+  font-size: 0.93rem;
+  color: #d2d2e6;
+}
+
+.course-card .category {
+  color: #9cc9ff;
+  font-weight: 600;
+  margin-top: 0.2rem;
+  margin-bottom: 14px;
+}
+
+/* Buttons */
+.course-card .btn-group {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 1rem 1rem;
+}
+
+.course-card button {
+  background: #0f2445;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 0.5rem 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.course-card button:hover {
+  background: #050e21;
+}
+
+.course-card img.thumbnail {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+
+/* Empty Course State */
+#emptyCourse {
+  text-align: center;
+  color: #ccc;
+  margin-top: 1.5rem;
+  font-style: italic;
+}

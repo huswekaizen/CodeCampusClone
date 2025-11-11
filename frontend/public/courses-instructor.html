@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <title>Courses — Instructor — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/home.css">
+  <link rel="stylesheet" href="../src/css/published-courses.css">
+</head>
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="topbar" role="banner">
+    <div class="topbar-left">
+      <a href="./home.html" class="logo-link" aria-label="Home">
+        <img id="site-logo" src="../src/images/site-logo.png" alt="logo">
+      </a>
+      <div class="search">
+        <input id="search" placeholder="Search…" aria-label="Search courses">
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="icon-btn" id="notifications" title="Notifications">🔔</button>
+      <button class="icon-btn" id="messages" title="Messages">💬</button>
+
+      <div class="profile">
+        <div class="avatar avatar-sm"></div>
+        <div class="profile-info">
+          <div id="fullNameTop" class="profile-name"></div>
+          <div id="roleTop" class="profile-role">Instructor</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LAYOUT -->
+  <div class="layout" role="main">
+    <!-- SIDEBAR -->
+    <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
+      <ul class="nav-list">
+        <li class="nav-item" onclick="location.href='./home-instructor.html'">Dashboard</li>
+        <li class="nav-item active">Courses</li>
+        <li class="nav-item">Challenges</li>
+        <li class="nav-item">Leaderboard</li>
+        <li class="nav-item">Community</li>
+        <li class="nav-item">Settings</li>
+        <a id="logout"><li class="nav-item">Logout</li></a>
+      </ul>
+      <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="content-area">
+        <section class="card welcome" aria-labelledby="courses-heading">
+            <h2 id="courses-heading">Your Courses</h2>
+            <p class="muted">Manage and publish your teaching content here.</p>
+            <div class="quick-actions">
+                <button id="createCourseBtn" class="primary" onclick="location.href='./create-course.html'">Create New Course</button>
+                <button id="refreshCourses" class="ghost">Refresh List</button>
+            </div>
+        </section>
+
+      <!-- COURSES GRID -->
+        <section class="card" aria-label="Published courses list">
+            <h1>Published Courses</h1>
+            <div id="emptyCourse"></div>
+
+            <!-- Container for all courses -->
+            <div id="coursesContainer" class="courses-grid"></div>
+
+            <!-- Hidden template card -->
+            <template id="cardTemplate">
+              <div class="course-card">
+                <img class="thumbnail" src="../src/assets/default-course-thumbnail.jpg" alt="Course Thumbnail">
+                <div class="card-content">
+                  <h3 class="title"></h3>
+                  <h5 class="subTitle"></h5>
+                  <p class="category"></p>
+                  <p class="description"></p>
+                  <p class="example"></p>
+                </div>
+                <div class="btn-group">
+                  <button class="view" id="view-btn">View</button>
+                </div>
+              </div>
+            </template>
+
+        </section>
+
+
+    </main>
+  </div>
+
+  <script src="../src/js/home.js"></script>
+  <script src="../src/js/courses-instructor.js"></script>
+</body>
+</html>

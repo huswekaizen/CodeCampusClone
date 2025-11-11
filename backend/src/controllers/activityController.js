@@ -1,0 +1,48 @@
+import Activity from "../models/Activity.js";
+import Course from "../models/Course.js";
+
+export const createActivity = async (req, res) => {
+  try {
+    const { title, type, description, outputExample, courseId } = req.body;
+
+    // Check if the course actually exists
+    const course = await Course.findById(courseId);
+    if (!course) return res.status(404).json({ message: "Course not found" });
+
+    // Create and save the new activity
+    const activity = new Activity({
+      title,
+      type,
+      description,
+      outputExample,
+      course: courseId,
+    });
+
+    await activity.save();
+
+    // Push activity reference to the course
+    await Course.findByIdAndUpdate(courseId, { $push: { activities: activity._id } });
+
+    res.status(201).json({ message: "Activity created successfully", activity });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to create activity" });
+  }
+};
+
+// Get all activities for a specific course
+export const getActivitiesByCourse = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const activities = await Activity.find({ course: courseId });
+
+    if (!activities.length) {
+      return res.status(404).json({ message: "No activities found for this course" });
+    }
+
+    res.status(200).json(activities);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to fetch activities" });
+  }
+};

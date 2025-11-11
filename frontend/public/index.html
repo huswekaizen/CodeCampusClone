@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="../src/css/index.css">
+</head>
+<body>
+    <div class="background-image"></div>
+    <main>
+        <section class="intro">
+            <div class="intro-text">
+                <h1>Welcome to CodeCampus!</h1>
+                <p>Build your skills, challenge yourself, and earn your spot at the top of the leaderboard.</p>
+                <ul class="features">
+                    <li>📘 Join Courses</li>
+                    <li>💻 Practice coding challenges</li>
+                    <li>🏆 Compete on the leaderboard</li>
+                </ul>
+            </div>
+            <div class="sign-in-container">
+                <h2>Sign In</h2>
+                <div class="form-box">
+                    <div class="textbox">
+                        <input type="text" placeholder="Username / Email" name="username" value="" id="username">
+                    </div>
+
+                    <div class="textbox">
+                        <input type="password" placeholder="Password" name="password" value="" id="password">
+                    </div>
+
+                    <div class="login-actions">
+                        <button type="button" id="login-button" class="primary">Log In</button>
+                        <a id="create-account" href="signUp.html">Create Account</a>
+                    </div>
+                    <div>
+                        <p id="errorMessage" class="form-message" role="status" aria-live="polite"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+   <script src="../src/js/index.js"></script>
+</body>
+</html>

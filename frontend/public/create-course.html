@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Create Course — Instructor — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/create-course.css">
+</head>
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+  <main class="layout" role="main" aria-labelledby="create-course-heading">
+    <div class="wizard centered" aria-live="polite">
+      <div class="wizard-steps" aria-hidden="false" aria-label="Create course progress">
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-fill" style="--progress-percent:0%"></div>
+        </div>
+
+        <div class="step-item" data-step="1" role="presentation" aria-current="step">
+          <span class="circle"><span class="num">1</span></span>
+          <span class="label">Course</span>
+        </div>
+
+        <div class="step-item" data-step="2" role="presentation" aria-current="false">
+          <span class="circle"><span class="num">2</span></span>
+          <span class="label">Activities</span>
+        </div>
+
+        <div class="step-item" data-step="3" role="presentation" aria-current="false">
+          <span class="circle"><span class="num">3</span></span>
+          <span class="label">Preview</span>
+        </div>
+      </div>
+
+      <form id="courseWizard" class="course-form" autocomplete="off" novalidate>
+        <!-- STEP 1 -->
+        <section id="step-1-panel" class="card step-panel" data-step="1" aria-labelledby="basics-heading">
+          <div class="card-header">
+            <h2 id="basics-heading">Course basics</h2>
+          </div>
+
+          <div class="field">
+            <label for="title">Title <span class="required">*</span></label>
+            <div class="textbox"><input id="title" name="title" type="text" placeholder="Course title" required></div>
+          </div>
+
+          <div class="field">
+            <label for="subTitle">Subtitle</label>
+            <div class="textbox"><input id="subTitle" name="subTitle" type="text" placeholder="One-line summary"></div>
+          </div>
+
+          <div class="row two-cols">
+            <div class="field">
+              <label for="category">Category</label>
+              <div class="textbox select">
+                <select id="category" name="category">
+                  <option value="">Select category</option>
+                  <option>Web Development</option>
+                  <option>Object Oriented Programming</option>
+                  <option>Data Structures and Algorithms</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="description">Description</label>
+            <div class="textbox">
+              <textarea id="description" name="description" placeholder="Write a short course description..." rows="5"></textarea>
+            </div>
+          </div>
+
+          <div class="row two-cols">
+            <div class="field">
+              <label for="thumbnail">Thumbnail</label>
+              <div class="textbox filebox">
+                <input id="thumbnail" name="thumbnail" type="file" accept="image/*" />
+                <button type="button" id="thumbnailClear" class="ghost small" title="Clear">Clear</button>
+              </div>
+              <div id="thumb-preview" class="thumb-preview" aria-hidden="true">
+                <img id="thumbnailPreviewImg" src="" alt="Thumbnail Preview" style="display:none;">
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="example">Example / Intro</label>
+              <div class="textbox">
+                <textarea id="example" name="example" placeholder="Add a short example or intro content" rows="5"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="wizard-actions">
+            <div class="left-actions"></div>
+            <div class="right-actions">
+              <button type="button" class="primary" id="nextToActivities">Next: Activities →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 2: Activities -->
+        <section id="step-2-panel" class="card step-panel hidden" data-step="2" aria-labelledby="activities-heading">
+          <div class="card-header">
+            <h2 id="activities-heading">Activities</h2>
+            <div class="actions">
+              <button type="button" id="addActivityBtn" class="primary">+ Add activity</button>
+            </div>
+          </div>
+
+          <ul id="activitiesList" class="activity-list" aria-live="polite">
+            <li class="activity">
+              <div class="activity-left">
+                <input class="activity-title" name="activityTitle" placeholder="Activity title (e.g., Quiz: Variables)">
+                <div class="textbox select small-select">
+                  <select class="activity-type" name="activityType">
+                    <option value="exercise">Exercise</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="assignment">Assignment</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="activity-details">
+                <div class="field small-field act-desc">
+                  <label>Activity description</label>
+                  <div class="textbox">
+                    <textarea class="activity-description" name="activityDescription" placeholder="Describe the activity..."></textarea>
+                  </div>
+                </div>
+
+                <div class="field small-field act-exercise">
+                  <label>Desired output / Example I/O</label>
+                  <div class="textbox">
+                    <textarea class="activity-output" name="activityOutput" placeholder="Expected output or example input/output..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+            </li>
+          </ul>
+
+          <template id="activityTemplate">
+            <li class="activity">
+              <div class="activity-left">
+                <input class="activity-title" name="activityTitle" placeholder="Activity title (e.g., Quiz: Variables)">
+                <div class="textbox select small-select">
+                  <select class="textbox select small-select" name="activityType">
+                    <option value="exercise">Exercise</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="assignment">Assignment</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="activity-details">
+                <div class="field small-field act-desc">
+                  <label>Activity description</label>
+                  <div class="textbox">
+                    <textarea class="activity-description" name="activityDescription" placeholder="Describe the activity..."></textarea>
+                  </div>
+                </div>
+
+                <div class="field small-field act-exercise">
+                  <label>Desired output / Example I/O</label>
+                  <div class="textbox">
+                    <textarea class="activity-output" name="activityOutput" placeholder="Expected output or example input/output..."></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="activity-right">
+                <button type="button" class="ghost small btn-remove">Remove</button>
+              </div>
+            </li>
+          </template>
+
+          <div class="wizard-actions">
+            <div class="left-actions">
+              <button type="button" class="ghost" data-go-step="1">← Back</button>
+            </div>
+            <div class="right-actions">
+              <button type="button" class="primary" id="nextToAssessment">Next: Preview →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- STEP 3: Preview -->
+        <section id="step-3-panel" class="card step-panel hidden" data-step="3" aria-labelledby="preview-heading">
+          <div class="card-header">
+            <h2 id="preview-heading">Preview Course</h2>
+          </div>
+
+          <div class="preview-section">
+            <h3>Course Details</h3>
+            <div class="preview-field"><strong>Title:</strong> <span id="previewTitleValue"></span></div>
+            <div class="preview-field"><strong>Subtitle:</strong> <span id="previewSubtitleValue"></span></div>
+            <div class="preview-field"><strong>Category:</strong> <span id="previewCategoryValue"></span></div>
+            <div class="preview-field"><strong>Description:</strong> <p id="previewDescriptionValue"></p></div>
+            <div class="preview-field"><strong>Example:</strong> <p id="previewExampleValue"></p></div>
+            <div class="preview-field"><strong>Thumbnail:</strong>
+              <div id="previewThumbnailValue" class="thumb-preview"></div>
+            </div>
+          </div>
+
+          <div class="preview-section">
+            <h3>Activities</h3>
+            <ul id="previewActivitiesList" class="preview-activities-list"></ul>
+          </div>
+
+          <div class="wizard-actions">
+            <div class="left-actions">
+              <button type="button" class="ghost" data-go-step="2">← Back</button>
+            </div>
+            <div class="right-actions">
+              <button type="button" class="primary" id="createCourseBtn">Create Course</button>
+            </div>
+          </div>
+        </section>
+
+      </form>
+    </div>
+  </main>
+
+
+  <script src="../src/js/create-course.js" defer></script>
+</body>
+</html>
