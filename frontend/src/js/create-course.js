@@ -237,11 +237,12 @@ if (clearBtn) {
       }
 
       alert("Course and all activities created successfully!");
-      window.location.href = "/courses-dashboard.html";
+      //window.location.href = "courses-view.html";
 
     } catch (err) {
       console.error("Error creating course or activities:", err);
       alert("Something went wrong while creating the course. Check console.");
+      alert(`Error: ${err.message || err}`)
     }
   });
 });
