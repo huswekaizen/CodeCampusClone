@@ -182,69 +182,66 @@ if (clearBtn) {
   }
 
   document.getElementById("createCourseBtn")?.addEventListener("click", async () => {
-  try {
-    // Build form data for multipart/form-data (so file uploads work)
-    const formData = new FormData();
-    formData.append("title", document.getElementById("title").value);
-    formData.append("subTitle", document.getElementById("subTitle").value);
-    formData.append("category", document.getElementById("category").value);
-    formData.append("description", document.getElementById("description").value);
-    formData.append("example", document.getElementById("example").value);
-    formData.append("instructorId", userId);
+    try {
+      // Build form data for multipart/form-data (so file uploads work)
+      const formData = new FormData();
+      formData.append("title", document.getElementById("title").value);
+      formData.append("subTitle", document.getElementById("subTitle").value);
+      formData.append("category", document.getElementById("category").value);
+      formData.append("description", document.getElementById("description").value);
+      formData.append("example", document.getElementById("example").value);
+      formData.append("instructorId", userId);
 
-    // append thumbnail file if present
-    const fileInput = document.getElementById("thumbnail");
-    if (fileInput && fileInput.files && fileInput.files[0]) {
-      formData.append("thumbnail", fileInput.files[0]);
-    }
+      // append thumbnail file if present
+      const fileInput = document.getElementById("thumbnail");
+      if (fileInput && fileInput.files && fileInput.files[0]) {
+        formData.append("thumbnail", fileInput.files[0]);
+      }
 
-    // Create course (server should be set to accept upload.single('thumbnail'))
-    const courseRes = await fetch("http://localhost:5000/api/courses", {
-      method: "POST",
-      body: formData // DO NOT set Content-Type header — browser sets boundary automatically
-    });
-
-    if (!courseRes.ok) {
-      const text = await courseRes.text().catch(() => null);
-      throw new Error(`Failed to create course (${courseRes.status}) ${text || ""}`);
-    }
-    const course = await courseRes.json();
-    console.log("Course created:", course);
-
-    // Now create activities (same as before)
-    const allActivities = document.querySelectorAll("#activitiesList .activity");
-    for (const act of allActivities) {
-      const activityData = {
-        title: act.querySelector(".activity-title")?.value || "Untitled",
-        type: act.querySelector("select[name='activityType']")?.value || "exercise",
-        description: act.querySelector(".activity-description")?.value || "",
-        outputExample: act.querySelector(".activity-output")?.value || "",
-        courseId: course._id
-      };
-
-      const activityRes = await fetch("http://localhost:5000/api/activities", {
+      // Create course (server should be set to accept upload.single('thumbnail'))
+      const courseRes = await fetch("http://localhost:5000/api/courses", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(activityData)
+        body: formData // DO NOT set Content-Type header — browser sets boundary automatically
       });
 
-      if (!activityRes.ok) {
-        const text = await activityRes.text().catch(() => null);
-        throw new Error(`Failed to create an activity (${activityRes.status}) ${text || ""}`);
+      if (!courseRes.ok) {
+        const text = await courseRes.text().catch(() => null);
+        throw new Error(`Failed to create course (${courseRes.status}) ${text || ""}`);
       }
-      const savedActivity = await activityRes.json();
-      console.log("Activity created:", savedActivity);
+      const course = await courseRes.json();
+      console.log("Course created:", course);
+
+      // Now create activities (same as before)
+      const allActivities = document.querySelectorAll("#activitiesList .activity");
+      for (const act of allActivities) {
+        const activityData = {
+          title: act.querySelector(".activity-title")?.value || "Untitled",
+          type: act.querySelector("select[name='activityType']")?.value || "exercise",
+          description: act.querySelector(".activity-description")?.value || "",
+          outputExample: act.querySelector(".activity-output")?.value || "",
+          courseId: course._id
+        };
+
+        const activityRes = await fetch("http://localhost:5000/api/activities", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(activityData)
+        });
+
+        if (!activityRes.ok) {
+          const text = await activityRes.text().catch(() => null);
+          throw new Error(`Failed to create an activity (${activityRes.status}) ${text || ""}`);
+        }
+        const savedActivity = await activityRes.json();
+        console.log("Activity created:", savedActivity);
+      }
+
+      alert("Course and all activities created successfully!");
+      window.location.href = "/courses-dashboard.html";
+
+    } catch (err) {
+      console.error("Error creating course or activities:", err);
+      alert("Something went wrong while creating the course. Check console.");
     }
-
-    alert("Course and all activities created successfully!");
-    // optionally redirect to the course page:
-    // location.href = `/instructor/courses.html?created=${course._id}`;
-
-  } catch (err) {
-    console.error("Error creating course or activities:", err);
-    alert("Something went wrong while creating the course. Check console.");
-  }
-});
-
-
+  });
 });
