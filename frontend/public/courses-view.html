@@ -11,8 +11,11 @@
     <div class="card" id="course-view">
       <!-- Header -->
       <div class="card-header">
-        <h2 id="course-title"></h2>
-        <p id="course-category"></p>
+        <div>
+          <h2 id="course-title"></h2>
+          <p id="course-category"></p>
+        </div>
+        <button id="deleteBtn">Delete Course</button>
       </div>
 
       <!-- Course Details -->
@@ -56,6 +59,27 @@
       </div>
     </div>
   </main>
+
+  <!-- Join Course Modal -->
+
+  <div id="deleteCourseModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Are you sure to delete this course?</h2>
+      <p class="muted">Enter the course title <span id="courseTitleSpan"></span></p>
+
+      <input 
+        type="text" 
+        id="deleteCourseInput" 
+        placeholder="Enter course title to confirm" 
+        class="modal-input"
+      >
+
+      <div class="modal-actions">
+        <button id="submitDeleteBtn" class="primary">Delete</button>
+        <button id="closeModal" class="ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <script src="../src/js/courses-view.js"></script>
 </body>

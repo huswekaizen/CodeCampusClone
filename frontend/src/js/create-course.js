@@ -1,6 +1,6 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const userId = localStorage.getItem('userId');
-
 
   // ===== Step Navigation =====
   function goToStep(stepNum) {

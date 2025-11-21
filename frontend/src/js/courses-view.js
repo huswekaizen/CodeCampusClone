@@ -1,5 +1,14 @@
+const deleteBtn = document.getElementById("deleteBtn");
+const submitDeleteBtn = document.getElementById("submitDeleteBtn");
+const courseId = localStorage.getItem("selectedCourseId");
+const closeModal = document.getElementById("closeModal");
+const deleteModal = document.getElementById("deleteCourseModal");
+
+const courseTitleSpan = document.getElementById("courseTitleSpan");
+
+let loadedCourse = null;
+
 document.addEventListener("DOMContentLoaded", async () => {
-  const courseId = localStorage.getItem("selectedCourseId");
 
   if (!courseId) {
     alert("No course selected.");
@@ -20,6 +29,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("course-category").textContent = `Category: ${course.category}`;
     document.getElementById("course-description").textContent = course.description || "No description available.";
     document.getElementById("course-example").textContent = course.example || "N/A";
+
+    courseTitleSpan.style.color = "red";
+    courseTitleSpan.textContent = course.title || "Course Title Unavailable";
 
     const thumbnail = document.getElementById("course-thumbnail");
     if (course.thumbnail) {
@@ -66,5 +78,38 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Error loading course:", err);
     alert("Failed to load course details. Check console for errors.");
+  }
+});
+
+// Show modal
+deleteBtn.addEventListener("click", () => {
+  deleteModal.style.display = "flex"; 
+});
+
+// Close modal
+closeModal.addEventListener("click", () => {
+  deleteModal.style.display = "none";
+});
+
+
+submitDeleteBtn.addEventListener("click", async () => {
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/courses/${courseId}/delete`, {
+      method: "DELETE"
+    });
+
+     if (!res.ok) {
+      throw new Error(`Failed to fetch course data (${res.status})`);
+    }
+
+    alert("Course deleted successfully.");
+    localStorage.removeItem("selectedCourseId");
+    window.location.href = "./courses-instructor.html";
+    return;
+  
+  } catch (err) {
+    console.error("Error deleting course:", err);
+    alert("Failed to delete course. Check console for errors.");
   }
 });

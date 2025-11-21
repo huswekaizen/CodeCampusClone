@@ -189,6 +189,169 @@ button.ghost:hover {
   border-color: var(--accent);
 }
 
+/* Card Header Layout */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap; /* wrap on small screens */
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-header > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-header h2 {
+  font-size: 24px;
+  color: var(--accent);
+  margin: 0;
+}
+
+.card-header p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Delete Course Button */
+.card-header button {
+  background: #ff4b5c;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.card-header button:hover {
+  background: #ff6b78;
+}
+
+/* ==== MODAL OVERLAY ==== */
+.modal-overlay {
+  display: none; /* hidden by default */
+  position: fixed;
+  top: 0; 
+  left: 0;
+  width: 100vw; 
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ==== MODAL CONTENT ==== */
+.modal-content {
+  background: #0f172c;
+  color: #fff;
+  padding: 2rem;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 22px rgba(0, 191, 255, 0.25);
+  animation: popUp 0.25s ease;
+}
+
+.modal-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.modal-content p.muted {
+  color: #8b96b5;
+  margin-bottom: 1.4rem;
+  font-size: 0.9rem;
+}
+
+/* ==== INPUT ==== */
+.modal-input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #fff;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+/* ==== ACTION BUTTONS ==== */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.modal-actions .primary {
+  background: #ef4444;
+  color: #fff;
+  padding: 0.75rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.modal-actions .primary:hover {
+  background: #dc2626;
+}
+
+.modal-actions .ghost {
+  background: transparent;
+  border: 1px solid #64748b;
+  color: #cbd5e1;
+  padding: 0.75rem 1.4rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s ease;
+}
+
+.modal-actions .ghost:hover {
+  background: #1e293b;
+}
+
+/* ==== ANIMATIONS ==== */
+@keyframes popUp {
+  from {
+    transform: scale(0.92) translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
 /* Mobile */
 @media (max-width: 600px) {
   .preview-section {

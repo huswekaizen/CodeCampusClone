@@ -115,6 +115,23 @@ export const editCourse = async (req, res) => {
     console.error("Error updating course:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
   }
-    
-  
-}
+};
+
+export const deleteCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const course = await Course.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    await Course.findByIdAndDelete(id);
+
+
+    res.status(200).json({ message: "Course deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting course:", error);
+    res.status(500).json({ message: "Server error. Please try again later." });
+  }
+};
