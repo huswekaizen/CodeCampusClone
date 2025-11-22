@@ -3,6 +3,7 @@ const submitDeleteBtn = document.getElementById("submitDeleteBtn");
 const courseId = localStorage.getItem("selectedCourseId");
 const closeModal = document.getElementById("closeModal");
 const deleteModal = document.getElementById("deleteCourseModal");
+const deleteCourseInput = document.getElementById("deleteCourseInput");
 
 const courseTitleSpan = document.getElementById("courseTitleSpan");
 
@@ -22,6 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const course = await res.json();
     console.log("Fetched course with activities:", course);
+    loadedCourse = course;
 
     // Display course details
     document.getElementById("course-title").textContent = course.title;
@@ -93,6 +95,11 @@ closeModal.addEventListener("click", () => {
 
 
 submitDeleteBtn.addEventListener("click", async () => {
+
+  if (deleteCourseInput.value !== loadedCourse.title) {
+    alert("Course title does not match. Please type the exact course title to confirm deletion.");
+    return;
+  }
 
   try {
     const res = await fetch(`http://localhost:5000/api/courses/${courseId}/delete`, {

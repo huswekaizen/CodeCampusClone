@@ -241,8 +241,7 @@ if (clearBtn) {
 
     } catch (err) {
       console.error("Error creating course or activities:", err);
-      alert("Something went wrong while creating the course. Check console.");
-      alert(`Error: ${err.message || err}`)
+      alert(`Something went wrong while creating the course. Check console. Error: ${err.message || err}`);
     }
   });
 });

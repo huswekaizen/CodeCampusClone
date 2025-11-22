@@ -2,6 +2,7 @@ import Course from "../models/Course.js";
 console.log("Course import check:", Course);
 
 import User from "../models/User.js";
+import Activity from "../models/Activity.js";
 
 export const createCourse = async (req, res) => {
   try {
@@ -126,10 +127,13 @@ export const deleteCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
+    // Delete all activities referenced in this course
+    await Activity.deleteMany({ _id: { $in: course.activities } });
+
+    // Delete the course itself
     await Course.findByIdAndDelete(id);
 
-
-    res.status(200).json({ message: "Course deleted successfully" });
+    res.status(200).json({ message: "Course and its activities deleted successfully" });
   } catch (error) {
     console.error("Error deleting course:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
