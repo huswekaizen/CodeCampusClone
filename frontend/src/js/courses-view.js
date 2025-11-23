@@ -45,22 +45,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     // Handle activities
+
     const activitiesList = document.getElementById("activities-list");
     activitiesList.innerHTML = "";
+    course.activities.forEach((activity, index) => {
+      const li = document.createElement("li");
+      li.dataset.activityId = activity._id;
+      li.dataset.index = index;
+      li.innerHTML = `
+        <!-- View Mode -->
+        <div class="view-mode">
+          <strong class="view-title">Activity ${index + 1}: ${activity.title}</strong>
+          <p class="view-desc">${activity.description}</p>
+          <small class="view-type">${activity.type}</small>
+        </div>
 
-    if (course.activities && course.activities.length > 0) {
-      course.activities.forEach((activity, index) => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <strong>Activity ${index + 1}: ${activity.title}</strong>
-          <p>${activity.description}</p>
-          <small>Type: ${activity.type}</small>
-        `;
-        activitiesList.appendChild(li);
-      });
-    } else {
-      activitiesList.innerHTML = `<p style="color: var(--text-muted)">No activities found for this course.</p>`;
-    }
+        <!-- Edit Mode -->
+        <div class="edit-mode" style="display:none">
+          <input type="text" class="edit-title" value="${activity.title}">
+          <textarea class="edit-desc">${activity.description}</textarea>
+
+          <select class="edit-type">
+            <option value="quiz" ${activity.type === "quiz" ? "selected" : ""}>Quiz</option>
+            <option value="assignment" ${activity.type === "assignment" ? "selected" : ""}>Assignment</option>
+            <option value="project" ${activity.type === "project" ? "selected" : ""}>Project</option>
+          </select>
+
+          <button class="save-activity">Save</button>
+          <button class="cancel-edit">Cancel</button>
+        </div>
+      `;
+
+      activitiesList.appendChild(li);
+    });
+
 
     // Buttons
     const backBtn = document.getElementById("backBtn");
@@ -82,6 +100,65 @@ document.addEventListener("DOMContentLoaded", async () => {
     alert("Failed to load course details. Check console for errors.");
   }
 });
+
+document.addEventListener("click", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+
+  // If clicked on view mode
+  if (e.target.classList.contains("view-title") ||
+      e.target.classList.contains("view-desc") ||
+      e.target.classList.contains("view-type")) {
+
+    li.querySelector(".view-mode").style.display = "none";
+    li.querySelector(".edit-mode").style.display = "block";
+  }
+
+  // Save logic
+  if (e.target.classList.contains("save-activity")) {
+    saveActivity(li);
+  }
+
+  // Cancel logic
+  if (e.target.classList.contains("cancel-edit")) {
+    li.querySelector(".edit-mode").style.display = "none";
+    li.querySelector(".view-mode").style.display = "block";
+  }
+});
+
+async function saveActivity(li) {
+  const id = li.dataset.activityId;
+
+  const newTitle = li.querySelector(".edit-title").value.trim();
+  const newDesc = li.querySelector(".edit-desc").value.trim();
+  const newType = li.querySelector(".edit-type").value;
+
+  const res = await fetch(`http://localhost:5000/api/activities/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      title: newTitle,
+      description: newDesc,
+      type: newType
+    })
+  });
+
+  if (!res.ok) {
+    alert("Failed to update activity.");
+    return;
+  }
+
+  const index = li.dataset.index;
+  li.querySelector(".view-title").textContent = `Activity ${parseInt(index)+1}: ${newTitle}`;
+
+  li.querySelector(".view-desc").textContent = newDesc;
+  li.querySelector(".view-type").textContent = newType;
+
+  li.querySelector(".edit-mode").style.display = "none";
+  li.querySelector(".view-mode").style.display = "block";
+}
+
+
 
 // Show modal
 deleteBtn.addEventListener("click", () => {

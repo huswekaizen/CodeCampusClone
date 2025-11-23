@@ -46,3 +46,25 @@ export const getActivitiesByCourse = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch activities" });
   }
 };
+
+export const updateActivity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, type } = req.body;
+
+    const activity = await Activity.findById(id);
+    if (!activity) return res.status(404).json({ message: "Activity not found" });
+
+    // Update fields
+    if (title) activity.title = title;
+    if (description) activity.description = description;
+    if (type) activity.type = type;
+
+    await activity.save();
+
+    res.status(200).json({ message: "Activity updated successfully", activity });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update activity" });
+  }
+};
