@@ -55,7 +55,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       li.innerHTML = `
         <!-- View Mode -->
         <div class="view-mode">
-          <strong class="view-title">Activity ${index + 1}: ${activity.title}</strong>
+          <div class="activity-header">
+            <strong class="view-title">Activity ${index + 1}: ${activity.title}</strong>
+            <button class="delete-activity" data-index="${index}">✖</button>
+          </div>
           <p class="view-desc">${activity.description}</p>
           <small class="view-type">${activity.type}</small>
         </div>
@@ -68,11 +71,11 @@ document.addEventListener("DOMContentLoaded", async () => {
           <select class="edit-type">
             <option value="quiz" ${activity.type === "quiz" ? "selected" : ""}>Quiz</option>
             <option value="assignment" ${activity.type === "assignment" ? "selected" : ""}>Assignment</option>
-            <option value="project" ${activity.type === "project" ? "selected" : ""}>Project</option>
+            <option value="exercise" ${activity.type === "exercise" ? "selected" : ""}>Exercise</option>
           </select>
 
-          <button class="save-activity">Save</button>
-          <button class="cancel-edit">Cancel</button>
+          <button class="save-btn save-activity">Save</button>
+          <button class="save-btn cancel-edit">Cancel</button>
         </div>
       `;
 
@@ -105,11 +108,10 @@ document.addEventListener("click", (e) => {
   const li = e.target.closest("li");
   if (!li) return;
 
-  // If clicked on view mode
+  // Edit logic
   if (e.target.classList.contains("view-title") ||
       e.target.classList.contains("view-desc") ||
       e.target.classList.contains("view-type")) {
-
     li.querySelector(".view-mode").style.display = "none";
     li.querySelector(".edit-mode").style.display = "block";
   }
@@ -124,7 +126,19 @@ document.addEventListener("click", (e) => {
     li.querySelector(".edit-mode").style.display = "none";
     li.querySelector(".view-mode").style.display = "block";
   }
+
+  // DELETE activity logic
+  if (e.target.classList.contains("delete-activity")) {
+    const index = e.target.dataset.index;
+    const activity = loadedCourse.activities[index];
+
+    const confirmed = confirm(`Are you sure you want to delete activity "${activity.title}"?`);
+    if (!confirmed) return;
+
+    deleteActivity(activity._id);
+  }
 });
+
 
 async function saveActivity(li) {
   const id = li.dataset.activityId;
@@ -157,6 +171,82 @@ async function saveActivity(li) {
   li.querySelector(".edit-mode").style.display = "none";
   li.querySelector(".view-mode").style.display = "block";
 }
+
+async function loadCourseData() {
+  if (!loadedCourse) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/api/courses/${loadedCourse._id}/details`);
+    if (!res.ok) throw new Error("Failed to fetch course details.");
+    const course = await res.json();
+    loadedCourse = course;
+
+    const activitiesList = document.getElementById("activities-list");
+    activitiesList.innerHTML = "";
+
+    course.activities.forEach((activity, index) => {
+      const li = document.createElement("li");
+      li.dataset.activityId = activity._id;
+      li.dataset.index = index;
+      li.innerHTML = `
+        <div class="view-mode">
+          <div class="activity-header">
+            <strong class="view-title">Activity ${index + 1}: ${activity.title}</strong>
+            <button class="delete-activity" data-index="${index}">✖</button>
+          </div>
+          <p class="view-desc">${activity.description}</p>
+          <small class="view-type">${activity.type}</small>
+        </div>
+        <div class="edit-mode" style="display:none">
+          <input type="text" class="edit-title" value="${activity.title}">
+          <textarea class="edit-desc">${activity.description}</textarea>
+          <select class="edit-type">
+            <option value="quiz" ${activity.type === "quiz" ? "selected" : ""}>Quiz</option>
+            <option value="assignment" ${activity.type === "assignment" ? "selected" : ""}>Assignment</option>
+            <option value="exercise" ${activity.type === "exercise" ? "selected" : ""}>Exercise</option>
+          </select>
+          <button class="save-btn save-activity">Save</button>
+          <button class="save-btn cancel-edit">Cancel</button>
+        </div>
+      `;
+      activitiesList.appendChild(li);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+async function deleteActivity(activityId) {
+  try {
+    const res = await fetch(`http://localhost:5000/api/activities/${activityId}`, {
+      method: "DELETE"
+    });
+
+
+    if (!res.ok) throw new Error("Failed to delete");
+
+    // re-fetch course or manually remove from DOM
+    loadCourseData();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+
+document.querySelectorAll(".delete-activity").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    const index = e.target.dataset.index;
+    const activity = loadedCourse.activities[index];
+
+    const confirmed = confirm(`Are you sure you want to delete activity "${activity.title}"?`);
+    if (!confirmed) return; // User clicked "Cancel"
+
+    deleteActivity(activity._id);
+  });
+});
+
+
 
 
 

@@ -330,6 +330,123 @@ button.ghost:hover {
   background: #1e293b;
 }
 
+/* === EDIT MODE STYLES FOR ACTIVITIES === */
+.preview-activities-list li .edit-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 18px; /* actual spacing */
+  margin-top: 14px;
+  background: #0f1529;
+  border: 1px solid var(--border);
+  padding: 20px;
+  border-radius: var(--radius);
+}
+
+
+/* Title input */
+.preview-activities-list li .edit-title {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.preview-activities-list li .edit-title:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Description textarea */
+.preview-activities-list li .edit-desc {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.preview-activities-list li .edit-desc:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Type dropdown */
+.preview-activities-list li .edit-type {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.preview-activities-list li .edit-type:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Save button */
+.preview-activities-list li .save-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.preview-activities-list li .save-btn:hover {
+  background: var(--accent-hover);
+}
+
+.preview-activities-list li .edit-mode > * {
+  margin-bottom: 14px;
+}
+
+.preview-activities-list li .edit-mode > *:last-child {
+  margin-bottom: 0;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-activity {
+  background: #ff4b5c;
+  border: none;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s ease;
+}
+
+.delete-activity:hover {
+  background: #ff6b78;
+}
+
+
+
+
 /* ==== ANIMATIONS ==== */
 @keyframes popUp {
   from {
