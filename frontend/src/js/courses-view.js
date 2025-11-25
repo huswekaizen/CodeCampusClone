@@ -246,6 +246,23 @@ document.querySelectorAll(".delete-activity").forEach(btn => {
   });
 });
 
+// Add Activity Template UI
+
+const addActivityBtn = document.getElementById("addActivityBtn");
+const activitiesList = document.getElementById("activities-list");
+const activityFormTemplate = document.getElementById("activityFormTemplate");
+
+addActivityBtn.addEventListener("click", () => {
+  const clone = activityFormTemplate.content.cloneNode(true);
+  const li = clone.querySelector(".activity-form");
+
+  // remove button inside the form
+  li.querySelector(".remove-activity").addEventListener("click", () => {
+    li.remove();
+  });
+
+  activitiesList.appendChild(li);
+});
 
 
 

@@ -334,7 +334,6 @@ button.ghost:hover {
 .preview-activities-list li .edit-mode {
   display: flex;
   flex-direction: column;
-  gap: 18px; /* actual spacing */
   margin-top: 14px;
   background: #0f1529;
   border: 1px solid var(--border);
@@ -444,6 +443,111 @@ button.ghost:hover {
   background: #ff6b78;
 }
 
+.activities-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addActivityBtn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 28px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+/* === ACTIVITY FORM TEMPLATE (MATCHES EDIT MODE) === */
+.activity-form {
+  background: #0f1529;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title Input */
+.activity-title-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 15px;
+}
+.activity-title-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Description */
+.activity-desc-input {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+  resize: vertical;
+}
+.activity-desc-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Type Dropdown */
+.activity-type-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+}
+.activity-type-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Save + Remove Buttons */
+.activity-form button {
+  align-self: flex-end;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.activity-form button:hover {
+  background: var(--accent-hover);
+}
+
+/* Remove button specifically */
+.activity-form button.remove-activity {
+  background: #ff4b5c;
+}
+.activity-form button.remove-activity:hover {
+  background: #ff6b78;
+}
 
 
 

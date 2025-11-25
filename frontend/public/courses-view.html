@@ -48,9 +48,35 @@
 
       <!-- Activities -->
       <section class="preview-section">
-        <h3>Activities</h3>
+        <div class="activities-header">
+          <h3>Activities</h3>
+          <button id="addActivityBtn" class="addActivityBtn">+</button>
+        </div>
         <ul class="preview-activities-list" id="activities-list"></ul>
       </section>
+
+      <!-- Activity Form Template-->
+      <template id="activityFormTemplate">
+        <li class="activity-form">
+          <div class="edit-mode">
+            <input class="activity-title-input" placeholder="Activity Title">
+            <textarea class="activity-desc-input" placeholder="Description"></textarea>
+
+            <select class="activity-type-input">
+              <option value="exercise">Exercise</option>
+              <option value="quiz">Quiz</option>
+              <option value="assignment">Assignment</option>
+            </select>
+
+            <div class="activity-buttons">
+              <button class="save-activity">Save</button>
+              <button class="remove-activity">Remove</button>
+            </div>
+
+          </div>
+        </li>
+      </template>
+
 
       <!-- Buttons -->
       <div class="wizard-actions">
