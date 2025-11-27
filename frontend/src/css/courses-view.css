@@ -379,6 +379,35 @@ button.ghost:hover {
   box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
 }
 
+/* Output Example (Edit Mode) */
+.edit-output-example {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+  resize: vertical;
+  margin-top: 8px;
+}
+
+.edit-output-example:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Output Example (View Mode) */
+.view-output-example {
+  color: var(--text);
+  font-size: 15px;
+  margin: 6px 0 10px 0;
+  font-weight: 500;
+}
+
+
 /* Type dropdown */
 .preview-activities-list li .edit-type {
   width: 100%;
