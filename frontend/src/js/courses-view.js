@@ -201,6 +201,44 @@ async function saveActivity(li) {
   }
 }
 
+document.addEventListener("click", async (e) => {
+  if (!e.target.classList.contains("save-activity")) return;
+
+  const li = e.target.closest(".activity-form");
+  if (!li) return;
+
+  const title = li.querySelector(".activity-title-input").value;
+  const description = li.querySelector(".activity-desc-input").value;
+  const outputExample = li.querySelector(".edit-output-example").value;
+  const type = li.querySelector(".activity-type-input").value;
+
+  try {
+    const res = await fetch("http://localhost:5000/api/activities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        description,
+        outputExample,
+        type,
+        courseId
+      })
+    });
+
+    if (!res.ok) throw new Error("Failed to save");
+
+    alert("Saved successfully");
+    li.remove(); // remove the template after save
+
+    await loadCourseData(); // refresh and show newly added activity
+
+  } catch (err) {
+    console.error(err);
+    alert("Failed to save activities. Check console for errors.");
+  }
+});
+
+
 document.getElementById("backBtn")?.addEventListener("click", () => {
   window.location.href = "./courses-instructor.html";
 });
