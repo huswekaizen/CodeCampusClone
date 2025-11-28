@@ -425,6 +425,8 @@ button.ghost:hover {
   box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
 }
 
+
+
 /* Save button */
 .preview-activities-list li .save-btn {
   align-self: flex-end;
@@ -575,6 +577,83 @@ button.ghost:hover {
   background: #ff4b5c;
 }
 .activity-form button.remove-activity:hover {
+  background: #ff6b78;
+}
+/* Activiity View UI */
+/* ============================
+   ACTIVITY VIEW (VIEW MODE)
+   ============================ */
+
+.preview-activities-list li .view-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Title */
+.view-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent-hover);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Description */
+.view-desc {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  background: #0f1529;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: var(--radius);
+}
+
+/* Output Example */
+.view-output-example {
+  background: #10182e;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Type label */
+.view-type {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: rgba(58, 141, 255, 0.1);
+  color: var(--accent-hover);
+  width: fit-content;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+/* Header inside each activity */
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+/* Delete button */
+.delete-activity {
+  background: #ff4b5c;
+  border: none;
+  color: white;
+  padding: 5px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s ease;
+}
+
+.delete-activity:hover {
   background: #ff6b78;
 }
 
