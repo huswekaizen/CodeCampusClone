@@ -1,3 +1,12 @@
+
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("courseCreatedSuccess") === "true") {
+    alert("Course created successfully!");
+    localStorage.removeItem("courseCreatedSuccess");
+  }
+});
+
+
 document.addEventListener("DOMContentLoaded", async () => {
   const userId = localStorage.getItem("userId");
   const container = document.getElementById("coursesContainer");

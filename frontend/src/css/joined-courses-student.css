@@ -6,9 +6,10 @@
   margin-top: 1.5rem;
 }
 
-/* ==== COURSE CARD ==== */
+/* Student course card styled EXACTLY like instructor card */
+.joined-course-card,
 .course-card {
-  background-color: #101b33;
+  background-color: #0f172c;
   color: #fff;
   border-radius: 14px;
   overflow: hidden;
@@ -16,92 +17,83 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.joined-course-card:hover,
 .course-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 /* Thumbnail */
+.joined-course-card .thumbnail,
 .course-card .thumbnail {
   width: 100%;
-  height: 170px;
+  height: 160px;
   object-fit: cover;
-  background-color: #202a47;
+  background-color: #2a2a40;
 }
 
 /* Content */
+.joined-course-card .card-content,
 .course-card .card-content {
   padding: 1rem 1.2rem;
   flex: 1;
 }
 
+.joined-course-card h3,
 .course-card h3 {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
-  color: #a8c7ff;
 }
 
+.joined-course-card h5,
 .course-card h5 {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: #9db2d7;
-  margin-bottom: 0.5rem;
+  color: #a0a0b5;
+  margin-bottom: 0.6rem;
 }
 
+.joined-course-card p,
 .course-card p {
   margin: 0.25rem 0;
-  font-size: 0.92rem;
-  color: #d6d8eb;
+  font-size: 0.93rem;
+  color: #d2d2e6;
 }
 
+.joined-course-card .category,
 .course-card .category {
-  color: #82baff;
+  color: #9cc9ff;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-top: 0.2rem;
+  margin-bottom: 14px;
 }
 
-/* Buttons */
+/* Buttons — student keeps different button label/function */
+.joined-course-card .btn-group,
 .course-card .btn-group {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 0.8rem 1rem 1rem;
+  gap: 12px;
 }
 
+.joined-course-card button,
 .course-card button {
+  background: #0f2445;
   border: none;
+  color: #fff;
+  font-weight: 600;
   border-radius: 8px;
   padding: 0.5rem 0.9rem;
-  font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
 }
 
-.course-card button.view {
-  background: #174288;
-  color: #fff;
-}
-
-.course-card button.view:hover {
-  background: #0f2850;
-}
-
-.course-card button.leave {
-  background: #821f2f;
-  color: #fff;
-}
-
-.course-card button.leave:hover {
-  background: #5b1622;
-}
-
-/* Empty State */
-#emptyCourse {
-  text-align: center;
-  color: #ccc;
-  margin-top: 1.5rem;
-  font-style: italic;
+.joined-course-card button:hover,
+.course-card button:hover {
+  background: #050e21;
 }

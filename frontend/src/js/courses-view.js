@@ -238,6 +238,9 @@ document.addEventListener("click", async (e) => {
   }
 });
 
+document.getElementById("editBtn")?.addEventListener("click", () => {
+  window.location.href = "./edit-course.html";
+});
 
 document.getElementById("backBtn")?.addEventListener("click", () => {
   window.location.href = "./courses-instructor.html";

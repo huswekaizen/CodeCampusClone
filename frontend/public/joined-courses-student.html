@@ -61,20 +61,20 @@
         <h2 id="joined-courses-heading">Joined Courses</h2>
         <p class="muted">Access the courses you’ve enrolled in and continue your learning journey.</p>
         <div class="quick-actions">
-          <button id="refreshCourses" class="ghost">Refresh List</button>
+          <button id="primaryAction" class="primary">Join Course</button>
         </div>
       </section>
 
       <!-- JOINED COURSES GRID -->
       <section class="card" aria-label="Joined courses list">
         <h1>My Enrolled Courses</h1>
-        <div id="emptyCourse"></div>
+        <div id="emptyJoinedCourses"></div>
 
         <!-- Container for all joined courses -->
-        <div id="coursesContainer" class="courses-grid"></div>
+        <div id="joinedCoursesContainer" class="courses-grid"></div>
 
         <!-- Hidden template card -->
-        <template id="cardTemplate">
+        <template id="joinedCourseCardTemplate">
           <div class="course-card">
             <img class="thumbnail" src="../src/assets/default-course-thumbnail.jpg" alt="Course Thumbnail">
             <div class="card-content">
@@ -90,11 +90,33 @@
             </div>
           </div>
         </template>
+
       </section>
     </main>
   </div>
 
+  <!-- JOIN COURSE MODAL -->
+  <div id="joinCourseModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Join a Course</h2>
+      <p class="muted">Enter the course code provided by your instructor.</p>
+
+      <input 
+        type="text" 
+        id="joinCodeInput" 
+        placeholder="Enter course code" 
+        class="modal-input"
+      >
+
+      <div class="modal-actions">
+        <button id="submitJoinCode" class="primary">Join</button>
+        <button id="closeModal" class="ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script src="../src/js/home.js"></script>
+  <script src="../src/js/join-course.js"></script>
   <script src="../src/js/joined-courses-student.js"></script>
 </body>
 </html>

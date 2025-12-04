@@ -127,15 +127,95 @@ export const deleteCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // Delete all activities referenced in this course
+    // Delete all activities
     await Activity.deleteMany({ _id: { $in: course.activities } });
 
-    // Delete the course itself
+    // Remove course ID from the instructor's createdCourses array
+    await User.findByIdAndUpdate(course.instructor, { 
+      $pull: { createdCourses: course._id } 
+    });
+
+    // Remove course ID from students' enrolledCourses arrays
+    await User.updateMany(
+      { enrolledCourses: course._id },
+      { $pull: { enrolledCourses: course._id } }
+    );
+
+    // Finally delete the course
     await Course.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "Course and its activities deleted successfully" });
+    res.status(200).json({
+      message: "Course, activities, and references deleted successfully"
+    });
   } catch (error) {
     console.error("Error deleting course:", error);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    res.status(500).json({
+      message: "Server error. Please try again later."
+    });
   }
 };
+
+
+
+export const joinCourse = async (req, res) => {
+  console.log("joinCourse hit with body:", req.body);
+  console.log("JOIN CONTROLLER REACHED");
+
+  try {
+    const { courseCode, studentId } = req.body;
+    if (!courseCode || !studentId) return res.status(400).json({ message: "courseCode and studentId are required" });
+
+    const course = await Course.findOne({ courseCode });
+    if (!course) return res.status(404).json({ message: "Invalid course code" });
+
+    if (course.students.includes(studentId)) return res.status(400).json({ message: "Already enrolled" });
+
+    // add student
+    course.students.push(studentId);
+    await course.save();
+
+    // add course to student
+    await User.findByIdAndUpdate(studentId, { $addToSet: { enrolledCourses: course._id } });
+
+    return res.status(200).json({ message: "Joined successfully", courseId: course._id });
+
+  } catch (err) {
+    console.error("Error joining course:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getEnrolledCourses = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "User ID required" });
+    }
+
+    // Find user and their course references
+    const user = await User.findById(id).populate({
+      path: "enrolledCourses",
+      select: "title subTitle category description example instructor thumbnail",
+      populate: {
+        path: "instructor",
+        model: "User",
+        select: "firstName lastName"
+      }
+    }); 
+
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const enrolledCourses = user.enrolledCourses || [];
+    const count = enrolledCourses.length;
+
+    res.status(200).json({ count, courses: enrolledCourses });
+  } catch (error) {
+    console.error("Error fetching enrolled courses:", error);
+    res.status(500).json({ message: "Error fetching enrolled courses" });
+  }
+};  
+

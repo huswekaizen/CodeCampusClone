@@ -22,14 +22,12 @@ const __dirname = path.dirname(__filename);
 app.use(cors());
 
 // Increase JSON and URL-encoded body limits for text-based requests
-app.use((req, res, next) => {
-  if (req.is('multipart/form-data')) return next(); // skip JSON parser for file uploads
-  express.json({ limit: '10mb' })(req, res, next);
-});
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 
 // Serve uploaded files correctly
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 
 // ----- Connect to MongoDB -----

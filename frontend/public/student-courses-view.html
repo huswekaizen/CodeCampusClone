@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Course View — Overview</title>
+  <link rel="stylesheet" href="../src/css/student-courses-view.css">
+</head>
+
+<body data-page="overview">
+  <main class="layout">
+
+    <!-- TAB HEADER -->
+    <header class="course-header">
+        <nav class="course-nav">
+            <a href="student-courses-view.html"
+            class="nav-item" data-page="overview">Overview</a>
+
+            <a href="student-courses-view-activities.html"
+            class="nav-item" data-page="activities">Activities</a>
+
+            <a href="student-courses-view-announcements.html"
+            class="nav-item" data-page="announcements">Announcements</a>
+        </nav>
+    </header>
+
+
+    <div class="card" id="course-view">
+
+      <!-- COURSE SUMMARY ONLY -->
+      <section class="preview-section">
+        <h3>Course Summary</h3>
+
+        <div class="summary-field">
+          <strong>Title</strong>
+          <span id="course-title"></span>
+        </div>
+
+        <div class="summary-field">
+          <strong>SubTitle</strong>
+          <span id="course-subTitle"></span>
+        </div>
+
+        <div class="summary-field">
+          <strong>Description</strong>
+          <span id="course-description"></span>
+        </div>
+
+        <div class="summary-field">
+          <strong>Thumbnail</strong>
+          <div class="thumb-preview">
+            <img id="course-thumbnail" src="" alt="Course Thumbnail">
+          </div>
+        </div>
+
+      </section>
+
+      <div class="wizard-actions">
+        <button class="ghost" id="backBtn">← Back</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="../src/js/student-courses-view.js"></script>
+</body>
+</html>

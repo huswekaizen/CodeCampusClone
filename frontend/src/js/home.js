@@ -1,5 +1,4 @@
 
-
 const role = localStorage.getItem('role');
 const username = localStorage.getItem('username');
 
@@ -117,5 +116,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (err) {
     console.error("Failed to load published courses:", err);
     publishedCourseList.textContent = "0";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const userId = localStorage.getItem("userId") || "";
+  const enrolledCourseList = document.getElementById("enrolledCoursesCount");
+  try {
+    const res = await fetch(`http://localhost:5000/api/students/${userId}/enrolled-courses`);
+    const data = await res.json();
+    console.log(data); // check what comes back
+    enrolledCourseList.textContent = data.count || 0;
+  } catch (err) {
+    console.error("Failed to load enrolled courses:", err);
+    enrolledCourseList.textContent = "0";
   }
 });

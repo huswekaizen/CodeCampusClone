@@ -16,18 +16,46 @@ closeBtn.addEventListener('click', () => {
 });
 
 // Submit join code
-submitBtn.addEventListener('click', () => {
+submitBtn.addEventListener('click', async () => {
     const code = joinInput.value.trim();
     if (!code) {
         alert("Please enter a course code.");
         return;
     }
-    // TODO: Add your API call here
-    console.log("Joining course with code:", code);
+
+    const userId = localStorage.getItem("userId"); // or whatever your auth stores
+    console.log("JOIN COURSE ROUTE HIT");
+
+
+    try {
+        const res = await fetch("http://localhost:5000/api/courses/join", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                courseCode: code,
+                studentId: userId
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert(data.message);
+            return;
+        }
+
+        console.log("Joined:", data);
+        alert("Course joined successfully");
+
+    } catch (e) {
+        console.error(e);
+        alert("Error joining course.");
+    }
 
     modal.style.display = 'none';
     joinInput.value = "";
 });
+
 
 // Close on background click
 modal.addEventListener('click', (e) => {

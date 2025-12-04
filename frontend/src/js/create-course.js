@@ -183,7 +183,9 @@ if (clearBtn) {
 
   document.getElementById("createCourseBtn")?.addEventListener("click", async () => {
     try {
-      // Build form data for multipart/form-data (so file uploads work)
+      const userId = localStorage.getItem('userId');
+
+      // Build form data for course
       const formData = new FormData();
       formData.append("title", document.getElementById("title").value);
       formData.append("subTitle", document.getElementById("subTitle").value);
@@ -192,26 +194,20 @@ if (clearBtn) {
       formData.append("example", document.getElementById("example").value);
       formData.append("instructorId", userId);
 
-      // append thumbnail file if present
       const fileInput = document.getElementById("thumbnail");
-      if (fileInput && fileInput.files && fileInput.files[0]) {
+      if (fileInput && fileInput.files[0]) {
         formData.append("thumbnail", fileInput.files[0]);
       }
 
-      // Create course (server should be set to accept upload.single('thumbnail'))
+      // Create course
       const courseRes = await fetch("http://localhost:5000/api/courses", {
         method: "POST",
-        body: formData // DO NOT set Content-Type header — browser sets boundary automatically
+        body: formData
       });
-
-      if (!courseRes.ok) {
-        const text = await courseRes.text().catch(() => null);
-        throw new Error(`Failed to create course (${courseRes.status}) ${text || ""}`);
-      }
+      if (!courseRes.ok) throw new Error("Failed to create course");
       const course = await courseRes.json();
-      console.log("Course created:", course);
 
-      // Now create activities (same as before)
+      // Create activities
       const allActivities = document.querySelectorAll("#activitiesList .activity");
       for (const act of allActivities) {
         const activityData = {
@@ -227,21 +223,18 @@ if (clearBtn) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(activityData)
         });
-
-        if (!activityRes.ok) {
-          const text = await activityRes.text().catch(() => null);
-          throw new Error(`Failed to create an activity (${activityRes.status}) ${text || ""}`);
-        }
-        const savedActivity = await activityRes.json();
-        console.log("Activity created:", savedActivity);
+        if (!activityRes.ok) throw new Error("Failed to create activity");
       }
 
-      alert("Course and all activities created successfully!");
-      //window.location.href = "courses-view.html";
+      // Everything succeeded
+      localStorage.setItem("courseCreatedSuccess", "true");
+      window.location.href = "./courses-instructor.html";
+
 
     } catch (err) {
-      console.error("Error creating course or activities:", err);
-      alert(`Something went wrong while creating the course. Check console. Error: ${err.message || err}`);
+      console.error(err);
+      alert("Something went wrong: " + err.message);
     }
   });
+
 });
