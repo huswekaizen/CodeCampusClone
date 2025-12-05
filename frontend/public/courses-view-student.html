@@ -13,13 +13,13 @@
     <!-- TAB HEADER -->
     <header class="course-header">
         <nav class="course-nav">
-            <a href="student-courses-view.html"
+            <a href="courses-view-student.html"
             class="nav-item" data-page="overview">Overview</a>
 
-            <a href="student-courses-view-activities.html"
+            <a href="courses-view-student-activities.html"
             class="nav-item" data-page="activities">Activities</a>
 
-            <a href="student-courses-view-announcements.html"
+            <a href="courses-view-student-announcements.html"
             class="nav-item" data-page="announcements">Announcements</a>
         </nav>
     </header>
@@ -42,27 +42,31 @@
         </div>
 
         <div class="summary-field">
+          <strong>Category</strong>
+          <span id="course-category"></span>
+        </div>
+
+        <div class="summary-field">
           <strong>Description</strong>
           <span id="course-description"></span>
         </div>
 
         <div class="summary-field">
-          <strong>Thumbnail</strong>
-          <div class="thumb-preview">
-            <img id="course-thumbnail" src="" alt="Course Thumbnail">
-          </div>
+          <strong>Example</strong>
+          <span id="course-example"></span>
         </div>
+
 
       </section>
 
       <div class="wizard-actions">
-        <button class="ghost" id="backBtn">← Back</button>
+        <button class="ghost" id="back-btn">← Back</button>
       </div>
 
     </div>
 
   </main>
 
-  <script src="../src/js/student-courses-view.js"></script>
+  <script src="../src/js/courses-view-student.js"></script>
 </body>
 </html>

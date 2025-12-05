@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const viewBtn = clone.querySelector(".view");
       viewBtn.addEventListener("click", () => {
         localStorage.setItem("selectedCourseId", course._id);
-        window.location.href = "./student-courses-view.html";
+        window.location.href = "./courses-view-student.html";
       });
 
       const leaveBtn = clone.querySelector(".leave");
