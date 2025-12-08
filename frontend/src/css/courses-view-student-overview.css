@@ -1,0 +1,225 @@
+:root {
+  --bg: #0a0f1e;
+  --card-bg: #11182a;
+  --section-bg: #0f1529;
+
+  --accent: #3a8dff;
+  --accent-hover: #64b2ff;
+
+  --text: #e6eefb;
+  --text-muted: #a7b4cc;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.06);
+
+  --radius: 12px;
+  --transition: 200ms ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+}
+
+/* ------------------------ */
+/*         LAYOUT           */
+/* ------------------------ */
+
+.layout {
+  max-width: 820px;
+  margin: 70px auto;   /* bigger top spacing */
+  padding: 0 24px;     /* more side spacing */
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;       /* more breathing room */
+  display: flex;
+  flex-direction: column;
+  gap: 40px;           /* wider spacing */
+}
+
+/* ------------------------ */
+/*         TOP NAV          */
+/* ------------------------ */
+
+.course-header {
+  background: var(--section-bg);
+  border: 1px solid rgba(58, 141, 255, 0.2);
+  border-radius: 14px;
+  margin-bottom: 40px;
+  overflow: hidden;
+}
+
+.course-nav {
+  display: flex;
+}
+
+.nav-item {
+  flex: 1;
+  text-align: center;
+  padding: 14px 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  position: relative;
+  transition: color var(--transition);
+}
+
+.nav-item:hover {
+  color: var(--accent);
+}
+
+.nav-item.active {
+  color: #fff;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  left: 0;
+  background: var(--accent);
+  border-radius: 3px;
+  box-shadow: 0 0 7px var(--accent);
+}
+
+/* ------------------------ */
+/*     CONTENT SECTION      */
+/* ------------------------ */
+
+.preview-section {
+  background: var(--section-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 36px;        /* increased padding */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;            /* more breathing room */
+  transition: var(--transition);
+}
+
+.preview-section:hover {
+  border-color: var(--accent);
+  background: #111a33;
+}
+
+.preview-section h3 {
+  font-size: 18px;
+  color: var(--accent-hover);
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+  margin-bottom: 6px;
+}
+
+/* ------------------------ */
+/*        TITLE AREA        */
+/* ------------------------ */
+
+.course-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.course-subtitle {
+  font-size: 16px;
+  color: var(--accent-hover);
+  opacity: 0.9;
+  margin-top: -6px;
+  margin-bottom: 8px;
+}
+
+/* ------------------------ */
+/*      CATEGORY BADGE      */
+/* ------------------------ */
+
+.course-category {
+  display: inline-flex;
+  width: max-content;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--accent-hover);
+  background: rgba(58, 141, 255, 0.15);
+  border: 1px solid rgba(58, 141, 255, 0.25);
+  border-radius: 40px;
+  font-weight: 600;
+}
+
+/* ------------------------ */
+/*      DESCRIPTION BOX     */
+/* ------------------------ */
+
+.course-description-box {
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px;     /* extra padding */
+  margin: 22px 0 22px 0;
+}
+
+.course-description-box span {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+/* ------------------------ */
+/*     INSTRUCTOR FIELD     */
+/* ------------------------ */
+
+.course-info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;              /* larger gap */
+}
+
+.course-info-field strong {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.course-info-field span {
+  color: var(--text);
+  font-size: 15px;
+}
+
+/* ------------------------ */
+/*         BUTTONS          */
+/* ------------------------ */
+
+.wizard-actions {
+  padding-top: 28px;
+  border-top: 1px solid var(--border-light);
+}
+
+button.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+button.ghost:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+button.ghost:active {
+  transform: scale(0.97);
+}

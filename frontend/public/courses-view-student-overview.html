@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Student Course View — Overview</title>
-  <link rel="stylesheet" href="../src/css/student-courses-view.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-overview.css">
 </head>
 
 <body data-page="overview">
@@ -13,7 +13,7 @@
     <!-- TAB HEADER -->
     <header class="course-header">
         <nav class="course-nav">
-            <a href="courses-view-student.html"
+            <a href="courses-view-student-overview.html"
             class="nav-item" data-page="overview">Overview</a>
 
             <a href="courses-view-student-activities.html"
@@ -29,32 +29,28 @@
 
       <!-- COURSE SUMMARY ONLY -->
       <section class="preview-section">
-        <h3>Course Summary</h3>
 
-        <div class="summary-field">
-          <strong>Title</strong>
-          <span id="course-title"></span>
+        <div>
+          <div class="course-title" id="course-title"></div>
+          <div class="course-subtitle" id="course-subTitle"></div>
         </div>
 
-        <div class="summary-field">
-          <strong>SubTitle</strong>
-          <span id="course-subTitle"></span>
-        </div>
-
-        <div class="summary-field">
-          <strong>Category</strong>
+        <div class="course-category">
           <span id="course-category"></span>
         </div>
 
-        <div class="summary-field">
-          <strong>Description</strong>
+        <div class="course-description-box">
           <span id="course-description"></span>
         </div>
 
-        <div class="summary-field">
-          <strong>Example</strong>
-          <span id="course-example"></span>
+
+        <div class="course-info-field">
+          <strong>Instructor</strong>
+          <span id="course-instructor"></span>
         </div>
+
+
+
 
 
       </section>
@@ -67,6 +63,7 @@
 
   </main>
 
+  <script src="../src/js/courses-view-student-overview.js"></script>
   <script src="../src/js/courses-view-student.js"></script>
 </body>
 </html>

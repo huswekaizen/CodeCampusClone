@@ -4,6 +4,8 @@ const closeBtn = document.getElementById('closeModal');
 const submitBtn = document.getElementById('submitJoinCode');
 const joinInput = document.getElementById('joinCodeInput');
 
+import { loadJoinedCourses } from "./joined-courses-student.js";
+
 // Open modal
 joinBtn.addEventListener('click', () => {
     modal.style.display = 'flex';
@@ -46,6 +48,8 @@ submitBtn.addEventListener('click', async () => {
 
         console.log("Joined:", data);
         alert("Course joined successfully");
+        loadJoinedCourses(); // refresh the list
+
 
     } catch (e) {
         console.error(e);

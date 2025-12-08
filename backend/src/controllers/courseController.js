@@ -43,7 +43,12 @@ export const getCourseWithActivities = async (req, res) => {
       .populate({
         path: "activities",
         model: "Activity",
-        select: "title description type outputExample"
+        select: "title description difficulty outputExample"
+      })
+      .populate({
+        path: "instructor",       // <-- populate instructor
+        model: "User",
+        select: "firstName lastName"
       })
       .select("title subTitle category description thumbnail example activities");
 
@@ -166,7 +171,7 @@ export const joinCourse = async (req, res) => {
     if (!courseCode || !studentId) return res.status(400).json({ message: "courseCode and studentId are required" });
 
     const course = await Course.findOne({ courseCode });
-    if (!course) return res.status(404).json({ message: "Invalid course code" });
+    if (!course) return res.status(404).json({ message: "Course not found" });
 
     if (course.students.includes(studentId)) return res.status(400).json({ message: "Already enrolled" });
 

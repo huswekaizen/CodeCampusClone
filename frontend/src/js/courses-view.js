@@ -148,16 +148,16 @@ function renderActivities(activities) {
         </div>
         <p class="view-desc">${activity.description}</p>
         <h5 class="view-output-example">${activity.outputExample || ""}</h5>
-        <small class="view-type">${activity.type}</small>
+        <small class="view-difficulty">${activity.difficulty}</small>
       </div>
       <div class="edit-mode" style="display:none">
         <input type="text" class="edit-title" value="${activity.title}">
         <textarea class="edit-desc">${activity.description}</textarea>
         <textarea class="edit-output-example">${activity.outputExample || ""}</textarea>
-        <select class="edit-type">
-          <option value="quiz" ${activity.type==="quiz"?"selected":""}>Quiz</option>
-          <option value="assignment" ${activity.type==="assignment"?"selected":""}>Assignment</option>
-          <option value="exercise" ${activity.type==="exercise"?"selected":""}>Exercise</option>
+        <select class="edit-difficulty">
+          <option value="Easy" ${activity.difficulty==="Easy"?"selected":""}>Easy</option>
+          <option value="Medium" ${activity.difficulty==="Medium"?"selected":""}>Medium</option>
+          <option value="Hard" ${activity.difficulty==="Hard"?"selected":""}>Hard</option>
         </select>
         <button class="save-btn save-activity">Save</button>
         <button class="save-btn cancel-edit">Cancel</button>
@@ -169,28 +169,30 @@ function renderActivities(activities) {
 }
 
 async function saveActivity(li) {
-  const id = li.dataset.activityId;
+  const id = li.dataset.activityId; // already there
   const newTitle = li.querySelector(".edit-title").value.trim();
   const newDesc = li.querySelector(".edit-desc").value.trim();
-  const newType = li.querySelector(".edit-type").value;
+  const newDifficulty = li.querySelector(".edit-difficulty").value;
   const newOutputExample = li.querySelector(".edit-output-example").value;
 
   try {
     const res = await fetch(`http://localhost:5000/api/activities/${id}`, {
       method: "PUT",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({title:newTitle, description:newDesc, type:newType, outputExample:newOutputExample})
+      body: JSON.stringify({title:newTitle, description:newDesc, difficulty:newDifficulty, outputExample:newOutputExample})
     });
     if (!res.ok) throw new Error("Failed to update activity");
 
-    // Update local state
-    const index = li.dataset.index;
-    loadedCourse.activities[index] = { ...loadedCourse.activities[index], title:newTitle, description:newDesc, type:newType, outputExample:newOutputExample };
+    // Update local state by _id instead of index
+    const activityIndex = loadedCourse.activities.findIndex(a => a._id === id);
+    if (activityIndex > -1) {
+      loadedCourse.activities[activityIndex] = { ...loadedCourse.activities[activityIndex], title:newTitle, description:newDesc, difficulty:newDifficulty, outputExample:newOutputExample };
+    }
 
     // Update DOM
-    li.querySelector(".view-title").textContent = `Activity ${parseInt(index)+1}: ${newTitle}`;
+    li.querySelector(".view-title").textContent = `Activity ${activityIndex+1}: ${newTitle}`;
     li.querySelector(".view-desc").textContent = newDesc;
-    li.querySelector(".view-type").textContent = newType;
+    li.querySelector(".view-difficulty").textContent = newDifficulty;
     li.querySelector(".view-output-example").textContent = newOutputExample;
     li.querySelector(".edit-mode").style.display = "none";
     li.querySelector(".view-mode").style.display = "block";
@@ -201,6 +203,7 @@ async function saveActivity(li) {
   }
 }
 
+
 document.addEventListener("click", async (e) => {
   if (!e.target.classList.contains("save-activity")) return;
 
@@ -210,7 +213,7 @@ document.addEventListener("click", async (e) => {
   const title = li.querySelector(".activity-title-input").value;
   const description = li.querySelector(".activity-desc-input").value;
   const outputExample = li.querySelector(".edit-output-example").value;
-  const type = li.querySelector(".activity-type-input").value;
+  const difficulty = li.querySelector(".activity-difficulty-input").value;
 
   try {
     const res = await fetch("http://localhost:5000/api/activities", {
@@ -220,7 +223,7 @@ document.addEventListener("click", async (e) => {
         title,
         description,
         outputExample,
-        type,
+        difficulty,
         courseId
       })
     });

@@ -539,7 +539,7 @@ button.ghost:hover {
 }
 
 /* Type Dropdown */
-.activity-type-input {
+.activity-difficulty-input, .edit-difficulty {
   width: 100%;
   padding: 10px 12px;
   border-radius: var(--radius);
@@ -548,7 +548,7 @@ button.ghost:hover {
   color: var(--text);
   font-size: 14px;
 }
-.activity-type-input:focus {
+.activity-difficulty-input:focus, .edit-difficulty:focus {
   border-color: var(--accent);
   outline: none;
   box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
@@ -609,7 +609,7 @@ button.ghost:hover {
   padding: 12px 14px;
   border-radius: var(--radius);
 }
-
+  
 /* Output Example */
 .view-output-example {
   background: #10182e;

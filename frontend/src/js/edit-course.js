@@ -72,6 +72,7 @@ saveBtn.addEventListener("click", async () => {
     if (!res.ok) throw new Error(`Failed to update course (${res.status})`);
     
     alert("Course updated successfully!");
+    window.location.href = "courses-view.html";
 
   } catch (err) {
     console.error("Error updating course:", err);

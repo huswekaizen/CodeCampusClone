@@ -100,7 +100,7 @@ if (clearBtn) {
   function registerActivity(activityElement) {
     const index = activitiesData.length;
     const titleField = activityElement.querySelector(".activity-title");
-    const typeSelect = activityElement.querySelector("select[name='activityType']");
+    const difficultySelect = activityElement.querySelector("select[name='activityDifficulty']");
     const descField = activityElement.querySelector(".activity-description");
     const outputField = activityElement.querySelector(".activity-output");
     const removeBtn = activityElement.querySelector(".btn-remove");
@@ -108,14 +108,14 @@ if (clearBtn) {
     // Push initial empty entry
     activitiesData.push({
       title: titleField.value || "",
-      type: typeSelect.value || "",
+      difficulty: difficultySelect.value || "",
       description: descField.value || "",
       output: outputField.value || ""
     });
 
     // Live updates
     titleField.addEventListener("input", () => (activitiesData[index].title = titleField.value));
-    typeSelect.addEventListener("change", () => (activitiesData[index].type = typeSelect.value));
+    difficultySelect.addEventListener("change", () => (activitiesData[index].difficulty = difficultySelect.value));
     descField.addEventListener("input", () => (activitiesData[index].description = descField.value));
     outputField.addEventListener("input", () => (activitiesData[index].output = outputField.value));
 
@@ -166,13 +166,13 @@ if (clearBtn) {
 
       allActivities.forEach((act, i) => {
         const title = act.querySelector(".activity-title")?.value || "(Untitled)";
-        const type = act.querySelector("select[name='activityType']")?.value || "(No type)";
+        const difficulty = act.querySelector("select[name='activityDifficulty']")?.value || "(No difficulty)";
         const desc = act.querySelector(".activity-description")?.value || "(No description)";
         const output = act.querySelector(".activity-output")?.value || "";
 
         const li = document.createElement("li");
         li.innerHTML = `
-          <strong>${i + 1}. ${title}</strong> <em>(${type})</em>
+          <strong>${i + 1}. ${title}</strong> <a>(${difficulty})</a>
           <p>${desc}</p>
           <small>${output}</small>
         `;
@@ -212,7 +212,7 @@ if (clearBtn) {
       for (const act of allActivities) {
         const activityData = {
           title: act.querySelector(".activity-title")?.value || "Untitled",
-          type: act.querySelector("select[name='activityType']")?.value || "exercise",
+          difficulty: act.querySelector("select[name='activityDifficulty']")?.value || "No difficulty",
           description: act.querySelector(".activity-description")?.value || "",
           outputExample: act.querySelector(".activity-output")?.value || "",
           courseId: course._id

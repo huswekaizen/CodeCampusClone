@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const activitySchema = new mongoose.Schema({
   title: { type: String, required: true }, // e.g. "Quiz: Variables"
-  type: { 
+  difficulty: { 
     type: String, 
-    enum: ["exercise", "quiz", "assignment"], 
+    enum: ["Easy", "Medium", "Hard"], 
     required: true 
   },
   description: { type: String, required: true }, // the textarea "Describe the activity..."

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", async () => {
+export async function loadJoinedCourses() {
   const userId = localStorage.getItem("userId");
   const container = document.getElementById("joinedCoursesContainer");
   const emptyList = document.getElementById("emptyJoinedCourses");
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const viewBtn = clone.querySelector(".view");
       viewBtn.addEventListener("click", () => {
         localStorage.setItem("selectedCourseId", course._id);
-        window.location.href = "./courses-view-student.html";
+        window.location.href = "./courses-view-student-overview.html";
       });
 
       const leaveBtn = clone.querySelector(".leave");
@@ -62,4 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(err);
     alert("Failed to fetch joined courses.");
   }
-});
+}
+
+
+document.addEventListener("DOMContentLoaded", loadJoinedCourses);

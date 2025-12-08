@@ -3,7 +3,7 @@ import Course from "../models/Course.js";
 
 export const createActivity = async (req, res) => {
   try {
-    const { title, type, description, outputExample, courseId } = req.body;
+    const { title, difficulty, description, outputExample, courseId } = req.body;
 
     // Check if the course actually exists
     const course = await Course.findById(courseId);
@@ -12,7 +12,7 @@ export const createActivity = async (req, res) => {
     // Create and save the new activity
     const activity = new Activity({
       title,
-      type,
+      difficulty,
       description,
       outputExample,
       course: courseId,
@@ -50,7 +50,7 @@ export const getActivitiesByCourse = async (req, res) => {
 export const updateActivity = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, type, outputExample } = req.body;
+    const { title, description, difficulty, outputExample } = req.body;
 
     const activity = await Activity.findById(id);
     if (!activity) return res.status(404).json({ message: "Activity not found" });
@@ -58,7 +58,7 @@ export const updateActivity = async (req, res) => {
     // Update fields
     if (title) activity.title = title;
     if (description) activity.description = description;
-    if (type) activity.type = type;
+    if (difficulty) activity.difficulty = difficulty;
     if (outputExample) activity.outputExample = outputExample;
 
     await activity.save();

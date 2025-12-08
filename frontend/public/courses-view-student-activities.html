@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Course View — Activities</title>
+  <link rel="stylesheet" href="../src/css/courses-view-student-overview.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-activities.css">
+</head>
+
+<body data-page="activities">
+  <main class="layout">
+
+    <!-- TAB HEADER -->
+    <header class="course-header">
+        <nav class="course-nav">
+            <a href="courses-view-student-overview.html"
+            class="nav-item" data-page="overview">Overview</a>
+
+            <a href="courses-view-student-activities.html"
+            class="nav-item" data-page="activities">Activities</a>
+
+            <a href="courses-view-student-announcements.html"
+            class="nav-item" data-page="announcements">Announcements</a>
+        </nav>
+    </header>
+
+
+    <div class="card" id="course-activities">
+
+      <h3 class="activities-title">Activities</h3>
+
+      <ul id="activitiesList" class="activities-list">
+        <!-- JS will insert activity cards here -->
+      </ul>
+
+      <div class="wizard-actions">
+        <button class="ghost" id="back-btn">← Back</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="../src/js/courses-view-student.js"></script>
+  <script src="../src/js/courses-view-student-activities.js"></script>
+  
+</body>
+</html>
