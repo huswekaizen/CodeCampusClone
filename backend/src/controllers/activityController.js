@@ -47,6 +47,22 @@ export const getActivitiesByCourse = async (req, res) => {
   }
 };
 
+export const getActivityById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const activity = await Activity.findById(id);
+    if (!activity) return res.status(404).json({ message: "Activity not found" });
+
+    res.status(200).json(activity);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch activity" });
+  }
+};
+
+
 export const updateActivity = async (req, res) => {
   try {
     const { id } = req.params;

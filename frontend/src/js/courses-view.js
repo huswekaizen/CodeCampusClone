@@ -116,6 +116,7 @@ async function loadCourseData() {
     document.getElementById("course-category").textContent = `Category: ${course.category}`;
     document.getElementById("course-description").textContent = course.description || "No description available.";
     document.getElementById("course-example").textContent = course.example || "N/A";
+    document.getElementById("course-code").textContent = course.courseCode || "N/A";
 
     courseTitleSpan.style.color = "red";
     courseTitleSpan.textContent = course.title || "Course Title Unavailable";

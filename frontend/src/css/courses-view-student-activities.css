@@ -2,6 +2,11 @@
 /*       ACTIVITIES PAGE STYLES       */
 /* ---------------------------------- */
 
+html {
+  overflow-y: scroll;
+}
+
+
 .activities-title {
   font-size: 20px;
   font-weight: 700;
@@ -42,7 +47,7 @@
 
 /* TYPE BADGE */
 
-.activity-type {
+.activity-difficulty {
   min-width: 50px;
   padding: 8px;
   background: rgba(58, 141, 255, 0.15);

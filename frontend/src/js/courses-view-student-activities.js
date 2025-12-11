@@ -3,7 +3,7 @@ const courseId = localStorage.getItem("selectedCourseId");
 function renderActivity(activity) {
   return `
     <li class="activity-card">
-      <div class="activity-type">${activity.type}</div>
+      <div class="activity-difficulty">${activity.difficulty}</div>
 
       <div class="activity-content">
         <div class="activity-title">${activity.title}</div>
@@ -51,6 +51,11 @@ window.addEventListener("DOMContentLoaded", loadActivities);
 
 document.addEventListener("click", e => {
   if (e.target.classList.contains("start-btn")) {
-    alert("not implemented yet");
+    const activityId = e.target.dataset.id;
+
+    localStorage.setItem("selectedActivityId", activityId);
+
+    window.location.href = "student-activity.html";
   }
 });
+

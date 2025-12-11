@@ -50,7 +50,7 @@ export const getCourseWithActivities = async (req, res) => {
         model: "User",
         select: "firstName lastName"
       })
-      .select("title subTitle category description thumbnail example activities");
+      .select("title subTitle category description thumbnail example activities courseCode");
 
     if (!course) return res.status(404).json({ message: "Course not found" });
 

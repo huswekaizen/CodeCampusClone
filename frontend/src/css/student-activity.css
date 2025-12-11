@@ -1,0 +1,135 @@
+:root {
+  --bg: #0a0f1e;
+  --card-bg: #11182a;
+  --accent: #3a8dff;
+  --accent-hover: #64b2ff;
+  --text: #e6eefb;
+  --text-muted: #a7b4cc;
+  --border: rgba(255,255,255,0.08);
+  --radius: 12px;
+  --transition: 200ms ease;
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  height: 600px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+button.primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+button.primary:hover {
+  background: var(--accent-hover);
+}
+
+/* Row layout for editor + output */
+.editor-output-row {
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 16px;
+  height: 470px; /* same height for both */
+}
+
+.editor-section, .output-section {
+    flex: 1;
+        background: #0f1529;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+/* Editor styles */
+.cm-editor {
+    height: 100%;
+    font-size: 14px;
+    line-height: 1.5;
+    font-family: 'Fira Code', monospace;
+}
+
+/* Output panel styles */
+.output-section {
+
+    display: flex;
+    flex-direction: column;
+}
+
+.output-header {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-hover);
+  padding: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+#output {
+  flex: 1;
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+  color: rgb(130, 135, 151);
+  background: transparent;
+  padding: 18px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+#activity-difficulty {
+  display: inline-block;      /* make the div shrink to its content */
+  padding: 8px;
+  margin: 7px 0 0 0;
+  background: rgba(58, 141, 255, 0.15);
+  border: 1px solid rgba(58, 141, 255, 0.25);
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700;
+  color: var(--accent-hover);
+  text-transform: uppercase;
+  font-size: 8px;
+}

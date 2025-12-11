@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Activity — CodeCampus</title>
+
+  <link rel="stylesheet" href="../src/css/student-activity.css">
+
+  <!-- CodeMirror 6 Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@codemirror/theme-one-dark@6.2.0/theme.css">
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+            <h2 id="activity-title"></h2>
+            <div id="activity-difficulty"></div>
+        </div>
+        <button id="runBtn" class="primary">Run</button>
+      </div>
+
+      <div class="editor-output-row">
+        <div class="editor-section">
+          <div id="editor"></div>
+        </div>
+
+        <div class="output-section">
+          <div class="output-header"> Output</div>
+          <pre id="output">Your results will be shown here.</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module" src="../src/js/student-activity-fetch.js"></script>
+  <script type="module" src="../src/js/student-code-editor.js"></script>
+</body>
+</html>
