@@ -1,38 +1,30 @@
-import { EditorView, basicSetup }
-  from "https://cdn.jsdelivr.net/npm/codemirror@6/dist/codemirror.min.js";
+import { EditorView, basicSetup } 
+  from "https://esm.sh/@codemirror/basic-setup";
 
-import { javascript }
-  from "https://cdn.jsdelivr.net/npm/@codemirror/lang-javascript@6/dist/index.js";
+import { javascript } 
+  from "https://esm.sh/@codemirror/lang-javascript";
 
 const editor = new EditorView({
   parent: document.getElementById("editor"),
-  doc: "// Write your JavaScript here\nconsole.log('Hello world');",
+  doc: "// Write JS here\nconsole.log('Hello');",
   extensions: [basicSetup, javascript()]
 });
 
-// Output box
-const outputBox = document.getElementById("output");
+const output = document.getElementById("output");
 
-// Run button
 document.getElementById("runBtn").addEventListener("click", () => {
-  outputBox.textContent = ""; // clear prev output
+  output.textContent = "";
 
-  const userCode = editor.state.doc.toString();
+  const code = editor.state.doc.toString();
 
   try {
-    // Capture console.log
     const originalLog = console.log;
-    console.log = (...msgs) => {
-      outputBox.textContent += msgs.join(" ") + "\n";
-    };
+    console.log = (...msg) => output.textContent += msg.join(" ") + "\n";
+    
+    new Function(code)();
 
-    // Execute code
-    new Function(userCode)();
-
-    // Restore console.log
     console.log = originalLog;
-
   } catch (err) {
-    outputBox.textContent += "Error: " + err.message;
+    output.textContent = "Error: " + err.message;
   }
 });

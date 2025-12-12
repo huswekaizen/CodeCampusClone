@@ -70,6 +70,13 @@ button.primary:hover {
   background: var(--accent-hover);
 }
 
+#editor {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+
 /* Row layout for editor + output */
 .editor-output-row {
   display: flex;
@@ -80,10 +87,10 @@ button.primary:hover {
 
 .editor-section, .output-section {
     flex: 1;
-        background: #0f1529;
+    background: #0f1529;
     border-radius: var(--radius);
     border: 1px solid var(--border);
-    overflow: hidden;
+    overflow: auto;
 }
 
 /* Editor styles */
@@ -92,6 +99,16 @@ button.primary:hover {
     font-size: 14px;
     line-height: 1.5;
     font-family: 'Fira Code', monospace;
+      padding: 12px;
+
+}
+
+.cm-editor .cm-content {
+  caret-color: #3a8dff !important;
+}
+
+.cm-editor .cm-cursor {
+  border-left: 2px solid #3a8dff !important;
 }
 
 /* Output panel styles */
