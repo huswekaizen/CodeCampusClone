@@ -224,3 +224,31 @@ export const getEnrolledCourses = async (req, res) => {
   }
 };  
 
+export const leaveCourse = async (req, res) => {
+  try {
+    const { id } = req.params; // course ID
+    const { studentId } = req.body; // student ID
+
+    if (!id || !studentId) return res.status(400).json({ message: "course id and student id are required" });
+
+    const course = await Course.findById(id);
+    if (!course) return res.status(404).json({ message: "Course not found" });
+
+    if (!course.students.some(s => s.toString() === studentId)) {
+      return res.status(400).json({ message: "Not enrolled" });
+    }
+
+
+    // remove student
+    course.students.pull(studentId);
+    await course.save();
+
+    // remove course from student
+    await User.findByIdAndUpdate(studentId, { $pull: { enrolledCourses: course._id } });
+
+    return res.status(200).json({ message: "Left course successfully" });
+  } catch (err) {
+    console.error("Error leaving course:", err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};

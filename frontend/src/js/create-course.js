@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const userId = localStorage.getItem('userId');
 
@@ -11,120 +10,58 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(`.step-item[data-step="${stepNum}"]`)?.setAttribute("aria-current", "step");
   }
 
-  // Step buttons
   document.querySelectorAll("[data-go-step]").forEach(btn => {
     btn.addEventListener("click", () => goToStep(btn.getAttribute("data-go-step")));
   });
 
-  const nextToActivities = document.getElementById("nextToActivities");
-  const nextToAssessment = document.getElementById("nextToAssessment");
-  if (nextToActivities) {
-      nextToActivities.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        
-        const currentStep = document.querySelector(".step-panel:not(.hidden)");
-        const inputs = currentStep.querySelectorAll("input, textarea, select");
-        const areAllFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+  // ===== Step Validation =====
+  function validateStepAndGo(nextStep) {
+    const currentStep = document.querySelector(".step-panel:not(.hidden)");
+    const inputs = currentStep.querySelectorAll("input, textarea, select");
+    const areAllFilled = Array.from(inputs).every(input => input.value.trim() !== "");
 
+    if (!areAllFilled) {
+      alert("Fill in all fields before creating the course, genius.");
+      return;
+    }
+    goToStep(nextStep);
+  }
 
-        if (!areAllFilled) {
-          alert("Fill in all fields before creating the course, genius.");
-          return; // stop the rest of your function
-        }
-        if (areAllFilled) {
-          goToStep(2);
-        } 
-    });
-  }
-  if (nextToAssessment) {
-    nextToAssessment.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-  
-      const currentStep = document.querySelector(".step-panel:not(.hidden)");
-      const inputs = currentStep.querySelectorAll("input, textarea, select");
-      const areAllFilled = Array.from(inputs).every(input => input.value.trim() !== "");
-  
-      if (!areAllFilled) {
-        alert("Fill in all fields before creating the course, genius.");
-        return; // stop the rest of your function
-      }
-      if (areAllFilled) {
-        goToStep(3);
-      }
-    });
-  }
+  document.getElementById("nextToActivities")?.addEventListener("click", () => validateStepAndGo(2));
+  document.getElementById("nextToAssessment")?.addEventListener("click", () => validateStepAndGo(3));
 
   // ===== Thumbnail Preview =====
-const fileInput = document.getElementById("thumbnail");
-const imgPreview = document.getElementById("thumbnailPreviewImg");
-const clearBtn = document.getElementById("thumbnailClear");
+  const fileInput = document.getElementById("thumbnail");
+  const imgPreview = document.getElementById("thumbnailPreviewImg");
+  const thumbnailPreview = document.getElementById("previewThumbnailValue");
+  const thumbnailClear = document.getElementById("thumbnailClear");
 
-if (fileInput && imgPreview) {
-  fileInput.addEventListener("change", e => {
+  fileInput?.addEventListener("change", e => {
     const file = e.target.files[0];
     if (file) {
       imgPreview.src = URL.createObjectURL(file);
       imgPreview.style.display = "block";
     }
   });
-}
 
-if (clearBtn) {
-  clearBtn.addEventListener("click", () => {
-    fileInput.value = "";
-    imgPreview.src = "";
-    imgPreview.style.display = "none";
+  thumbnailClear?.addEventListener("click", () => {
+    if (fileInput) fileInput.value = "";
+    if (imgPreview) {
+      imgPreview.src = "";
+      imgPreview.style.display = "none";
+    }
+    if (thumbnailPreview) thumbnailPreview.innerHTML = "";
   });
-}
-
-
-  // ===== Thumbnail Clear =====
-  const thumbnail = document.getElementById("thumbnail");
-  const thumbnailPreview = document.getElementById("previewThumbnailValue");
-  const thumbnailClear = document.getElementById("thumbnailClear");
-  if (thumbnailClear && thumbnail && thumbnailPreview) {
-    thumbnailClear.addEventListener("click", () => {
-      thumbnail.value = "";
-      thumbnailPreview.innerHTML = "";
-    });
-  }
 
   // ===== Activities Management =====
   const addActivityBtn = document.getElementById("addActivityBtn");
   const activitiesList = document.getElementById("activitiesList");
   const activityTemplate = document.getElementById("activityTemplate");
-  const activitiesData = [];
 
   function registerActivity(activityElement) {
-    const index = activitiesData.length;
-    const titleField = activityElement.querySelector(".activity-title");
-    const difficultySelect = activityElement.querySelector("select[name='activityDifficulty']");
-    const descField = activityElement.querySelector(".activity-description");
-    const outputField = activityElement.querySelector(".activity-output");
     const removeBtn = activityElement.querySelector(".btn-remove");
-
-    // Push initial empty entry
-    activitiesData.push({
-      title: titleField.value || "",
-      difficulty: difficultySelect.value || "",
-      description: descField.value || "",
-      output: outputField.value || ""
-    });
-
-    // Live updates
-    titleField.addEventListener("input", () => (activitiesData[index].title = titleField.value));
-    difficultySelect.addEventListener("change", () => (activitiesData[index].difficulty = difficultySelect.value));
-    descField.addEventListener("input", () => (activitiesData[index].description = descField.value));
-    outputField.addEventListener("input", () => (activitiesData[index].output = outputField.value));
-
-    // Optional remove
     if (removeBtn) {
-      removeBtn.addEventListener("click", () => {
-        activityElement.remove();
-        activitiesData.splice(index, 1);
-      });
+      removeBtn.addEventListener("click", () => activityElement.remove());
     }
   }
 
@@ -133,59 +70,54 @@ if (clearBtn) {
   if (defaultActivity) registerActivity(defaultActivity);
 
   // Add new activities
-  if (addActivityBtn && activitiesList && activityTemplate) {
-    addActivityBtn.addEventListener("click", () => {
-      const clone = activityTemplate.content.cloneNode(true);
-      const newActivity = clone.querySelector(".activity");
-      if (!newActivity) return;
-
-      registerActivity(newActivity);
-      activitiesList.appendChild(newActivity);
-    });
-  }
+  addActivityBtn?.addEventListener("click", () => {
+    const clone = activityTemplate.content.cloneNode(true);
+    const newActivity = clone.querySelector(".activity");
+    if (!newActivity) return;
+    registerActivity(newActivity);
+    activitiesList.appendChild(newActivity);
+  });
 
   // ===== Preview Step =====
   const previewBtn = document.getElementById("nextToAssessment");
-  if (previewBtn) {
-    previewBtn.addEventListener("click", () => {
-      document.getElementById("previewTitleValue").textContent = document.getElementById("title").value;
-      document.getElementById("previewSubtitleValue").textContent = document.getElementById("subTitle").value;
-      document.getElementById("previewCategoryValue").textContent = document.getElementById("category").value;
-      document.getElementById("previewDescriptionValue").textContent = document.getElementById("description").value;
-      document.getElementById("previewExampleValue").textContent = document.getElementById("example").value;
+  previewBtn?.addEventListener("click", () => {
+    document.getElementById("previewTitleValue").textContent = document.getElementById("title").value;
+    document.getElementById("previewSubtitleValue").textContent = document.getElementById("subTitle").value;
+    document.getElementById("previewCategoryValue").textContent = document.getElementById("category").value;
+    document.getElementById("previewDescriptionValue").textContent = document.getElementById("description").value;
+    document.getElementById("previewExampleValue").textContent = document.getElementById("example").value;
 
-      const thumbFile = thumbnail.files[0];
-      thumbnailPreview.innerHTML = thumbFile
-        ? `<img src="${URL.createObjectURL(thumbFile)}" alt="Thumbnail Preview">`
-        : `<em>No thumbnail selected</em>`;
+    const thumbFile = fileInput?.files[0];
+    thumbnailPreview.innerHTML = thumbFile
+      ? `<img src="${URL.createObjectURL(thumbFile)}" alt="Thumbnail Preview">`
+      : `<em>No thumbnail selected</em>`;
 
-      // Update all activities from DOM (to make sure everything's current)
-      const allActivities = document.querySelectorAll("#activitiesList .activity");
-      const previewList = document.getElementById("previewActivitiesList");
-      previewList.innerHTML = "";
+    const allActivities = document.querySelectorAll("#activitiesList .activity");
+    const previewList = document.getElementById("previewActivitiesList");
+    previewList.innerHTML = "";
 
-      allActivities.forEach((act, i) => {
-        const title = act.querySelector(".activity-title")?.value || "(Untitled)";
-        const difficulty = act.querySelector("select[name='activityDifficulty']")?.value || "(No difficulty)";
-        const desc = act.querySelector(".activity-description")?.value || "(No description)";
-        const output = act.querySelector(".activity-output")?.value || "";
+    allActivities.forEach((act, i) => {
+      const title = act.querySelector(".activity-title")?.value || "(Untitled)";
+      const difficulty = act.querySelector(".activity-difficulty")?.value || "(No difficulty)";
+      const desc = act.querySelector(".activity-description")?.value || "(No description)";
+      const functionName = act.querySelector(".activity-function")?.value || "(No function)";
+      const tests = act.querySelector(".activity-tests")?.value || "[]";
 
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <strong>${i + 1}. ${title}</strong> <a>(${difficulty})</a>
-          <p>${desc}</p>
-          <small>${output}</small>
-        `;
-        previewList.appendChild(li);
-      });
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>${i + 1}. ${title}</strong> (${difficulty})
+        <p>${desc}</p>
+        <code>Function: ${functionName}</code>
+        <pre>${tests}</pre>
+      `;
+      previewList.appendChild(li);
     });
-  }
+  });
 
+  // ===== Create Course & Activities =====
   document.getElementById("createCourseBtn")?.addEventListener("click", async () => {
     try {
-      const userId = localStorage.getItem('userId');
-
-      // Build form data for course
+      // Course form data
       const formData = new FormData();
       formData.append("title", document.getElementById("title").value);
       formData.append("subTitle", document.getElementById("subTitle").value);
@@ -194,47 +126,61 @@ if (clearBtn) {
       formData.append("example", document.getElementById("example").value);
       formData.append("instructorId", userId);
 
-      const fileInput = document.getElementById("thumbnail");
-      if (fileInput && fileInput.files[0]) {
-        formData.append("thumbnail", fileInput.files[0]);
-      }
+      if (fileInput?.files[0]) formData.append("thumbnail", fileInput.files[0]);
 
       // Create course
-      const courseRes = await fetch("http://localhost:5000/api/courses", {
-        method: "POST",
-        body: formData
-      });
-      if (!courseRes.ok) throw new Error("Failed to create course");
+      const courseRes = await fetch("http://localhost:5000/api/courses", { method: "POST", body: formData });
+      if (!courseRes.ok) {
+        const errText = await courseRes.text();
+        throw new Error(errText);
+      }
+
       const course = await courseRes.json();
 
       // Create activities
       const allActivities = document.querySelectorAll("#activitiesList .activity");
       for (const act of allActivities) {
+        const testsRaw = act.querySelector(".activity-tests")?.value || "[]";
+        let testCases;
+        try {
+          testCases = JSON.parse(testsRaw);
+        } catch {
+          alert("Invalid test cases JSON. Fix it.");
+          return;
+        }
+
         const activityData = {
           title: act.querySelector(".activity-title")?.value || "Untitled",
-          difficulty: act.querySelector("select[name='activityDifficulty']")?.value || "No difficulty",
+          difficulty: act.querySelector(".activity-difficulty")?.value,
           description: act.querySelector(".activity-description")?.value || "",
-          outputExample: act.querySelector(".activity-output")?.value || "",
+          functionName: act.querySelector(".activity-function")?.value,
+          testCases,
           courseId: course._id
         };
+
+        if (!activityData.functionName) {
+          alert("Function name is required.");
+          return;
+        }
 
         const activityRes = await fetch("http://localhost:5000/api/activities", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(activityData)
         });
-        if (!activityRes.ok) throw new Error("Failed to create activity");
+        if (!activityRes.ok) {
+          const errText = await activityRes.text();
+          throw new Error(errText);
+        }
+
       }
 
-      // Everything succeeded
       localStorage.setItem("courseCreatedSuccess", "true");
       window.location.href = "./courses-instructor.html";
 
-
     } catch (err) {
-      console.error(err);
       alert("Something went wrong: " + err.message);
+      console.error(err);
     }
   });
-
 });

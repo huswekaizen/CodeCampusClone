@@ -223,3 +223,28 @@ button.ghost:hover {
 button.ghost:active {
   transform: scale(0.97);
 }
+
+.leave {
+  margin-top: 12px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 99, 99, 0.4);
+  background: rgba(255, 99, 99, 0.12);
+  color: #ff6b6b;
+  cursor: pointer;
+  transition: 200ms ease;
+  align-self: flex-start;
+  width: auto
+}
+
+.leave:hover {
+  background: rgba(255, 99, 99, 0.22);
+  border-color: rgba(255, 99, 99, 0.7);
+}
+
+.leave:active {
+  transform: scale(0.96);
+}
+

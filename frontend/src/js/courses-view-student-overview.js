@@ -35,6 +35,35 @@ async function loadCourseData() {
   }
 }
 
+document.getElementById("leave-btn").addEventListener("click", async () => {
+  try {
+    const studentId = localStorage.getItem("userId");
+
+    const res = await fetch(`http://localhost:5000/api/courses/${courseId}/leave-course`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ studentId })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Failed to leave course");
+      return;
+    }
+
+    alert("Successfully left the course.");
+    window.location.href = "./joined-courses-student.html";
+
+  } catch (err) {
+    console.error(err);
+    alert("Error leaving course.");
+  }
+
+});
+
 document.addEventListener("DOMContentLoaded", async () => {
   if (!courseId) {
     alert("No course selected.");

@@ -93,18 +93,35 @@ document.getElementById("runBtn").addEventListener("click", () => {
   const code = editor.state.doc.toString();
 
   try {
-    const originalLog = console.log;
-    console.log = (...msg) => output.textContent += msg.join(" ") + "\n";
-    
-    new Function(code)();
+    const userFn = new Function(`
+      ${code}
+      return typeof ${activityFunctionName} === "function" ? ${activityFunctionName} : null;
+    `)();
 
-    console.log = originalLog;
-
-    if (output.textContent === "") {
-      output.textContent = "✅ Code executed successfully (no output).";
+    if (!userFn) {
+      output.textContent = `❌ Function "${activityFunctionName}" is not defined.`;
+      return;
     }
-    
+
+    let passed = 0;
+
+    activityTestCases.forEach((test, index) => {
+      const result = userFn(...test.input);
+      const expected = test.expected;
+
+      if (JSON.stringify(result) === JSON.stringify(expected)) {
+        passed++;
+        output.textContent += `✅ Test ${index + 1} passed\n`;
+      } else {
+        output.textContent += `❌ Test ${index + 1} failed\n`;
+        output.textContent += `Expected: ${expected}, Got: ${result}\n`;
+      }
+    });
+
+    output.textContent += `\n${passed}/${activityTestCases.length} tests passed.`;
+
   } catch (err) {
-    output.textContent = "Error: " + err.message;
+    output.textContent = "❌ Runtime error: " + err.message;
   }
 });
+

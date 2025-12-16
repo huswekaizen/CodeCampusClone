@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
+export async function updateEnrolledCourseCount() {
   const userId = localStorage.getItem("userId") || "";
   const enrolledCourseList = document.getElementById("enrolledCoursesCount");
   try {
@@ -131,4 +131,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load enrolled courses:", err);
     enrolledCourseList.textContent = "0";
   }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await updateEnrolledCourseCount();
 });

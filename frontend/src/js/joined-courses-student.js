@@ -51,11 +51,6 @@ export async function loadJoinedCourses() {
         window.location.href = "./courses-view-student-overview.html";
       });
 
-      const leaveBtn = clone.querySelector(".leave");
-      leaveBtn.addEventListener("click", () => {
-        alert("Leave course not implemented yet");
-      });
-
       container.appendChild(clone);
     });
   } catch (err) {
@@ -64,5 +59,3 @@ export async function loadJoinedCourses() {
   }
 }
 
-
-document.addEventListener("DOMContentLoaded", loadJoinedCourses);

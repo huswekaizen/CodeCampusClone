@@ -3,7 +3,7 @@ import Course from "../models/Course.js";
 
 export const createActivity = async (req, res) => {
   try {
-    const { title, difficulty, description, outputExample, courseId } = req.body;
+    const { title, difficulty, description, functionName, testCases, courseId } = req.body;
 
     // Check if the course actually exists
     const course = await Course.findById(courseId);
@@ -14,9 +14,11 @@ export const createActivity = async (req, res) => {
       title,
       difficulty,
       description,
-      outputExample,
-      course: courseId,
+      functionName,
+      testCases,
+      course: courseId
     });
+
 
     await activity.save();
 

@@ -128,13 +128,23 @@
                   </div>
                 </div>
 
-                <div class="field small-field act-exercise">
-                  <label>Desired output / Example I/O</label>
+                <div class="field small-field">
+                  <label>Function name (required)</label>
                   <div class="textbox">
-                    <textarea class="activity-output" name="activityOutput" placeholder="Expected output or example input/output..."></textarea>
+                    <input class="activity-function" placeholder="e.g. sumNumbers">
                   </div>
                 </div>
+
               </div>
+
+              <div class="field small-field">
+                <label>Test cases (JSON)</label>
+                <div class="textbox">
+                  <textarea class="activity-tests"
+                    placeholder='[{ "input":[1,2] (depending on the function parameters), "expected":3 }]'></textarea>
+                </div>
+              </div>
+
 
             </li>
           </ul>
