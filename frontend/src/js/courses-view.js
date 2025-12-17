@@ -27,12 +27,13 @@ document.addEventListener("click", async (e) => {
   const li = e.target.closest("li");
   if (!li) return;
 
-  // Open edit mode
-  if (["view-title","view-desc","view-type","view-output-example"].some(cls => e.target.classList.contains(cls))) {
+  // ✅ Open edit mode ONLY when Edit button is clicked
+  if (e.target.classList.contains("edit-activity")) {
     li.querySelector(".view-mode").style.display = "none";
     li.querySelector(".edit-mode").style.display = "block";
     return;
   }
+
 
   // Save activity
   if (e.target.classList.contains("save-activity")) {
@@ -49,23 +50,39 @@ document.addEventListener("click", async (e) => {
 
   // Delete activity
   if (e.target.classList.contains("delete-activity")) {
-    const index = e.target.dataset.index;
-    const activity = loadedCourse.activities[index];
+    const activityId = li.dataset.activityId;
+
+    const activity = loadedCourse.activities.find(
+      a => a._id === activityId
+    );
+
+    if (!activity) {
+      alert("Activity not found.");
+      return;
+    }
 
     if (!confirm(`Are you sure you want to delete activity "${activity.title}"?`)) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/activities/${activity._id}`, { method: "DELETE" });
+      const res = await fetch(
+        `http://localhost:5000/api/activities/${activityId}`,
+        { method: "DELETE" }
+      );
+
       if (!res.ok) throw new Error("Failed to delete activity");
 
       li.remove();
-      loadedCourse.activities.splice(index, 1);
+      loadedCourse.activities = loadedCourse.activities.filter(
+        a => a._id !== activityId
+      );
+
       alert(`Activity "${activity.title}" deleted successfully`);
     } catch (err) {
       console.error(err);
-      alert("Failed to delete activity. Check console for errors.");
+      alert("Failed to delete activity.");
     }
   }
+
 });
 
 // Add new activity template
@@ -139,29 +156,52 @@ function renderActivities(activities) {
   activities.forEach((activity, index) => {
     const li = document.createElement("li");
     li.dataset.activityId = activity._id;
-    li.dataset.index = index;
 
     li.innerHTML = `
       <div class="view-mode">
         <div class="activity-header">
-          <strong class="view-title">Activity ${index+1}: ${activity.title}</strong>
-          <button class="delete-activity" data-index="${index}">✖</button>
+          <strong class="view-title">
+            Activity ${index + 1}: ${activity.title}
+          </strong>
+          <div>
+            <button class="edit-activity">edit</button>
+            <button class="delete-activity">✖</button>
+          </div>
+
         </div>
-        <p class="view-desc">${activity.description}</p>
-        <h5 class="view-output-example">${activity.outputExample || ""}</h5>
+
+        <p class="view-desc">${activity.description || ""}</p>
+
+        <code class="view-function">
+          Function: ${activity.functionName || "N/A"}
+        </code>
+
+        <pre class="view-tests">
+          ${JSON.stringify(activity.testCases || [], null, 2)}
+        </pre>
+
         <small class="view-difficulty">${activity.difficulty}</small>
       </div>
+
       <div class="edit-mode" style="display:none">
-        <input type="text" class="edit-title" value="${activity.title}">
-        <textarea class="edit-desc">${activity.description}</textarea>
-        <textarea class="edit-output-example">${activity.outputExample || ""}</textarea>
+        <input class="edit-title" value="${activity.title}" />
+
+        <textarea class="edit-desc">${activity.description || ""}</textarea>
+
+        <input class="edit-function" value="${activity.functionName || ""}" />
+
+        <textarea class="edit-tests">
+          ${JSON.stringify(activity.testCases || [], null, 2)}
+        </textarea>
+
         <select class="edit-difficulty">
-          <option value="Easy" ${activity.difficulty==="Easy"?"selected":""}>Easy</option>
-          <option value="Medium" ${activity.difficulty==="Medium"?"selected":""}>Medium</option>
-          <option value="Hard" ${activity.difficulty==="Hard"?"selected":""}>Hard</option>
+          <option value="Easy" ${activity.difficulty === "Easy" ? "selected" : ""}>Easy</option>
+          <option value="Medium" ${activity.difficulty === "Medium" ? "selected" : ""}>Medium</option>
+          <option value="Hard" ${activity.difficulty === "Hard" ? "selected" : ""}>Hard</option>
         </select>
-        <button class="save-btn save-activity">Save</button>
-        <button class="save-btn cancel-edit">Cancel</button>
+
+        <button class="save-activity">Save</button>
+        <button class="cancel-edit">Cancel</button>
       </div>
     `;
 
@@ -169,52 +209,93 @@ function renderActivities(activities) {
   });
 }
 
+
 async function saveActivity(li) {
-  const id = li.dataset.activityId; // already there
-  const newTitle = li.querySelector(".edit-title").value.trim();
-  const newDesc = li.querySelector(".edit-desc").value.trim();
-  const newDifficulty = li.querySelector(".edit-difficulty").value;
-  const newOutputExample = li.querySelector(".edit-output-example").value;
+  const id = li.dataset.activityId;
+
+  const title = li.querySelector(".edit-title").value.trim();
+  const description = li.querySelector(".edit-desc").value.trim();
+  const functionName = li.querySelector(".edit-function").value.trim();
+  const difficulty = li.querySelector(".edit-difficulty").value;
+  const testsRaw = li.querySelector(".edit-tests").value;
+
+  let testCases;
+  try {
+    testCases = JSON.parse(testsRaw);
+  } catch {
+    alert("Test cases must be valid JSON.");
+    return;
+  }
 
   try {
     const res = await fetch(`http://localhost:5000/api/activities/${id}`, {
       method: "PUT",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({title:newTitle, description:newDesc, difficulty:newDifficulty, outputExample:newOutputExample})
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        description,
+        functionName,
+        difficulty,
+        testCases
+      })
     });
+
     if (!res.ok) throw new Error("Failed to update activity");
 
-    // Update local state by _id instead of index
-    const activityIndex = loadedCourse.activities.findIndex(a => a._id === id);
-    if (activityIndex > -1) {
-      loadedCourse.activities[activityIndex] = { ...loadedCourse.activities[activityIndex], title:newTitle, description:newDesc, difficulty:newDifficulty, outputExample:newOutputExample };
+    // Update local cache
+    const idx = loadedCourse.activities.findIndex(a => a._id === id);
+    if (idx > -1) {
+      loadedCourse.activities[idx] = {
+        ...loadedCourse.activities[idx],
+        title,
+        description,
+        functionName,
+        difficulty,
+        testCases
+      };
     }
 
-    // Update DOM
-    li.querySelector(".view-title").textContent = `Activity ${activityIndex+1}: ${newTitle}`;
-    li.querySelector(".view-desc").textContent = newDesc;
-    li.querySelector(".view-difficulty").textContent = newDifficulty;
-    li.querySelector(".view-output-example").textContent = newOutputExample;
+    // Update view
+    li.querySelector(".view-title").textContent = `Activity ${idx + 1}: ${title}`;
+    li.querySelector(".view-desc").textContent = description;
+    li.querySelector(".view-function").textContent = `Function: ${functionName}`;
+    li.querySelector(".view-tests").textContent = JSON.stringify(testCases, null, 2);
+    li.querySelector(".view-difficulty").textContent = difficulty;
+
     li.querySelector(".edit-mode").style.display = "none";
     li.querySelector(".view-mode").style.display = "block";
 
   } catch (err) {
     console.error(err);
-    alert("Failed to update activity. Check console for errors.");
+    alert("Failed to update activity.");
   }
 }
 
-
 document.addEventListener("click", async (e) => {
-  if (!e.target.classList.contains("save-activity")) return;
+  if (!e.target.classList.contains("create-activity")) return;
 
   const li = e.target.closest(".activity-form");
   if (!li) return;
 
-  const title = li.querySelector(".activity-title-input").value;
-  const description = li.querySelector(".activity-desc-input").value;
-  const outputExample = li.querySelector(".edit-output-example").value;
+  const title = li.querySelector(".activity-title-input").value.trim();
+  const description = li.querySelector(".activity-desc-input").value.trim();
+  const functionName = li.querySelector(".activity-function-input").value.trim();
+  const testsRaw = li.querySelector(".activity-tests-input").value.trim();
   const difficulty = li.querySelector(".activity-difficulty-input").value;
+
+  let testCases;
+  try {
+    testCases = JSON.parse(testsRaw || "[]");
+  } catch {
+    alert("Test cases must be valid JSON.");
+    return;
+  }
+
+
+  if (!title || !description) {
+    alert("Fill all required fields.");
+    return;
+  }
 
   try {
     const res = await fetch("http://localhost:5000/api/activities", {
@@ -223,24 +304,24 @@ document.addEventListener("click", async (e) => {
       body: JSON.stringify({
         title,
         description,
-        outputExample,
+        functionName,
+        testCases,
         difficulty,
         courseId
       })
     });
 
-    if (!res.ok) throw new Error("Failed to save");
+    if (!res.ok) throw new Error("Failed to create activity");
 
-    alert("Saved successfully");
-    li.remove(); // remove the template after save
-
-    await loadCourseData(); // refresh and show newly added activity
+    li.remove();
+    await loadCourseData();
 
   } catch (err) {
     console.error(err);
-    alert("Failed to save activities. Check console for errors.");
+    alert("Failed to create activity.");
   }
 });
+
 
 document.getElementById("editBtn")?.addEventListener("click", () => {
   window.location.href = "./edit-course.html";

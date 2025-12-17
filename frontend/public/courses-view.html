@@ -55,7 +55,9 @@
       <section class="preview-section">
         <div class="activities-header">
           <h3>Activities</h3>
-          <button id="addActivityBtn" class="addActivityBtn">+</button>
+          <div>
+            <button id="addActivityBtn" class="addActivityBtn">+</button>
+          </div>
         </div>
         <ul class="preview-activities-list" id="activities-list"></ul>
       </section>
@@ -66,7 +68,16 @@
           <div class="edit-mode">
             <input class="activity-title-input" placeholder="Activity Title">
             <textarea class="activity-desc-input" placeholder="Description"></textarea>
-            <textarea class="edit-output-example" placeholder="Output / Example"></textarea>
+            <input 
+              class="activity-function-input" 
+              placeholder="Function name (e.g. sumTwoNumbers)"
+            >
+
+            <textarea 
+              class="activity-tests-input" 
+              placeholder='Test cases JSON (e.g. [{"input":[1,2],"expected":3}])'
+            ></textarea>
+
             <select class="activity-difficulty-input">
               <option value="Easy">Easy</option>
               <option value="Medium">Medium</option>
@@ -74,7 +85,7 @@
             </select>
 
             <div class="activity-buttons">
-              <button class="save-activity">Save</button>
+              <button class="create-activity">Create</button>
               <button class="remove-activity">Remove</button>
             </div>
 

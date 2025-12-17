@@ -36,6 +36,11 @@ async function loadCourseData() {
 }
 
 document.getElementById("leave-btn").addEventListener("click", async () => {
+  const confirmLeave = confirm(
+    "Are you sure you want to leave this course?\nYou will lose access to its content."
+  );
+
+  if (!confirmLeave) return; // user chickened out, good
   try {
     const studentId = localStorage.getItem("userId");
 

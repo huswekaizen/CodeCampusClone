@@ -108,18 +108,20 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener("DOMContentLoaded", async () => {
   const userId = localStorage.getItem("userId") || "";
   const publishedCourseList = document.getElementById("publishedCourseList");
+  const publishedCourseCountProfile = document.getElementById("publishedCourseCountProfile");
   try {
     const res = await fetch(`http://localhost:5000/api/instructors/${userId}/published-courses`);
     const data = await res.json();
     console.log(data); // check what comes back
     publishedCourseList.textContent = data.count || 0;
+    publishedCourseCountProfile.textContent = data.count || 0;
   } catch (err) {
     console.error("Failed to load published courses:", err);
     publishedCourseList.textContent = "0";
   }
 });
 
-export async function updateEnrolledCourseCount() {
+async function updateEnrolledCourseCount() {
   const userId = localStorage.getItem("userId") || "";
   const enrolledCourseList = document.getElementById("enrolledCoursesCount");
   try {
