@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-async function updateEnrolledCourseCount() {
+export async function updateEnrolledCourseCount() {
   const userId = localStorage.getItem("userId") || "";
   const enrolledCourseList = document.getElementById("enrolledCoursesCount");
   try {
