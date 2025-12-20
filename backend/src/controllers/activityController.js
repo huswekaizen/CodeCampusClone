@@ -64,29 +64,41 @@ export const getActivityById = async (req, res) => {
   }
 };
 
-
 export const updateActivity = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, difficulty, outputExample } = req.body;
 
     const activity = await Activity.findById(id);
-    if (!activity) return res.status(404).json({ message: "Activity not found" });
+    if (!activity) {
+      return res.status(404).json({ message: "Activity not found" });
+    }
 
-    // Update fields
-    if (title) activity.title = title;
-    if (description) activity.description = description;
-    if (difficulty) activity.difficulty = difficulty;
-    if (outputExample) activity.outputExample = outputExample;
+    const {
+      title,
+      description,
+      functionName,
+      difficulty,
+      testCases,
+    } = req.body;
+
+    if (title !== undefined) activity.title = title;
+    if (description !== undefined) activity.description = description;
+    if (functionName !== undefined) activity.functionName = functionName;
+    if (difficulty !== undefined) activity.difficulty = difficulty;
+    if (testCases !== undefined) activity.testCases = testCases;
 
     await activity.save();
 
-    res.status(200).json({ message: "Activity updated successfully", activity });
+    res.status(200).json({
+      message: "Activity updated successfully",
+      activity,
+    });
   } catch (error) {
-    console.error(error);
+    console.error("Update activity error:", error);
     res.status(500).json({ message: "Failed to update activity" });
   }
 };
+
 
 
 export const deleteActivity = async (req, res) => {

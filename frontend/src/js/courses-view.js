@@ -155,34 +155,38 @@ function renderActivities(activities) {
 
   activities.forEach((activity, index) => {
     const li = document.createElement("li");
+    li.classList.add("activity-item");
     li.dataset.activityId = activity._id;
 
     li.innerHTML = `
+      <!-- VIEW MODE -->
       <div class="view-mode">
         <div class="activity-header">
           <strong class="view-title">
             Activity ${index + 1}: ${activity.title}
           </strong>
-          <div>
-            <button class="edit-activity">edit</button>
+          <div class="activity-actions">
+            <button class="edit-activity">Edit</button>
             <button class="delete-activity">✖</button>
           </div>
-
         </div>
 
         <p class="view-desc">${activity.description || ""}</p>
 
-        <code class="view-function">
+        <div class="view-function">
           Function: ${activity.functionName || "N/A"}
-        </code>
+        </div>
 
-        <pre class="view-tests">
-          ${JSON.stringify(activity.testCases || [], null, 2)}
-        </pre>
+        <pre class="view-tests">${JSON.stringify(
+          activity.testCases || [],
+          null,
+          2
+        )}</pre>
 
         <small class="view-difficulty">${activity.difficulty}</small>
       </div>
 
+      <!-- EDIT MODE -->
       <div class="edit-mode" style="display:none">
         <input class="edit-title" value="${activity.title}" />
 
@@ -190,9 +194,11 @@ function renderActivities(activities) {
 
         <input class="edit-function" value="${activity.functionName || ""}" />
 
-        <textarea class="edit-tests">
-          ${JSON.stringify(activity.testCases || [], null, 2)}
-        </textarea>
+        <textarea class="edit-tests">${JSON.stringify(
+          activity.testCases || [],
+          null,
+          2
+        )}</textarea>
 
         <select class="edit-difficulty">
           <option value="Easy" ${activity.difficulty === "Easy" ? "selected" : ""}>Easy</option>
@@ -200,8 +206,10 @@ function renderActivities(activities) {
           <option value="Hard" ${activity.difficulty === "Hard" ? "selected" : ""}>Hard</option>
         </select>
 
-        <button class="save-activity">Save</button>
-        <button class="cancel-edit">Cancel</button>
+        <div class="edit-actions">
+          <button class="save-activity">Save</button>
+          <button class="cancel-edit">Cancel</button>
+        </div>
       </div>
     `;
 
