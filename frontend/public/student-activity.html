@@ -31,10 +31,18 @@
           <div id="editor"></div>
         </div>
 
-        <div class="output-section">
-          <div class="output-header"> Output</div>
-          <pre id="output">Your results will be shown here.</pre>
+        <div class="side-panel">
+          <div class="tab-buttons">
+            <button class="instruction-btn active">Instruction</button>
+            <button class="output-btn">Output</button>
+          </div>
+
+          <pre id="instruction" class="panel active">Your instructions will be shown here.</pre>
+
+          <pre id="output" class="panel">Your results will be shown here.</pre>
+
         </div>
+
       </div>
 
       <button id="runBtn" class="primary">Run</button>
@@ -42,7 +50,7 @@
 
   </div>
 
-  <script type="module" src="../src/js/student-activity-fetch.js"></script>
+  <script type="module" src="../src/js/student-activity-frontend.js"></script>
   <script type="module" src="../src/js/student-activity-code-editor.js"></script>
 </body>
 </html>

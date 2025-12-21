@@ -25,7 +25,7 @@ body {
 }
 
 .page {
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 20px auto;
   padding: 0 20px;
 }
@@ -63,21 +63,11 @@ body {
 }
 
 .editor-section {
-  flex: 7; /* wider editor */
+  flex: 5; /* wider editor */
   background: #0f1529;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   overflow: auto;
-}
-
-.output-section {
-  flex: 3; /* smaller output panel */
-  background: #0f1529;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 #editor {
@@ -156,4 +146,101 @@ button.primary:hover {
   border-color: rgba(72, 187, 120, 0.25);
   background: rgba(72, 187, 120, 0.15);
   color: #48bb78;
+}
+
+/* Panel container */
+.side-panel {
+  flex: 3;
+  background: #0f1529;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Tabs already styled earlier, just ensure layout */
+.tab-buttons {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+}
+
+.panel {
+  display: none;
+
+  /* kill flex behavior entirely */
+  flex: none;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 12px;
+  margin: 0;
+
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-y: auto;
+
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+  color: rgb(130, 135, 151);
+}
+
+.panel.active {
+  display: block;
+}
+
+.panel pre {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Instruction / Output Toggle Buttons ===== */
+
+.output-section > div {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: transparent;
+}
+
+.instruction-btn,
+.output-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+/* Hover state */
+.instruction-btn:hover,
+.output-btn:hover {
+  color: var(--accent-hover);
+  border-color: rgba(100, 178, 255, 0.4);
+}
+
+/* Active / selected tab */
+.instruction-btn.active,
+.output-btn.active {
+  background: rgba(58, 141, 255, 0.15);
+  color: var(--accent-hover);
+  border-color: rgba(58, 141, 255, 0.5);
+}
+
+/* Keyboard focus */
+.instruction-btn:focus-visible,
+.output-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.35);
 }

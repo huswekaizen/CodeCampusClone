@@ -1,2 +1,4 @@
-- editable activities since it has new features now
+- fix the functionName in the schema and backend the function name shouldnt be required, the function name is ok regardless, only the output is what matters
+- fetch data fix code editor when running code
+- codewars like code validation
 
