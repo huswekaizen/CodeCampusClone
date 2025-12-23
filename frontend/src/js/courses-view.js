@@ -21,6 +21,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await loadCourseData();
 });
+function autoResizeTextarea(textarea) {
+  textarea.style.height = "auto";
+  textarea.style.height = textarea.scrollHeight + "px";
+}
 
 // Delegate clicks for edit/save/cancel/delete
 document.addEventListener("click", async (e) => {
@@ -31,8 +35,13 @@ document.addEventListener("click", async (e) => {
   if (e.target.classList.contains("edit-activity")) {
     li.querySelector(".view-mode").style.display = "none";
     li.querySelector(".edit-mode").style.display = "block";
+
+    const ta = li.querySelector(".edit-tests");
+    autoResizeTextarea(ta);
+
     return;
   }
+
 
 
   // Save activity
@@ -150,6 +159,8 @@ async function loadCourseData() {
   }
 }
 
+
+
 function renderActivities(activities) {
   activitiesList.innerHTML = "";
 
@@ -173,10 +184,6 @@ function renderActivities(activities) {
 
         <p class="view-desc">${activity.description || ""}</p>
 
-        <div class="view-function">
-          Function: ${activity.functionName || "N/A"}
-        </div>
-
         <pre class="view-tests">${JSON.stringify(
           activity.testCases || [],
           null,
@@ -191,8 +198,6 @@ function renderActivities(activities) {
         <input class="edit-title" value="${activity.title}" />
 
         <textarea class="edit-desc">${activity.description || ""}</textarea>
-
-        <input class="edit-function" value="${activity.functionName || ""}" />
 
         <textarea class="edit-tests">${JSON.stringify(
           activity.testCases || [],
@@ -212,10 +217,12 @@ function renderActivities(activities) {
         </div>
       </div>
     `;
-
+        
     activitiesList.appendChild(li);
   });
 }
+
+
 
 
 async function saveActivity(li) {
@@ -223,7 +230,6 @@ async function saveActivity(li) {
 
   const title = li.querySelector(".edit-title").value.trim();
   const description = li.querySelector(".edit-desc").value.trim();
-  const functionName = li.querySelector(".edit-function").value.trim();
   const difficulty = li.querySelector(".edit-difficulty").value;
   const testsRaw = li.querySelector(".edit-tests").value;
 
@@ -242,7 +248,6 @@ async function saveActivity(li) {
       body: JSON.stringify({
         title,
         description,
-        functionName,
         difficulty,
         testCases
       })
@@ -257,7 +262,6 @@ async function saveActivity(li) {
         ...loadedCourse.activities[idx],
         title,
         description,
-        functionName,
         difficulty,
         testCases
       };
@@ -266,7 +270,6 @@ async function saveActivity(li) {
     // Update view
     li.querySelector(".view-title").textContent = `Activity ${idx + 1}: ${title}`;
     li.querySelector(".view-desc").textContent = description;
-    li.querySelector(".view-function").textContent = `Function: ${functionName}`;
     li.querySelector(".view-tests").textContent = JSON.stringify(testCases, null, 2);
     li.querySelector(".view-difficulty").textContent = difficulty;
 
@@ -287,7 +290,6 @@ document.addEventListener("click", async (e) => {
 
   const title = li.querySelector(".activity-title-input").value.trim();
   const description = li.querySelector(".activity-desc-input").value.trim();
-  const functionName = li.querySelector(".activity-function-input").value.trim();
   const testsRaw = li.querySelector(".activity-tests-input").value.trim();
   const difficulty = li.querySelector(".activity-difficulty-input").value;
 
@@ -312,7 +314,6 @@ document.addEventListener("click", async (e) => {
       body: JSON.stringify({
         title,
         description,
-        functionName,
         testCases,
         difficulty,
         courseId

@@ -11,11 +11,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 // get the activity id from the course-view-student-activities.js localStorage first
 
    try {
-        const res = await fetch (`http://localhost:5000/api/activity/${localStorage.getItem("selectedActivityId")}`);
+        const res = await fetch (`http://localhost:5000/api/activities/${localStorage.getItem("selectedActivityId")}`);
         const activities = await res.json();
 
         activityTitle.textContent = activities.title || "N/A";
         activityDifficulty.textContent = activities.difficulty || "N/A";
+        instruction.textContent = activities.description || "N/A";
+        
 
    } catch (err) {
      console.error(err);    

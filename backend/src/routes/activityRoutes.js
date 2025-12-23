@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.post("/activities", createActivity);
 
-router.get("/activities/:courseId", getActivitiesByCourse);
-router.get("/activity/:id", getActivityById);
+router.get("/activities/course/:courseId", getActivitiesByCourse);
+router.get("/activities/:id", getActivityById);
 
 router.put("/activities/:id", updateActivity);
 

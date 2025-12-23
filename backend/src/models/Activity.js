@@ -9,11 +9,6 @@ const activitySchema = new mongoose.Schema({
   },
   description: String,
 
-  functionName: {
-    type: String,
-    required: true // e.g. "sum"
-  },
-
   testCases: [
     {
       input: [mongoose.Schema.Types.Mixed], // parameters

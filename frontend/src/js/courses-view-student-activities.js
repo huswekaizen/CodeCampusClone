@@ -35,7 +35,7 @@ async function loadActivities() {
       return;
     }
 
-    const res = await fetch(`http://localhost:5000/api/activities/${courseId}`);
+    const res = await fetch(`http://localhost:5000/api/activities/course/${courseId}`);
     if (!res.ok) throw new Error("Failed to fetch activities");
 
     const activities = await res.json();

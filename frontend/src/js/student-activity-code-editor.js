@@ -87,34 +87,72 @@ const editor = new EditorView({
 
 const output = document.getElementById("output");
 
+// 1️⃣ Fetch activity from backend
+let activityTestCases = [];
+let activityDefaultCode = "";
+
+async function loadActivity(activityId) {
+  try {
+    const res = await fetch(`http://localhost:5000/api/activities/${activityId}`);
+    const data = await res.json();
+
+    activityTestCases = data.testCases || [];
+    activityDefaultCode = data.defaultCode || "// Write JS here\nconsole.log('Hello');"
+
+
+    // Set editor default code
+    editor.dispatch({
+      changes: { from: 0, to: editor.state.doc.length, insert: activityDefaultCode }
+    });
+
+  } catch (err) {
+    output.textContent = "❌ Failed to load activity: " + err.message;
+  }
+}
+
+// Load your activity on page load
+loadActivity(localStorage.getItem("selectedActivityId")); // replace with actual ID
+
+// 2️⃣ Run button logic
 document.getElementById("runBtn").addEventListener("click", () => {
   output.textContent = "";
-
   const code = editor.state.doc.toString();
 
   try {
-    const userFn = new Function(`
-      ${code}
-      return typeof ${activityFunctionName} === "function" ? ${activityFunctionName} : null;
-    `)();
+    // Wrap user code so it captures console.log and test inputs
+    const wrapper = new Function(`
+      const console = { log: (...args) => { window.output.textContent += args.join(' ') + '\\n'; } };
+      return (...args) => {
+        let result;
+        try {
+          // Use eval to execute code with arguments
+          result = eval(\`(${code})(...args)\`);
+        } catch (err) {
+          throw err;
+        }
+        return result;
+      };
+    `);
 
-    if (!userFn) {
-      output.textContent = `❌ Function "${activityFunctionName}" is not defined.`;
-      return;
-    }
+    const userFn = wrapper();
 
     let passed = 0;
 
     activityTestCases.forEach((test, index) => {
-      const result = userFn(...test.input);
-      const expected = test.expected;
+      let result;
+      try {
+        result = userFn(...test.input);
+      } catch (err) {
+        output.textContent += `❌ Test ${index + 1} runtime error: ${err.message}\n`;
+        return;
+      }
 
-      if (JSON.stringify(result) === JSON.stringify(expected)) {
+      if (JSON.stringify(result) === JSON.stringify(test.expected)) {
         passed++;
         output.textContent += `✅ Test ${index + 1} passed\n`;
       } else {
         output.textContent += `❌ Test ${index + 1} failed\n`;
-        output.textContent += `Expected: ${expected}, Got: ${result}\n`;
+        output.textContent += `Expected: ${test.expected}, Got: ${result}\n`;
       }
     });
 
@@ -124,4 +162,3 @@ document.getElementById("runBtn").addEventListener("click", () => {
     output.textContent = "❌ Runtime error: " + err.message;
   }
 });
-

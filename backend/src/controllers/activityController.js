@@ -14,7 +14,6 @@ export const createActivity = async (req, res) => {
       title,
       difficulty,
       description,
-      functionName,
       testCases,
       course: courseId
     });
@@ -76,14 +75,12 @@ export const updateActivity = async (req, res) => {
     const {
       title,
       description,
-      functionName,
       difficulty,
       testCases,
     } = req.body;
 
     if (title !== undefined) activity.title = title;
     if (description !== undefined) activity.description = description;
-    if (functionName !== undefined) activity.functionName = functionName;
     if (difficulty !== undefined) activity.difficulty = difficulty;
     if (testCases !== undefined) activity.testCases = testCases;
 

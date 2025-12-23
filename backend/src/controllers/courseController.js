@@ -43,14 +43,15 @@ export const getCourseWithActivities = async (req, res) => {
       .populate({
         path: "activities",
         model: "Activity",
-        select: "title description difficulty outputExample"
+        select: "title description difficulty testCases"
       })
       .populate({
         path: "instructor",       // <-- populate instructor
         model: "User",
         select: "firstName lastName"
       })
-      .select("title subTitle category description thumbnail example activities courseCode");
+      .select("title subTitle category description thumbnail example activities courseCode")
+      .lean();
 
     if (!course) return res.status(404).json({ message: "Course not found" });
 
