@@ -1,4 +1,4 @@
-- fix the functionName in the schema and backend the function name shouldnt be required, the function name is ok regardless, only the output is what matters
-- fetch data fix code editor when running code
-- codewars like code validation
+- fixing create course
 
+- fix code editor validation because it has bugs
+    - bug is if you just put return and the expected output it will pass, but it shouldnt it should be a paramater validateds

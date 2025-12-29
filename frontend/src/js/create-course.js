@@ -100,22 +100,27 @@ document.addEventListener("DOMContentLoaded", () => {
       const title = act.querySelector(".activity-title")?.value || "(Untitled)";
       const difficulty = act.querySelector(".activity-difficulty")?.value || "(No difficulty)";
       const desc = act.querySelector(".activity-description")?.value || "(No description)";
-      const functionName = act.querySelector(".activity-function")?.value || "(No function)";
       const tests = act.querySelector(".activity-tests")?.value || "[]";
 
       const li = document.createElement("li");
       li.innerHTML = `
         <strong>${i + 1}. ${title}</strong> (${difficulty})
         <p>${desc}</p>
-        <code>Function: ${functionName}</code>
-        <pre>${tests}</pre>
+        <pre class="view-tests">${JSON.stringify(
+          JSON.parse(tests) || [],
+          null,
+          2
+        )}</pre>
       `;
       previewList.appendChild(li);
     });
   });
 
   // ===== Create Course & Activities =====
-  document.getElementById("createCourseBtn")?.addEventListener("click", async () => {
+  const form = document.getElementById("courseWizard");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault(); // THIS is the missing spine
     try {
       // Course form data
       const formData = new FormData();
@@ -153,15 +158,9 @@ document.addEventListener("DOMContentLoaded", () => {
           title: act.querySelector(".activity-title")?.value || "Untitled",
           difficulty: act.querySelector(".activity-difficulty")?.value,
           description: act.querySelector(".activity-description")?.value || "",
-          functionName: act.querySelector(".activity-function")?.value,
           testCases,
           courseId: course._id
         };
-
-        if (!activityData.functionName) {
-          alert("Function name is required.");
-          return;
-        }
 
         const activityRes = await fetch("http://localhost:5000/api/activities", {
           method: "POST",

@@ -128,13 +128,6 @@
                   </div>
                 </div>
 
-                <div class="field small-field">
-                  <label>Function name (required)</label>
-                  <div class="textbox">
-                    <input class="activity-function" placeholder="e.g. sumNumbers">
-                  </div>
-                </div>
-
               </div>
 
               <div class="field small-field">
@@ -170,12 +163,14 @@
                   </div>
                 </div>
 
-                <div class="field small-field act-exercise">
-                  <label>Desired output / Example I/O</label>
+                <div class="field small-field">
+                  <label>Test cases (JSON)</label>
                   <div class="textbox">
-                    <textarea class="activity-output" name="activityOutput" placeholder="Expected output or example input/output..."></textarea>
+                    <textarea class="activity-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
                   </div>
                 </div>
+
               </div>
 
               <div class="activity-right">
@@ -222,7 +217,7 @@
               <button type="button" class="ghost" data-go-step="2">← Back</button>
             </div>
             <div class="right-actions">
-              <button type="button" class="primary" id="createCourseBtn">Create Course</button>
+              <button type="submit" class="primary" >Create Course</button>
             </div>
           </div>
         </section>
