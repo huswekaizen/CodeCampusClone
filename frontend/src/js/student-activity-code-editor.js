@@ -24,6 +24,11 @@ function jsSyntaxLinter() {
   });
 }
 
+const submitBtn = document.getElementById("submitBtn");
+submitBtn.addEventListener("click", () => {
+  alert("Submit functionality is not implemented yet.");
+});
+
 const syntaxColors = HighlightStyle.define([
   { tag: tags.keyword, color: "#ff7b72" },
   { tag: tags.string, color: "#a5d6ff" },
@@ -115,48 +120,58 @@ loadActivity(localStorage.getItem("selectedActivityId")); // replace with actual
 
 // 2️⃣ Run button logic
 document.getElementById("runBtn").addEventListener("click", () => {
-  output.textContent = "";
+  const output = document.getElementById("output");
+  output.innerHTML = "";
   const code = editor.state.doc.toString();
 
+  window.output = output;
+
+
   try {
-    // Wrap user code so it captures console.log and test inputs
     const wrapper = new Function(`
-      const console = { log: (...args) => { window.output.textContent += args.join(' ') + '\\n'; } };
-      return (...args) => {
-        let result;
-        try {
-          // Use eval to execute code with arguments
-          result = eval(\`(${code})(...args)\`);
-        } catch (err) {
-          throw err;
-        }
-        return result;
-      };
+      const console = { log: (...args) => window.output.textContent += args.join(' ') + '\\n' };
+      ${code}
+      if (typeof solution !== "function") {
+        throw new Error("You must define a function named solution");
+      }
+      return solution;
     `);
 
-    const userFn = wrapper();
 
+    const userFn = wrapper();
     let passed = 0;
 
     activityTestCases.forEach((test, index) => {
+      const testDiv = document.createElement("div");
+      testDiv.classList.add("test-case");
+
       let result;
       try {
         result = userFn(...test.input);
       } catch (err) {
-        output.textContent += `❌ Test ${index + 1} runtime error: ${err.message}\n`;
+        testDiv.innerHTML = `<div class="test-header fail">❌ Test ${index + 1} error: ${err.message}</div>`;
+        output.appendChild(testDiv);
         return;
       }
 
       if (JSON.stringify(result) === JSON.stringify(test.expected)) {
         passed++;
-        output.textContent += `✅ Test ${index + 1} passed\n`;
+        testDiv.innerHTML = `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
       } else {
-        output.textContent += `❌ Test ${index + 1} failed\n`;
-        output.textContent += `Expected: ${test.expected}, Got: ${result}\n`;
+        testDiv.innerHTML = `
+          <div class="test-header fail">❌ Test ${index + 1} failed</div>
+          <div class="test-box"><span class="label">Expected:</span><span class="content">${test.expected}</span></div>
+          <div class="test-box"><span class="label">Got:</span><span class="content">${result}</span></div>
+        `;
       }
+
+      output.appendChild(testDiv);
     });
 
-    output.textContent += `\n${passed}/${activityTestCases.length} tests passed.`;
+    const summaryDiv = document.createElement("div");
+    summaryDiv.classList.add("test-summary");
+    summaryDiv.textContent = `${passed}/${activityTestCases.length} tests passed.`;
+    output.appendChild(summaryDiv);
 
   } catch (err) {
     output.textContent = "❌ Runtime error: " + err.message;
