@@ -7,24 +7,30 @@ export const createActivity = async (req, res) => {
 
     // Check if the course actually exists
     const course = await Course.findById(courseId);
-    if (!course) return res.status(404).json({ message: "Course not found" });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
 
-    // Create and save the new activity
     const activity = new Activity({
       title,
       difficulty,
       description,
-      testCases,
+      points,
+      sampleTests,
+      validationTests,
       course: courseId
     });
 
-
     await activity.save();
 
-    // Push activity reference to the course
-    await Course.findByIdAndUpdate(courseId, { $push: { activities: activity._id } });
+    await Course.findByIdAndUpdate(courseId, {
+      $push: { activities: activity._id }
+    });
 
-    res.status(201).json({ message: "Activity created successfully", activity });
+    res.status(201).json({
+      message: "Activity created successfully",
+      activity
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Failed to create activity" });
@@ -76,13 +82,17 @@ export const updateActivity = async (req, res) => {
       title,
       description,
       difficulty,
-      testCases,
+      points,
+      sampleTests,
+      validationTests,
     } = req.body;
 
     if (title !== undefined) activity.title = title;
     if (description !== undefined) activity.description = description;
     if (difficulty !== undefined) activity.difficulty = difficulty;
-    if (testCases !== undefined) activity.testCases = testCases;
+    if (points !== undefined) activity.points = points;
+    if (sampleTests !== undefined) activity.sampleTests = sampleTests;
+    if (validationTests !== undefined) activity.validationTests = validationTests;
 
     await activity.save();
 

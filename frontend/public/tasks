@@ -1,4 +1,6 @@
-- fixing create course
+- new schema in activities
+- updated controller and create activities in create-course
 
-- fix code editor validation because it has bugs
-    - bug is if you just put return and the expected output it will pass, but it shouldnt it should be a paramater validateds
+now:
+- failed creating course in activity only
+- update the update activity and add activity in view-course

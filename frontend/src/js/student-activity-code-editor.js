@@ -93,7 +93,9 @@ const editor = new EditorView({
 const output = document.getElementById("output");
 
 // 1️⃣ Fetch activity from backend
-let activityTestCases = [];
+let sampleTests = [];
+let validationTests = [];
+
 let activityDefaultCode = "";
 
 async function loadActivity(activityId) {
@@ -101,14 +103,8 @@ async function loadActivity(activityId) {
     const res = await fetch(`http://localhost:5000/api/activities/${activityId}`);
     const data = await res.json();
 
-    activityTestCases = data.testCases || [];
-    activityDefaultCode = data.defaultCode || "// Write JS here\nconsole.log('Hello');"
-
-
-    // Set editor default code
-    editor.dispatch({
-      changes: { from: 0, to: editor.state.doc.length, insert: activityDefaultCode }
-    });
+    sampleTests = data.sampleTests || [];
+    validationTests = data.validationTests || [];
 
   } catch (err) {
     output.textContent = "❌ Failed to load activity: " + err.message;
@@ -139,9 +135,10 @@ document.getElementById("runBtn").addEventListener("click", () => {
 
 
     const userFn = wrapper();
-    let passed = 0;
+    let allPassed = true;
 
-    activityTestCases.forEach((test, index) => {
+
+    sampleTests.forEach((test, index) => {
       const testDiv = document.createElement("div");
       testDiv.classList.add("test-case");
 
@@ -155,9 +152,9 @@ document.getElementById("runBtn").addEventListener("click", () => {
       }
 
       if (JSON.stringify(result) === JSON.stringify(test.expected)) {
-        passed++;
-        testDiv.innerHTML = `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
+        testDiv.innerHTML = `<div class="test-header pass">\n✅ Test ${index + 1} passed</div>`;
       } else {
+        allPassed = false;
         testDiv.innerHTML = `
           <div class="test-header fail">❌ Test ${index + 1} failed</div>
           <div class="test-box"><span class="label">Expected:</span><span class="content">${test.expected}</span></div>
@@ -165,15 +162,24 @@ document.getElementById("runBtn").addEventListener("click", () => {
         `;
       }
 
+
       output.appendChild(testDiv);
     });
 
     const summaryDiv = document.createElement("div");
     summaryDiv.classList.add("test-summary");
-    summaryDiv.textContent = `${passed}/${activityTestCases.length} tests passed.`;
+
+    if (allPassed) {
+      summaryDiv.textContent = "🎉 All tests passed. Kata completed.";
+      summaryDiv.classList.add("pass");
+    } else {
+      summaryDiv.textContent = "❌ Some tests failed. Kata not completed.";
+      summaryDiv.classList.add("fail");
+    }
+
     output.appendChild(summaryDiv);
 
   } catch (err) {
-    output.textContent = "❌ Runtime error: " + err.message;
+    output.textContent += "\n❌ Runtime error: " + err.message;
   }
 });

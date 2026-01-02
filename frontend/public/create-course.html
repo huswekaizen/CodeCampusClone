@@ -120,6 +120,14 @@
                 </div>
               </div>
 
+              <div class="field small-field">
+                <label>Points</label>
+                <div class="textbox">
+                  <input type="number" class="activity-points" name="activityPoints" min="1" max="100" placeholder="Points for this activity (1-100)">
+                </div>
+              </div>
+
+
               <div class="activity-details">
                 <div class="field small-field act-desc">
                   <label>Activity description</label>
@@ -128,14 +136,22 @@
                   </div>
                 </div>
 
-              </div>
-
-              <div class="field small-field">
-                <label>Test cases (JSON)</label>
-                <div class="textbox">
-                  <textarea class="activity-tests"
-                    placeholder='[{ "input":[1,2] (depending on the function parameters), "expected":3 }]'></textarea>
+                <div class="field small-field">
+                  <label>Sample Tests (JSON)</label>
+                  <div class="textbox">
+                    <textarea class="activity-sample-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
+                  </div>
                 </div>
+
+                <div class="field small-field">
+                  <label>Validation Tests (JSON)</label>
+                  <div class="textbox">
+                    <textarea class="activity-validation-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
+                  </div>
+                </div>
+
               </div>
 
 
@@ -155,6 +171,14 @@
                 </div>
               </div>
 
+              <div class="field small-field">
+                <label>Points</label>
+                <div class="textbox">
+                  <input type="number" class="activity-points" name="activityPoints" min="1" max="100" placeholder="Points for this activity">
+                </div>
+              </div>
+
+
               <div class="activity-details">
                 <div class="field small-field act-desc">
                   <label>Activity description</label>
@@ -164,9 +188,17 @@
                 </div>
 
                 <div class="field small-field">
-                  <label>Test cases (JSON)</label>
+                  <label>Sample Tests (JSON)</label>
                   <div class="textbox">
-                    <textarea class="activity-tests"
+                    <textarea class="activity-sample-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
+                  </div>
+                </div>
+
+                <div class="field small-field">
+                  <label>Validation Tests (JSON)</label>
+                  <div class="textbox">
+                    <textarea class="activity-validation-tests"
                       placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
                   </div>
                 </div>
