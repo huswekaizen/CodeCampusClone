@@ -17,6 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Step Validation =====
   function validateStepAndGo(nextStep) {
     const currentStep = document.querySelector(".step-panel:not(.hidden)");
+
+    // Step 2 (Activities) is optional, so skip validation if on step 2
+    if (currentStep.id === "step-2-panel") {
+      goToStep(nextStep);
+      return;
+    }
+
     const inputs = currentStep.querySelectorAll("input, textarea, select");
     const areAllFilled = Array.from(inputs).every(input => input.value.trim() !== "");
 
@@ -24,8 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Fill in all fields before creating the course, genius.");
       return;
     }
+
     goToStep(nextStep);
   }
+
 
   document.getElementById("nextToActivities")?.addEventListener("click", () => validateStepAndGo(2));
   document.getElementById("nextToAssessment")?.addEventListener("click", () => validateStepAndGo(3));
@@ -96,43 +105,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const previewList = document.getElementById("previewActivitiesList");
     previewList.innerHTML = "";
 
-   allActivities.forEach((act, i) => {
-    const title = act.querySelector(".activity-title")?.value || "(Untitled)";
-    const difficulty = act.querySelector(".activity-difficulty")?.value || "(No difficulty)";
-    const desc = act.querySelector(".activity-description")?.value || "(No description)";
+    allActivities.forEach((act, i) => {
+        const title = act.querySelector(".activity-title")?.value.trim();
+        const difficulty = act.querySelector(".activity-difficulty")?.value || "(No difficulty)";
+        const desc = act.querySelector(".activity-description")?.value || "(No description)";
+        const points = act.querySelector(".activity-points")?.value || 1;
+        const sampleRaw = act.querySelector(".activity-sample-tests")?.value || "";
+        const validationRaw = act.querySelector(".activity-validation-tests")?.value || "";
 
-    // Parse both sample and validation tests
-    let sampleTests = [], validationTests = [];
+        if (!title) {
+          alert(`Proceed without Activity? Because Activity #${i + 1} is missing a title`);
+          return; // Skip entirely if no title and no other fields touched
+        }
+        // Parse both sample and validation tests
+        let sampleTests = [], validationTests = [];
 
-    const sampleRaw = act.querySelector(".activity-sample-tests")?.value || "";
-    const validationRaw = act.querySelector(".activity-validation-tests")?.value || ""; 
+        // Convert newlines into array objects
+        if (sampleRaw.trim()) {
+          sampleTests = sampleRaw.split("\n").map(line => {
+            try { return JSON.parse(line); } catch { return line.trim(); }
+          }).filter(Boolean);
+        }
 
-    // Convert newlines into array objects
-    if (sampleRaw.trim()) {
-      sampleTests = sampleRaw.split("\n").map(line => {
-        try { return JSON.parse(line); } catch { return line.trim(); }
-      }).filter(Boolean);
-    }
+        if (validationRaw.trim()) {
+          validationTests = validationRaw.split("\n").map(line => {
+            try { return JSON.parse(line); } catch { return line.trim(); }
+          }).filter(Boolean);
+        }
 
-    if (validationRaw.trim()) {
-      validationTests = validationRaw.split("\n").map(line => {
-        try { return JSON.parse(line); } catch { return line.trim(); }
-      }).filter(Boolean);
-    }
-
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${i + 1}. ${title}</strong> (${difficulty}) - Points: ${act.querySelector(".activity-points")?.value || 1}
-      <p>${desc}</p>
-      <pre class="view-tests">
-  Sample Tests: ${JSON.stringify(sampleTests, null, 2)}
-  Validation Tests: ${JSON.stringify(validationTests, null, 2)}
-      </pre>
-    `;
-    previewList.appendChild(li);
-  });
-
-
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${i + 1}. ${title || "(Untitled)"}</strong> (${difficulty}) - Points: ${points}
+          <p>${desc}</p>
+          <pre class="view-tests">
+      Sample Tests: ${JSON.stringify(sampleTests, null, 2)}
+      Validation Tests: ${JSON.stringify(validationTests, null, 2)}
+          </pre>
+        `;
+        previewList.appendChild(li);
+    });
 
   });
 
@@ -140,59 +151,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("courseWizard");
 
   form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // THIS is the missing spine
+    e.preventDefault();
+
     try {
-      // Course form data
-      const formData = new FormData();
-      formData.append("title", document.getElementById("title").value);
-      formData.append("subTitle", document.getElementById("subTitle").value);
-      formData.append("category", document.getElementById("category").value);
-      formData.append("description", document.getElementById("description").value);
-      formData.append("example", document.getElementById("example").value);
-      formData.append("instructorId", userId);
+      // ===== Course Data =====
+      const courseData = {
+        title: document.getElementById("title").value.trim(),
+        subTitle: document.getElementById("subTitle").value.trim(),
+        category: document.getElementById("category").value.trim(),
+        description: document.getElementById("description").value.trim(),
+        example: document.getElementById("example").value.trim(),
+        instructorId: userId
+      };
 
-      if (fileInput?.files[0]) formData.append("thumbnail", fileInput.files[0]);
+      const file = fileInput?.files[0];
+      let res;
 
-      // Create course
-      const courseRes = await fetch("http://localhost:5000/api/courses", { method: "POST", body: formData });
-      if (!courseRes.ok) {
-        const errText = await courseRes.text();
-        throw new Error(errText);
-      }
-
-      const course = await courseRes.json();
-
-      // ===== Create activities =====
+      // ===== Activities Data =====
       const allActivities = document.querySelectorAll("#activitiesList .activity");
-
-      // Step 1: Prepare all activity data first
       const activitiesData = [];
-      for (const [i, act] of allActivities.entries()) {
-        const title = act.querySelector(".activity-title")?.value.trim() || "Untitled";
+
+      allActivities.forEach((act, i) => {
+        const title = act.querySelector(".activity-title")?.value.trim();
+
+        // If no title, treat as non-existent activity
+        if (!title) return;
+
         const difficulty = act.querySelector(".activity-difficulty")?.value;
-        const description = act.querySelector(".activity-description")?.value.trim() || "";
-        const points = parseInt(act.querySelector(".activity-points")?.value);
+        const description = act.querySelector(".activity-description")?.value.trim();
+        const points = Number(act.querySelector(".activity-points")?.value);
+        const sampleRaw = act.querySelector(".activity-sample-tests")?.value.trim();
+        const validationRaw = act.querySelector(".activity-validation-tests")?.value.trim();
 
-        if (!points || points < 1 || points > 100) {
-          alert(`Activity #${i + 1} points must be between 1 and 100.`);
-          act.querySelector(".activity-points")?.focus();
-          return;
+        if (!difficulty || !description || !points) {
+          throw new Error(`Activity #${i + 1} is incomplete. Fill all fields.`);
         }
 
-        if (!["Easy", "Medium", "Hard"].includes(difficulty)) {
-          alert(`Activity #${i + 1} must have a valid difficulty.`);
-          act.querySelector(".activity-difficulty")?.focus();
-          return;
-        }
-
-        // Parse test JSON
         let sampleTests = [], validationTests = [];
         try {
-          sampleTests = JSON.parse(act.querySelector(".activity-sample-tests")?.value || "[]");
-          validationTests = JSON.parse(act.querySelector(".activity-validation-tests")?.value || "[]");
+          sampleTests = sampleRaw ? JSON.parse(sampleRaw) : [];
+          validationTests = validationRaw ? JSON.parse(validationRaw) : [];
         } catch {
-          alert(`Activity #${i + 1} has invalid JSON in tests.`);
-          return;
+          throw new Error(`Activity #${i + 1} has invalid JSON`);
         }
 
         activitiesData.push({
@@ -201,36 +201,53 @@ document.addEventListener("DOMContentLoaded", () => {
           description,
           points,
           sampleTests,
-          validationTests,
-          course: course._id
+          validationTests
+        });
+      });
+
+
+      // ===== Send Request =====
+      if (file) {
+        const formData = new FormData();
+
+        formData.append("course", JSON.stringify(courseData));
+
+        if (activitiesData.length) {
+          formData.append("activities", JSON.stringify(activitiesData));
+        }
+
+        formData.append("thumbnail", file);
+
+        res = await fetch("http://localhost:5000/api/courses/with-activities", {
+          method: "POST",
+          body: formData
+        });
+      } else {
+        // JSON payload
+        const payload = { course: courseData };
+        if (activitiesData.length) payload.activities = activitiesData;
+
+        res = await fetch("http://localhost:5000/api/courses/with-activities", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
       }
 
-      // Step 2: Send all activities in parallel
-      const activityRequests = activitiesData.map(data =>
-        fetch("http://localhost:5000/api/activities", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        })
-      );
-
-      const results = await Promise.all(activityRequests);
-      for (const [i, res] of results.entries()) {
-        if (!res.ok) {
-          const errText = await res.text();
-          throw new Error(`Activity #${i + 1} creation failed: ${errText}`);
-        }
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error(errText);
       }
 
-      alert("Course created successfully!");
-
+      const createdCourse = await res.json();
       localStorage.setItem("courseCreatedSuccess", "true");
       window.location.href = "./courses-instructor.html";
 
     } catch (err) {
-      alert("Something went wrong: " + err.message);
+      alert("Error creating course: " + err.message);
       console.error(err);
     }
   });
+
+
 });

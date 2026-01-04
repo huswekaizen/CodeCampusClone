@@ -3,8 +3,9 @@ console.log("Course import check:", Course);
 
 import User from "../models/User.js";
 import Activity from "../models/Activity.js";
+import mongoose from "mongoose";
 
-export const createCourse = async (req, res) => {
+/*export const createCourse = async (req, res) => {
   try {
     const { title, subTitle, category, description, example, instructorId } = req.body;
 
@@ -33,7 +34,56 @@ export const createCourse = async (req, res) => {
     console.error("Error in createCourse:", error);
     res.status(500).json({ message: "Error creating course", error: error.message });
   }
+};*/
+
+export const createCourseWithActivities = async (req, res) => {
+  try {
+    // Course data
+    let course = req.body.course;
+    let activities = req.body.activities;
+
+    // If FormData strings, parse them
+    if (course && typeof course === "string") course = JSON.parse(course);
+    if (activities && typeof activities === "string") activities = JSON.parse(activities);
+
+    if (!course) return res.status(400).json({ error: "Missing course data" });
+    activities = activities || []; // <-- make sure it's always an array
+
+    const {
+      title, subTitle, category, description, example, instructorId
+    } = course;
+
+    if (!instructorId) return res.status(400).json({ error: "Missing instructorId" });
+
+    // Handle thumbnail
+    const thumbnail = req.file ? `/uploads/${req.file.filename}` : course.thumbnail || null;
+
+    // Create course
+    const createdCourse = await Course.create({
+      title, subTitle, category, description, example, thumbnail, instructor: instructorId
+    });
+
+    // Create activities if any
+    if (activities.length > 0) {
+      const activitiesWithCourse = activities.map(a => ({
+        ...a,
+        course: createdCourse._id
+      }));
+      const createdActivities = await Activity.insertMany(activitiesWithCourse);
+      createdCourse.activities.push(...createdActivities.map(a => a._id));
+      await createdCourse.save();
+    }
+
+    // Link course to instructor
+    await User.findByIdAndUpdate(instructorId, { $push: { createdCourses: createdCourse._id } });
+
+    res.status(201).json(createdCourse);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
 export const getCourseWithActivities = async (req, res) => {
   try {

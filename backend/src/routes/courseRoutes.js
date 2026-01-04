@@ -3,8 +3,8 @@ console.log("LOADING COURSE ROUTES...");
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { createCourse, getCourseWithActivities, getPublishedCourses, editCourse, deleteCourse,
-         joinCourse, getEnrolledCourses, leaveCourse} from "../controllers/courseController.js";
+import { /*createCourse,*/ getCourseWithActivities, getPublishedCourses, editCourse, deleteCourse,
+         joinCourse, getEnrolledCourses, leaveCourse, createCourseWithActivities} from "../controllers/courseController.js";
 
 const router = express.Router();
 
@@ -28,8 +28,9 @@ const upload = multer({
 console.log("COURSE ROUTES MOUNTED");
 console.log("JOIN ROUTE REGISTERING...");
 
-router.post("/courses", upload.single("thumbnail"), createCourse);
+// router.post("/courses", upload.single("thumbnail"), createCourse);
 router.post("/courses/join", joinCourse);
+router.post("/courses/with-activities", upload.single("thumbnail"), createCourseWithActivities);
 
 router.get("/courses/:id/details", getCourseWithActivities);
 router.get("/instructors/:id/published-courses", getPublishedCourses);
