@@ -203,6 +203,15 @@ button.primary:hover {
   padding: 0;
 }
 
+.pass{
+  margin-top: 28px;
+}
+
+.test-summary.pass {
+  font-weight: 600;
+  margin-top: 25px;
+}
+
 /* ===== Instruction / Output Toggle Buttons ===== */
 
 .output-section > div {

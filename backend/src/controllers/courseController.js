@@ -56,7 +56,12 @@ export const createCourseWithActivities = async (req, res) => {
     if (!instructorId) return res.status(400).json({ error: "Missing instructorId" });
 
     // Handle thumbnail
-    const thumbnail = req.file ? `/uploads/${req.file.filename}` : course.thumbnail || null;
+    const thumbnail = req.file
+      ? `/uploads/${req.file.filename}`
+      : req.existingThumbnail
+        ? `/uploads/${req.existingThumbnail}`
+        : course.thumbnail || null;
+
 
     // Create course
     const createdCourse = await Course.create({
@@ -93,7 +98,7 @@ export const getCourseWithActivities = async (req, res) => {
       .populate({
         path: "activities",
         model: "Activity",
-        select: "title description difficulty testCases"
+        select: "title description points difficulty sampleTests validationTests"
       })
       .populate({
         path: "instructor",       // <-- populate instructor

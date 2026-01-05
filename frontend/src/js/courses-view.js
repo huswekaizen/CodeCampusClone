@@ -36,8 +36,7 @@ document.addEventListener("click", async (e) => {
     li.querySelector(".view-mode").style.display = "none";
     li.querySelector(".edit-mode").style.display = "block";
 
-    const ta = li.querySelector(".edit-tests");
-    autoResizeTextarea(ta);
+    li.querySelectorAll("textarea").forEach(autoResizeTextarea);
 
     return;
   }
@@ -184,8 +183,16 @@ function renderActivities(activities) {
 
         <p class="view-desc">${activity.description || ""}</p>
 
-        <pre class="view-tests">${JSON.stringify(
-          activity.testCases || [],
+        <p><strong>Points:</strong> <span class="view-points">${activity.points}</span></p>
+
+        <pre class="view-sample-tests">${JSON.stringify(
+          activity.sampleTests || [],
+          null,
+          2
+        )}</pre>
+
+        <pre class="view-validation-tests">${JSON.stringify(
+          activity.validationTests || [],
           null,
           2
         )}</pre>
@@ -197,10 +204,25 @@ function renderActivities(activities) {
       <div class="edit-mode" style="display:none">
         <input class="edit-title" value="${activity.title}" />
 
+        <input 
+          type="number" 
+          class="edit-points" 
+          placeholder="Points for this activity (1-100)"
+          min="1" 
+          max="100" 
+          value="${activity.points}"
+        />
+
         <textarea class="edit-desc">${activity.description || ""}</textarea>
 
-        <textarea class="edit-tests">${JSON.stringify(
-          activity.testCases || [],
+        <textarea class="edit-sample-tests">${JSON.stringify(
+          activity.sampleTests || [],
+          null,
+          2
+        )}</textarea>
+
+        <textarea class="edit-validation-tests">${JSON.stringify(
+          activity.validationTests || [],
           null,
           2
         )}</textarea>
@@ -217,13 +239,10 @@ function renderActivities(activities) {
         </div>
       </div>
     `;
-        
+
     activitiesList.appendChild(li);
   });
 }
-
-
-
 
 async function saveActivity(li) {
   const id = li.dataset.activityId;
@@ -231,13 +250,20 @@ async function saveActivity(li) {
   const title = li.querySelector(".edit-title").value.trim();
   const description = li.querySelector(".edit-desc").value.trim();
   const difficulty = li.querySelector(".edit-difficulty").value;
-  const testsRaw = li.querySelector(".edit-tests").value;
+  const points = Number(li.querySelector(".edit-points").value);
 
-  let testCases;
+  if (isNaN(points) || points < 1 || points > 100) {
+    alert("Points must be a number between 1 and 100.");
+    return;
+  }
+
+  let sampleTests, validationTests;
+
   try {
-    testCases = JSON.parse(testsRaw);
+    sampleTests = JSON.parse(li.querySelector(".edit-sample-tests").value || "[]");
+    validationTests = JSON.parse(li.querySelector(".edit-validation-tests").value || "[]");
   } catch {
-    alert("Test cases must be valid JSON.");
+    alert("Tests must be valid JSON.");
     return;
   }
 
@@ -249,38 +275,21 @@ async function saveActivity(li) {
         title,
         description,
         difficulty,
-        testCases
+        points,
+        sampleTests,
+        validationTests
       })
     });
 
     if (!res.ok) throw new Error("Failed to update activity");
 
-    // Update local cache
-    const idx = loadedCourse.activities.findIndex(a => a._id === id);
-    if (idx > -1) {
-      loadedCourse.activities[idx] = {
-        ...loadedCourse.activities[idx],
-        title,
-        description,
-        difficulty,
-        testCases
-      };
-    }
-
-    // Update view
-    li.querySelector(".view-title").textContent = `Activity ${idx + 1}: ${title}`;
-    li.querySelector(".view-desc").textContent = description;
-    li.querySelector(".view-tests").textContent = JSON.stringify(testCases, null, 2);
-    li.querySelector(".view-difficulty").textContent = difficulty;
-
-    li.querySelector(".edit-mode").style.display = "none";
-    li.querySelector(".view-mode").style.display = "block";
-
+    await loadCourseData();
   } catch (err) {
     console.error(err);
     alert("Failed to update activity.");
   }
 }
+
 
 document.addEventListener("click", async (e) => {
   if (!e.target.classList.contains("create-activity")) return;
@@ -290,19 +299,27 @@ document.addEventListener("click", async (e) => {
 
   const title = li.querySelector(".activity-title-input").value.trim();
   const description = li.querySelector(".activity-desc-input").value.trim();
-  const testsRaw = li.querySelector(".activity-tests-input").value.trim();
+  const points = Number(li.querySelector(".activity-points-input").value);
   const difficulty = li.querySelector(".activity-difficulty-input").value;
-
-  let testCases;
-  try {
-    testCases = JSON.parse(testsRaw || "[]");
-  } catch {
-    alert("Test cases must be valid JSON.");
+  
+  if (isNaN(points) || points < 1 || points > 100) {
+    alert("Points must be a number between 1 and 100.");
     return;
   }
 
 
-  if (!title || !description) {
+  let sampleTests, validationTests;
+
+  try {
+    sampleTests = JSON.parse(li.querySelector(".activity-sample-tests-input").value || "[]");
+    validationTests = JSON.parse(li.querySelector(".activity-validation-tests-input").value || "[]");
+  } catch {
+    alert("Tests must be valid JSON.");
+    return;
+  }
+
+
+  if (!title || !description || !points) {
     alert("Fill all required fields.");
     return;
   }
@@ -314,8 +331,10 @@ document.addEventListener("click", async (e) => {
       body: JSON.stringify({
         title,
         description,
-        testCases,
         difficulty,
+        points,
+        sampleTests,
+        validationTests,
         courseId
       })
     });
@@ -324,7 +343,6 @@ document.addEventListener("click", async (e) => {
 
     li.remove();
     await loadCourseData();
-
   } catch (err) {
     console.error(err);
     alert("Failed to create activity.");

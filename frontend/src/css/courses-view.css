@@ -491,6 +491,25 @@ button.ghost:hover {
   transition: var(--transition);
 }
 
+/* Show sample and validation tests */
+.preview-activities-list li .view-sample-tests,
+.preview-activities-list li .view-validation-tests {
+  display: block;         /* ensure visible */
+  white-space: pre-wrap;  /* preserve JSON formatting */
+  color: var(--text);     
+  background: #1a2238;
+  padding: 10px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  overflow-x: auto;       /* scroll if too wide */
+  margin-top: 8px;
+}
+.preview-activities-list li .view-difficulty {
+  display: inline-block;
+  color: var(--accent-hover);
+  font-size: 13px;
+  margin-top: 6px;
+}
 
 
 /* ==== ANIMATIONS ==== */

@@ -1,6 +1,4 @@
 - new schema in activities
 - updated controller and create activities in create-course
 
-- Failing to create the course error: "Cannot read properties of undefined (reading 'course')"
-
 - update the update activity and add activity in view-coursea

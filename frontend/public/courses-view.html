@@ -68,11 +68,25 @@
         <li class="activity-form">
           <div class="edit-mode">
             <input class="activity-title-input" placeholder="Activity Title">
+
+            <input 
+              type="number" 
+              class="activity-points-input" 
+              placeholder="Points (1-100)" 
+              min="1" 
+              max="100"
+            >
+
             <textarea class="activity-desc-input" placeholder="Description"></textarea>
 
-            <textarea 
-              class="activity-input activity-tests-input" 
-              placeholder='Test cases JSON (e.g. [{"input":[1,2],"expected":3}])'
+            <textarea
+              class="activity-sample-tests-input"
+              placeholder='Sample Tests JSON (e.g. [{"input":[1,2],"expected":3}])'
+            ></textarea>
+
+            <textarea
+              class="activity-validation-tests-input"
+              placeholder='Validation Tests JSON (e.g. [{"input":[2,3],"expected":5}])'
             ></textarea>
 
             <select class="activity-difficulty-input">
@@ -85,11 +99,9 @@
               <button class="create-activity">Create</button>
               <button class="remove-activity">Remove</button>
             </div>
-
           </div>
         </li>
       </template>
-
 
       <!-- Buttons -->
       <div class="wizard-actions">

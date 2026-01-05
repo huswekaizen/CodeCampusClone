@@ -2,6 +2,7 @@ console.log("LOADING COURSE ROUTES...");
 
 import express from "express";
 import multer from "multer";
+import fs from "fs";
 import path from "path";
 import { /*createCourse,*/ getCourseWithActivities, getPublishedCourses, editCourse, deleteCourse,
          joinCourse, getEnrolledCourses, leaveCourse, createCourseWithActivities} from "../controllers/courseController.js";
@@ -15,10 +16,20 @@ const storage = multer.diskStorage({
   },
 
   filename: (req, file, cb) => {
-    const uniqueName = Date.now() + "-" + file.originalname.replace(/\s+/g, "_");
-    cb(null, uniqueName);
+    const uploadDir = path.join(process.cwd(), "uploads");
+    const sanitizedName = file.originalname.replace(/\s+/g, "_");
+    const filePath = path.join(uploadDir, sanitizedName);
+
+    if (fs.existsSync(filePath)) {
+      req.existingThumbnail = sanitizedName;
+      cb(null, sanitizedName); // reuse
+    } else {
+      cb(null, sanitizedName);
+    }
   }
+
 });
+
 
 const upload = multer({
   storage,

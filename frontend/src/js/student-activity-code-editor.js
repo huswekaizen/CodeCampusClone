@@ -118,14 +118,15 @@ loadActivity(localStorage.getItem("selectedActivityId")); // replace with actual
 document.getElementById("runBtn").addEventListener("click", () => {
   const output = document.getElementById("output");
   output.innerHTML = "";
+
   const code = editor.state.doc.toString();
-
   window.output = output;
-
 
   try {
     const wrapper = new Function(`
-      const console = { log: (...args) => window.output.textContent += args.join(' ') + '\\n' };
+      const console = {
+        log: (...args) => window.output.textContent += args.join(" ") + "\\n"
+      };
       ${code}
       if (typeof solution !== "function") {
         throw new Error("You must define a function named solution");
@@ -133,53 +134,83 @@ document.getElementById("runBtn").addEventListener("click", () => {
       return solution;
     `);
 
-
     const userFn = wrapper();
+
     let allPassed = true;
+    let firstFailure = null;
 
-
-    sampleTests.forEach((test, index) => {
-      const testDiv = document.createElement("div");
-      testDiv.classList.add("test-case");
-
+    // === RUN TESTS ===
+    for (let i = 0; i < sampleTests.length; i++) {
+      const test = sampleTests[i];
       let result;
+
       try {
         result = userFn(...test.input);
       } catch (err) {
-        testDiv.innerHTML = `<div class="test-header fail">❌ Test ${index + 1} error: ${err.message}</div>`;
-        output.appendChild(testDiv);
-        return;
-      }
-
-      if (JSON.stringify(result) === JSON.stringify(test.expected)) {
-        testDiv.innerHTML = `<div class="test-header pass">\n✅ Test ${index + 1} passed</div>`;
-      } else {
         allPassed = false;
-        testDiv.innerHTML = `
-          <div class="test-header fail">❌ Test ${index + 1} failed</div>
-          <div class="test-box"><span class="label">Expected:</span><span class="content">${test.expected}</span></div>
-          <div class="test-box"><span class="label">Got:</span><span class="content">${result}</span></div>
-        `;
+        firstFailure = {
+          index: i,
+          error: err.message
+        };
+        break;
       }
 
-
-      output.appendChild(testDiv);
-    });
-
-    const summaryDiv = document.createElement("div");
-    summaryDiv.classList.add("test-summary");
-
-    if (allPassed) {
-      summaryDiv.textContent = "🎉 All tests passed. Kata completed.";
-      summaryDiv.classList.add("pass");
-    } else {
-      summaryDiv.textContent = "❌ Some tests failed. Kata not completed.";
-      summaryDiv.classList.add("fail");
+      if (JSON.stringify(result) !== JSON.stringify(test.expected)) {
+        allPassed = false;
+        firstFailure = {
+          index: i,
+          expected: test.expected,
+          got: result
+        };
+        break;
+      }
     }
 
-    output.appendChild(summaryDiv);
+    // === RENDER UI ===
+    if (allPassed) {
+      sampleTests.forEach((_, index) => {
+        const testDiv = document.createElement("div");
+        testDiv.classList.add("test-case");
+        testDiv.innerHTML =
+          `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
+
+        output.appendChild(testDiv);
+      });
+
+      const summaryDiv = document.createElement("div");
+      summaryDiv.classList.add("test-summary", "pass");
+      summaryDiv.textContent = "🎉 All tests passed. Kata completed.";
+      output.appendChild(summaryDiv);
+
+    } else {
+      const failDiv = document.createElement("div");
+      failDiv.classList.add("test-case");
+
+      if (firstFailure.error) {
+        failDiv.innerHTML = `
+          <div class="test-header fail">
+            ❌ Test ${firstFailure.index + 1} error
+          </div>
+          <div class="test-box">
+            <span class="content">${firstFailure.error}</span>
+          </div>
+        `;
+      } else {
+        failDiv.innerHTML =
+          `<div class="test-header fail">❌ Test ${firstFailure.index + 1} failed</div>` +
+          `<div class="test-box"><span class="label">Expected:</span><span class="content">${firstFailure.expected}</span></div>` +
+          `<div class="test-box"><span class="label">Got:</span><span class="content">${firstFailure.got}</span></div>`;
+      }
+
+      output.appendChild(failDiv);
+
+      const summaryDiv = document.createElement("div");
+      summaryDiv.classList.add("test-summary", "fail");
+      summaryDiv.textContent = "❌ Some tests failed. Kata not completed.";
+      output.appendChild(summaryDiv);
+    }
 
   } catch (err) {
-    output.textContent += "\n❌ Runtime error: " + err.message;
+    output.textContent = "❌ Runtime error: " + err.message;
   }
 });
