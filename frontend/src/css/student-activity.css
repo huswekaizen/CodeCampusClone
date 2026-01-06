@@ -206,6 +206,12 @@ button.primary:hover {
 .pass{
   margin-top: 28px;
 }
+.fail{
+  margin-top: 28px;
+}
+.test-box {
+  margin: 16px 0 16px 0;
+}
 
 .test-summary.pass {
   font-weight: 600;
@@ -219,6 +225,11 @@ button.primary:hover {
   gap: 6px;
   padding: 6px;
   background: transparent;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .instruction-btn,

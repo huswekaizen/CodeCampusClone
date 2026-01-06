@@ -24,11 +24,6 @@ function jsSyntaxLinter() {
   });
 }
 
-const submitBtn = document.getElementById("submitBtn");
-submitBtn.addEventListener("click", () => {
-  alert("Submit functionality is not implemented yet.");
-});
-
 const syntaxColors = HighlightStyle.define([
   { tag: tags.keyword, color: "#ff7b72" },
   { tag: tags.string, color: "#a5d6ff" },
@@ -114,8 +109,24 @@ async function loadActivity(activityId) {
 // Load your activity on page load
 loadActivity(localStorage.getItem("selectedActivityId")); // replace with actual ID
 
+const submitBtn = document.getElementById("submitBtn");
+submitBtn.disabled = true; // Disable submit button initially
+
+const instructionBtn = document.querySelector(".instruction-btn");
+const outputBtn = document.querySelector(".output-btn");
+
+const instructionPanel = document.getElementById("instruction");
+const outputPanel = document.getElementById("output");
+
 // 2️⃣ Run button logic
 document.getElementById("runBtn").addEventListener("click", () => {
+
+  outputBtn.classList.add("active");
+  instructionBtn.classList.remove("active");
+
+  outputPanel.classList.add("active");
+  instructionPanel.classList.remove("active");
+
   const output = document.getElementById("output");
   output.innerHTML = "";
 
@@ -173,7 +184,9 @@ document.getElementById("runBtn").addEventListener("click", () => {
         testDiv.classList.add("test-case");
         testDiv.innerHTML =
           `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
-
+        submitBtn.disabled = false; // Enable submit button if all tests pass
+        output.style.border = ".5px solid green";
+        output.style.borderRadius = "10px";
         output.appendChild(testDiv);
       });
 
@@ -200,17 +213,21 @@ document.getElementById("runBtn").addEventListener("click", () => {
           `<div class="test-header fail">❌ Test ${firstFailure.index + 1} failed</div>` +
           `<div class="test-box"><span class="label">Expected:</span><span class="content">${firstFailure.expected}</span></div>` +
           `<div class="test-box"><span class="label">Got:</span><span class="content">${firstFailure.got}</span></div>`;
+        output.style.border = ".5px solid rgb(169, 72, 72)";
+        output.style.borderRadius = "10px";
+        submitBtn.disabled = true; // Keep submit button disabled if tests fail
       }
 
       output.appendChild(failDiv);
 
       const summaryDiv = document.createElement("div");
       summaryDiv.classList.add("test-summary", "fail");
-      summaryDiv.textContent = "❌ Some tests failed. Kata not completed.";
+      summaryDiv.textContent = "❌ Tests failed. Kata not completed.";
       output.appendChild(summaryDiv);
     }
 
   } catch (err) {
-    output.textContent = "❌ Runtime error: " + err.message;
+    output.textContent += "\n❌ Runtime error: " + err.message + "\n";
+    output.style.borderBlockColor = "red";
   }
 });

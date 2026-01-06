@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullNameTop = document.getElementById("fullNameTop");
     const roleTop = document.getElementById("roleTop");
     const fullNameProfile = document.getElementById("fullNameProfile");
+    const studentName = document.getElementById("studentName");
     const roleProfile = document.getElementById("roleProfile");
 
     const firstName = localStorage.getItem("firstName") || "";
@@ -100,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("id:", id);
 
 
-    [fullNameTop, fullNameProfile].forEach(el => el.textContent = fullName);
+    [fullNameTop, fullNameProfile, studentName].forEach(el => el.textContent = fullName);
     [roleTop, roleProfile].forEach(el => el.textContent = role);
 
 });
