@@ -1,5 +1,6 @@
 import Activity from "../models/Activity.js";
 import Course from "../models/Course.js";
+import User from "../models/User.js";
 
 export const createActivity = async (req, res) => {
   try {
@@ -127,5 +128,60 @@ export const deleteActivity = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to delete activity" });
+  }
+};
+
+export const submitActivity = async (req, res) => {
+  try {
+    const { id: activityId } = req.params;
+    const userId = req.user._id;
+
+    // 1. Find the activity
+    const activity = await Activity.findById(activityId);
+    if (!activity) return res.status(404).json({ message: "Activity not found" });
+
+    // 2. Try to update user's progress atomically
+    const user = await User.findOneAndUpdate(
+      {
+        _id: userId,
+        "courseProgress.course": activity.course,
+        "courseProgress.completedActivities": { $ne: activity._id } // make sure not already completed
+      },
+      {
+        $inc: { "courseProgress.$.points": activity.points },
+        $addToSet: { "courseProgress.$.completedActivities": activity._id }
+      },
+      { new: true } // return the updated document
+    );
+
+    // 3. If user is null, either they didn't join the course or already completed
+    if (!user) {
+      const existingUser = await User.findById(userId);
+      const progress = existingUser.courseProgress.find(
+        p => p.course.toString() === activity.course.toString()
+      );
+
+      if (!progress) return res.status(400).json({ message: "User has not joined this course yet" });
+
+      const alreadyCompleted = progress.completedActivities.some(a => a.toString() === activityId);
+      if (alreadyCompleted) {
+        return res.status(200).json({ message: "Activity already submitted", points: progress.points });
+      }
+
+      // Fallback in case something else went wrong
+      return res.status(500).json({ message: "Failed to submit activity" });
+    }
+
+    // 4. Return success
+    const progress = user.courseProgress.find(p => p.course.toString() === activity.course.toString());
+    res.status(200).json({
+      message: "Activity submitted successfully",
+      totalPoints: progress.points,
+      completedActivities: progress.completedActivities
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to submit activity" });
   }
 };

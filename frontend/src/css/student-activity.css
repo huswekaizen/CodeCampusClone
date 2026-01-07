@@ -131,9 +131,12 @@ button.primary:hover {
 
 .primaryBtnRow {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   gap: 10px;
 }
+
+
 
 
 #activity-difficulty {

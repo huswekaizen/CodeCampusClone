@@ -17,8 +17,37 @@ const userSchema = new mongoose.Schema({
   // Student: courses they joined
   enrolledCourses: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Course" }
+  ],
+
+  courseProgress: [
+    {
+      course: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+        required: true
+      },
+
+      points: {
+        type: Number,
+        default: 0
+      },
+
+      completedActivities: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Activity"
+        }
+      ]
+    }
   ]
 
+
 }, { timestamps: true });
+
+userSchema.index(
+  { _id: 1, "courseProgress.course": 1 },
+  { unique: true, sparse: true }
+);
+
 
 export default mongoose.model("User", userSchema);

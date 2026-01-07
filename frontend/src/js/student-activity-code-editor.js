@@ -185,6 +185,7 @@ document.getElementById("runBtn").addEventListener("click", () => {
         testDiv.innerHTML =
           `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
         submitBtn.disabled = false; // Enable submit button if all tests pass
+        submitBtn.style.backgroundColor = "#08c91bca";
         output.style.border = ".5px solid green";
         output.style.borderRadius = "10px";
         output.appendChild(testDiv);
@@ -228,6 +229,7 @@ document.getElementById("runBtn").addEventListener("click", () => {
 
   } catch (err) {
     output.textContent += "\n❌ Runtime error: " + err.message + "\n";
-    output.style.borderBlockColor = "red";
+    output.style.border = ".5px solid rgb(169, 72, 72)";
+    output.style.borderRadius = "10px";
   }
 });

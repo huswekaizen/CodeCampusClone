@@ -24,6 +24,13 @@ document.addEventListener("DOMContentLoaded", async () => {
    }
 });
 
+document.getElementById("backBtn")?.addEventListener("click", () => {
+  const confirmGoBack = confirm("Going back to course activities page will lose your progress. Are you sure?");
+  if (confirmGoBack) {
+    window.location.href = "courses-view-student-activities.html";
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const instructionBtn = document.querySelector(".instruction-btn");
   const outputBtn = document.querySelector(".output-btn");
