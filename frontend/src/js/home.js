@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullNameTop = document.getElementById("fullNameTop");
     const roleTop = document.getElementById("roleTop");
     const fullNameProfile = document.getElementById("fullNameProfile");
+    const instructorName = document.getElementById("instructorName");
     const studentName = document.getElementById("studentName");
     const roleProfile = document.getElementById("roleProfile");
 
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("id:", id);
 
 
-    [fullNameTop, fullNameProfile, studentName].forEach(el => el.textContent = fullName);
+    [fullNameTop, fullNameProfile, instructorName, studentName].forEach(el => el.textContent = fullName);
     [roleTop, roleProfile].forEach(el => el.textContent = role);
 
 });

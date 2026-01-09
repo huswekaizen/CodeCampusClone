@@ -1,26 +1,27 @@
-const submitBtn = document.getElementById("submitBtn");
-
 submitBtn.addEventListener("click", async () => {
   const activityId = localStorage.getItem("selectedActivityId");
-  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
   try {
+    // 1️⃣ Fetch the activity first to know its points
+    const activityRes = await fetch(`http://localhost:5000/api/activities/${activityId}`);
+    const activityData = await activityRes.json();
+    const activityPoints = activityData.points;
+
+    // 2️⃣ Submit
     const res = await fetch(
-      `http://localhost:5000/api/activities/${activityId}/submit`,
+      `http://localhost:5000/api/activities/${activityId}/submission`,
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        }
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
       }
     );
 
     const data = await res.json();
-
     if (!res.ok) throw new Error(data.message);
 
-    alert(`✅ Submitted. Total points: ${data.totalPoints}`);
+    alert(`✅ Submitted. You earned ${activityPoints} points for this activity.`);
     submitBtn.disabled = true;
 
   } catch (err) {

@@ -134,46 +134,47 @@ export const deleteActivity = async (req, res) => {
 export const submitActivity = async (req, res) => {
   try {
     const { id: activityId } = req.params;
-    const userId = req.user._id;
+    const { userId } = req.body;
 
-    // 1. Find the activity
+    if (!userId) {
+      return res.status(400).json({ message: "User ID missing" });
+    }
+
+    // 1️⃣ Find the activity
     const activity = await Activity.findById(activityId);
     if (!activity) return res.status(404).json({ message: "Activity not found" });
 
-    // 2. Try to update user's progress atomically
-    const user = await User.findOneAndUpdate(
-      {
-        _id: userId,
-        "courseProgress.course": activity.course,
-        "courseProgress.completedActivities": { $ne: activity._id } // make sure not already completed
-      },
-      {
-        $inc: { "courseProgress.$.points": activity.points },
-        $addToSet: { "courseProgress.$.completedActivities": activity._id }
-      },
-      { new: true } // return the updated document
+    // 2️⃣ Find the user
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // 3️⃣ Find or create courseProgress for this course
+    let progress = user.courseProgress.find(
+      p => p.course.toString() === activity.course.toString()
     );
 
-    // 3. If user is null, either they didn't join the course or already completed
-    if (!user) {
-      const existingUser = await User.findById(userId);
-      const progress = existingUser.courseProgress.find(
-        p => p.course.toString() === activity.course.toString()
-      );
-
-      if (!progress) return res.status(400).json({ message: "User has not joined this course yet" });
-
-      const alreadyCompleted = progress.completedActivities.some(a => a.toString() === activityId);
-      if (alreadyCompleted) {
-        return res.status(200).json({ message: "Activity already submitted", points: progress.points });
-      }
-
-      // Fallback in case something else went wrong
-      return res.status(500).json({ message: "Failed to submit activity" });
+    if (!progress) {
+      // Lazy-create it if missing
+      progress = { course: activity.course, points: 0, completedActivities: [] };
+      user.courseProgress.push(progress);
     }
 
-    // 4. Return success
-    const progress = user.courseProgress.find(p => p.course.toString() === activity.course.toString());
+    // 4️⃣ Check if activity already completed
+    if (progress.completedActivities.some(a => a.toString() === activity._id.toString())) {
+      await user.save(); // in case we just created progress
+      return res.status(200).json({
+        message: "Activity already submitted",
+        totalPoints: progress.points,
+        completedActivities: progress.completedActivities
+      });
+    }
+
+    // 5️⃣ Add points and mark activity as completed
+    progress.points += activity.points;
+    progress.completedActivities.push(activity._id);
+
+    await user.save();
+
     res.status(200).json({
       message: "Activity submitted successfully",
       totalPoints: progress.points,

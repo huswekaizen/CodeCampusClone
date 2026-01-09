@@ -1,6 +1,7 @@
 import express from "express";
 import { createActivity, getActivitiesByCourse, updateActivity, 
          deleteActivity, getActivityById, submitActivity } from "../controllers/activityController.js";
+         
 const router = express.Router();
 
 router.post("/activities", createActivity);
