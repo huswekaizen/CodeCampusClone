@@ -185,7 +185,7 @@ document.getElementById("runBtn").addEventListener("click", () => {
         testDiv.innerHTML =
           `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
         submitBtn.disabled = false; // Enable submit button if all tests pass
-        submitBtn.style.backgroundColor = "#08c91bca";
+        submitBtn.style.backgroundColor = "#56ff67ca";
         output.style.border = ".5px solid green";
         output.style.borderRadius = "10px";
         output.appendChild(testDiv);

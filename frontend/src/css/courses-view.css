@@ -330,6 +330,8 @@ button.ghost:hover {
   background: #1e293b;
 }
 
+
+
 /* === EDIT MODE STYLES FOR ACTIVITIES === */
 .preview-activities-list li .edit-mode {
   display: flex;

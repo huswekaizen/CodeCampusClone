@@ -2,6 +2,7 @@ const activityId = localStorage.getItem("selectedActivityId");
 const activityTitle = document.getElementById("activity-title");
 const activityDescription = document.getElementById("activity-description");
 const activityDifficulty = document.getElementById("activity-difficulty");
+const activityPoints = document.getElementById("activity-points");
 const activityOutputExample = document.getElementById("activity-output-example");
 
 const instruction = document.getElementById("instruction");
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         activityTitle.textContent = activities.title || "N/A";
         activityDifficulty.textContent = activities.difficulty || "N/A";
+        activityPoints.textContent = ` ${activities.points || "N/A"} pts`;
         instruction.textContent = activities.description || "N/A";
         
 
