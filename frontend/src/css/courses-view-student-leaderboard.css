@@ -1,0 +1,143 @@
+/* ---------------------------------- */
+/*        LEADERBOARD PAGE STYLES      */
+/* ---------------------------------- */
+
+html {
+  overflow-y: scroll;
+}
+
+.leaderboard-container {
+  padding: 24px;
+}
+
+/* TITLE */
+
+.leaderboard-header h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent-hover);
+  margin-bottom: 6px;
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+}
+
+.leaderboard-header p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-left: 13px;
+}
+
+/* ---------------------------------- */
+/*           LEADERBOARD TABLE        */
+/* ---------------------------------- */
+
+.leaderboard-table-wrapper {
+  margin-top: 20px;
+}
+
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--section-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* HEADER */
+
+.leaderboard-table thead {
+  background: rgba(58, 141, 255, 0.08);
+}
+
+.leaderboard-table th {
+  padding: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-hover);
+  letter-spacing: 0.4px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ROWS */
+
+.leaderboard-table td {
+  padding: 18px 16px;
+  font-size: 15px;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ROW HOVER */
+
+.leaderboard-table tbody tr {
+  transition: var(--transition);
+}
+
+.leaderboard-table tbody tr:hover {
+  background: #111a33;
+  border-color: var(--accent);
+}
+
+/* RANK COLUMN */
+
+.leaderboard-table td:first-child {
+  font-weight: 700;
+  color: var(--accent-hover);
+}
+
+/* ---------------------------------- */
+/*          PROGRESS BAR              */
+/* ---------------------------------- */
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(58, 141, 255, 0.15);
+  border: 1px solid rgba(58, 141, 255, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.4s ease;
+}
+
+/* ---------------------------------- */
+/*          EMPTY STATE               */
+/* ---------------------------------- */
+
+.leaderboard-empty {
+  margin-top: 28px;
+  padding: 22px;
+  background: var(--section-bg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.hidden {
+  display: none;
+}
+
+/* ---------------------------------- */
+/*          RESPONSIVE                */
+/* ---------------------------------- */
+
+@media (max-width: 768px) {
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 14px;
+    font-size: 14px;
+  }
+
+  .leaderboard-header h1 {
+    font-size: 18px;
+  }
+}

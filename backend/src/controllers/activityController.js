@@ -162,8 +162,8 @@ export const submitActivity = async (req, res) => {
     // 4️⃣ Check if activity already completed
     if (progress.completedActivities.some(a => a.toString() === activity._id.toString())) {
       await user.save(); // in case we just created progress
-      return res.status(200).json({
-        message: "Activity already submitted",
+      return res.status(409).json({
+        message: "Activity already completed and submitted, no points awarded",
         totalPoints: progress.points,
         completedActivities: progress.completedActivities
       });

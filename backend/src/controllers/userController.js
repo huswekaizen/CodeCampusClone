@@ -79,3 +79,24 @@ export const getUserWithCourses = async (req, res) => {
     res.status(500).json({ message: "Error fetching user data" });
   }
 };
+
+export const getUserCourseProgress = async (req, res) => {
+  try {
+    const { id, courseId } = req.params;
+
+    const user = await User.findById(id).select("courseProgress");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const progress = user.courseProgress.find(
+      p => p.course.toString() === courseId
+    );
+
+    res.status(200).json({
+      completedActivities: progress ? progress.completedActivities : [],
+      points: progress ? progress.points : 0
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch progress" });
+  }
+};

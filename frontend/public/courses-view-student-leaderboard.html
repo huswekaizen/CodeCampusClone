@@ -6,6 +6,7 @@
   <title>Student Course View — Leaderboard</title>
   <link rel="stylesheet" href="../src/css/courses-view-student-overview.css">
   <link rel="stylesheet" href="../src/css/courses-view-student-activities.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-leaderboard.css">
 </head>
 
 <body data-page="leaderboard">
@@ -25,25 +26,51 @@
         </nav>
     </header>
 
+    <!-- MAIN CONTENT -->
+     <section class="leaderboard-container">
+      <header class="leaderboard-header">
+        <h1>Course Leaderboard</h1>
+        <p>Ranking based on total points</p>
+      </header>
 
-    <div class="card" id="course-activities">
+      <div class="leaderboard-table-wrapper">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Student</th>
+              <th>Points</th>
+              <th>Progress</th>
+            </tr>
+          </thead>
 
-      <h3 class="activities-title">Activities</h3>
+          <tbody id="leaderboard-body">
+            <!-- 
+              JS will inject rows here
+              Example structure per row:
 
-      <ul id="activitiesList" class="activities-list">
-        <!-- JS will insert activity cards here -->
-      </ul>
-
-      <div class="wizard-actions">
-        <button class="ghost" id="back-btn">← Back</button>
+              <tr>
+                <td>#</td>
+                <td>Student Name</td>
+                <td>Points</td>
+                <td>Progress Bar</td>
+              </tr>
+            -->
+          </tbody>
+        </table>
       </div>
 
-    </div>
+      <!-- Optional empty state -->
+      <div class="leaderboard-empty hidden" id="leaderboard-empty">
+        No students enrolled yet.
+      </div>
+
+    </section>
 
   </main>
 
   <script src="../src/js/courses-view-student.js"></script>
-  <script src="../src/js/courses-view-student-activities.js"></script>
+  <script src="../src/js/courses-view-student-leaderboard.js"></script>
   
 </body>
 </html>

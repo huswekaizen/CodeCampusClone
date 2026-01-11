@@ -127,3 +127,13 @@ html {
   align-self: flex-start; /* or center or flex-end */
   margin-top: 0; 
 }
+.activity-card.completed {
+  opacity: 0.6;
+}
+
+.activity-card.completed .start-btn {
+  cursor: pointer;
+}
+.activity-card.completed .start-btn:hover {
+  background: color-mix(in srgb, var(--accent) 70%, transparent);
+}

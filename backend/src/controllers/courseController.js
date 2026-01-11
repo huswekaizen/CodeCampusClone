@@ -308,3 +308,36 @@ export const leaveCourse = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getCourseLeaderboard = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    // Find users who have progress for this course
+    const users = await User.find({
+      "courseProgress.course": courseId
+    }).select("firstName lastName courseProgress");
+
+    const leaderboard = users.map(user => {
+      const progress = user.courseProgress.find(
+        p => p.course.toString() === courseId
+      );
+
+      return {
+        userId: user._id,
+        name: `${user.firstName} ${user.lastName}`,
+        points: progress?.points || 0,
+        completedCount: progress?.completedActivities.length || 0
+      };
+    });
+
+    // Rank by points
+    leaderboard.sort((a, b) => b.points - a.points);
+
+    res.status(200).json(leaderboard);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load leaderboard" });
+  }
+};

@@ -44,10 +44,6 @@ const userSchema = new mongoose.Schema({
 
 }, { timestamps: true });
 
-userSchema.index(
-  { _id: 1, "courseProgress.course": 1 },
-  { unique: true, sparse: true }
-);
 
 
 export default mongoose.model("User", userSchema);
