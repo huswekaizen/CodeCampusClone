@@ -127,6 +127,52 @@ html {
 }
 
 /* ---------------------------------- */
+/*        TOP 3 RANK STYLES            */
+/* ---------------------------------- */
+
+/* 🥇 RANK 1 — GOLD */
+.leaderboard-table tbody tr:nth-child(1) {
+  background: linear-gradient(
+    135deg,
+    #ffea8a,
+    #ffd700,
+    #ffb700
+  );
+  border-radius: 999px;
+  box-shadow:
+    0 0 6px rgba(255, 215, 0, 0.8),
+    0 0 12px rgba(255, 200, 0, 0.6),
+    0 0 20px rgba(255, 180, 0, 0.4);
+}
+
+.leaderboard-table tbody tr:nth-child(1) td {
+  color: #1a1a1a;
+  text-shadow: 0 0 4px rgba(255, 255, 200, 0.8);
+  font-weight: 700;
+}
+
+/* 🥈 RANK 2 — SILVER */
+.leaderboard-table tbody tr:nth-child(2) {
+  background: linear-gradient(135deg, #e0e0e0, #cfcfcf, #bdbdbd);
+}
+
+.leaderboard-table tbody tr:nth-child(2) td {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+/* 🥉 RANK 3 — BRONZE */
+.leaderboard-table tbody tr:nth-child(3) {
+  background: linear-gradient(135deg, #f4c29f, #cd7f32, #b87333);
+}
+
+.leaderboard-table tbody tr:nth-child(3) td {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+
+/* ---------------------------------- */
 /*          RESPONSIVE                */
 /* ---------------------------------- */
 

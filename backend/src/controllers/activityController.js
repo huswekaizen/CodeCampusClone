@@ -154,11 +154,13 @@ export const submitActivity = async (req, res) => {
     );
 
     if (!progress) {
-      // Lazy-create it if missing
-      progress = { course: activity.course, points: 0, completedActivities: [] };
-      user.courseProgress.push(progress);
+      user.courseProgress.push({
+        course: activity.course,
+        points: 0,
+        completedActivities: []
+      });
+      progress = user.courseProgress[user.courseProgress.length - 1];
     }
-
     // 4️⃣ Check if activity already completed
     if (progress.completedActivities.some(a => a.toString() === activity._id.toString())) {
       await user.save(); // in case we just created progress

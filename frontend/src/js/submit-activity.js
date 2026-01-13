@@ -23,6 +23,7 @@ submitBtn.addEventListener("click", async () => {
 
     alert(`✅ Submitted. You earned ${activityPoints} points for this activity.`);
     submitBtn.disabled = true;
+    window.location.href = "courses-view-student-leaderboard.html";
 
   } catch (err) {
     alert("❌ " + err.message);
