@@ -5,7 +5,8 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import { /*createCourse,*/ getCourseWithActivities, getPublishedCourses, editCourse, deleteCourse,
-         joinCourse, getEnrolledCourses, leaveCourse, createCourseWithActivities, getCourseLeaderboard } from "../controllers/courseController.js";
+         joinCourse, getEnrolledCourses, leaveCourse, createCourseWithActivities, getCourseLeaderboard,
+         getPublicCourses } from "../controllers/courseController.js";
 
 const router = express.Router();
 
@@ -47,6 +48,7 @@ router.get("/courses/:id/details", getCourseWithActivities);
 router.get("/instructors/:id/published-courses", getPublishedCourses);
 router.get("/students/:id/enrolled-courses", getEnrolledCourses);
 router.get("/courses/:courseId/leaderboard", getCourseLeaderboard);
+router.get("/courses/public", getPublicCourses);
 
 router.put("/courses/:id/edit", upload.single("thumbnail"), editCourse);
 

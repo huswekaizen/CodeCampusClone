@@ -341,3 +341,33 @@ export const getCourseLeaderboard = async (req, res) => {
     res.status(500).json({ message: "Failed to load leaderboard" });
   }
 };
+
+export const getPublicCourses = async (req, res) => {
+  try {
+    const { studentId } = req.query; // optional
+
+    let enrolledCourses = [];
+
+    if (studentId) {
+      const user = await User.findById(studentId).select("enrolledCourses");
+      if (user) enrolledCourses = user.enrolledCourses;
+    }
+
+    const courses = await Course.find({
+      accessibility: "public",
+      _id: { $nin: enrolledCourses }
+    })
+      .select("title subTitle category description example thumbnail instructor")
+      .populate({
+        path: "instructor",
+        model: "User",
+        select: "firstName lastName"
+      });
+
+    res.status(200).json(courses);
+  } catch (err) {
+    console.error("Error fetching public courses:", err);
+    res.status(500).json({ message: "Failed to fetch public courses" });
+  }
+};
+
