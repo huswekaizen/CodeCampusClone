@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("previewTitleValue").textContent = document.getElementById("title").value;
     document.getElementById("previewSubtitleValue").textContent = document.getElementById("subTitle").value;
     document.getElementById("previewCategoryValue").textContent = document.getElementById("category").value;
+    document.getElementById("previewAccessibilityValue").textContent = document.getElementById("accessibility").value;
     document.getElementById("previewDescriptionValue").textContent = document.getElementById("description").value;
     document.getElementById("previewExampleValue").textContent = document.getElementById("example").value;
 
@@ -159,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
         title: document.getElementById("title").value.trim(),
         subTitle: document.getElementById("subTitle").value.trim(),
         category: document.getElementById("category").value.trim(),
+        accessibility: document.getElementById("accessibility").value,
         description: document.getElementById("description").value.trim(),
         example: document.getElementById("example").value.trim(),
         instructorId: userId

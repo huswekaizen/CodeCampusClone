@@ -50,7 +50,7 @@ export const createCourseWithActivities = async (req, res) => {
     activities = activities || []; // <-- make sure it's always an array
 
     const {
-      title, subTitle, category, description, example, instructorId
+      title, subTitle, category, accessibility, description, example, instructorId
     } = course;
 
     if (!instructorId) return res.status(400).json({ error: "Missing instructorId" });
@@ -65,8 +65,16 @@ export const createCourseWithActivities = async (req, res) => {
 
     // Create course
     const createdCourse = await Course.create({
-      title, subTitle, category, description, example, thumbnail, instructor: instructorId
+      title,
+      subTitle,
+      category,
+      description,
+      example,
+      accessibility: accessibility || "private",
+      thumbnail,
+      instructor: instructorId
     });
+
 
     // Create activities if any
     if (activities.length > 0) {
@@ -118,7 +126,7 @@ export const getCourseWithActivities = async (req, res) => {
 };
 
 // GET /api/instructors/:id/published-courses
-export const getPublishedCourses = async (req, res) => {
+export const getInstructorCourses = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -129,7 +137,7 @@ export const getPublishedCourses = async (req, res) => {
     // Find instructor and their course references
     const instructor = await User.findById(id).populate({
       path: "createdCourses",
-      select: "title subTitle category description example thumbnail"
+      select: "title subTitle category accessibility description example thumbnail"
     });
 
 
@@ -228,6 +236,10 @@ export const joinCourse = async (req, res) => {
 
     const course = await Course.findOne({ courseCode });
     if (!course) return res.status(404).json({ message: "Course not found" });
+
+    if (course.accessibility === "private") {
+      return res.status(403).json({ message: "Private course" });
+    }
 
     if (course.students.includes(studentId)) return res.status(400).json({ message: "Already enrolled" });
 

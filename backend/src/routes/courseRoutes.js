@@ -4,7 +4,7 @@ import express from "express";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
-import { /*createCourse,*/ getCourseWithActivities, getPublishedCourses, editCourse, deleteCourse,
+import { /*createCourse,*/ getCourseWithActivities, getInstructorCourses, editCourse, deleteCourse,
          joinCourse, getEnrolledCourses, leaveCourse, createCourseWithActivities, getCourseLeaderboard,
          getPublicCourses } from "../controllers/courseController.js";
 
@@ -45,7 +45,7 @@ router.post("/courses/join", joinCourse);
 router.post("/courses/with-activities", upload.single("thumbnail"), createCourseWithActivities);
 
 router.get("/courses/:id/details", getCourseWithActivities);
-router.get("/instructors/:id/published-courses", getPublishedCourses);
+router.get("/instructors/:id/published-courses", getInstructorCourses);
 router.get("/students/:id/enrolled-courses", getEnrolledCourses);
 router.get("/courses/:courseId/leaderboard", getCourseLeaderboard);
 router.get("/courses/public", getPublicCourses);
