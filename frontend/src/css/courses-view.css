@@ -76,6 +76,12 @@ body {
   margin-bottom: 10px;
 }
 
+.preview-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* Fields */
 .preview-field {
   display: flex;

@@ -102,8 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("id:", id);
 
 
-    [fullNameTop, fullNameProfile, instructorName, studentName].forEach(el => el.textContent = fullName);
-    [roleTop, roleProfile].forEach(el => el.textContent = role);
+    [fullNameTop, fullNameProfile, instructorName, studentName]
+      .filter(Boolean)
+      .forEach(el => el.textContent = fullName);
+
+    [roleTop, roleProfile]
+      .filter(Boolean)
+      .forEach(el => el.textContent = role);
 
 });
 

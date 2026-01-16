@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <title>Public Courses — CodeCampus</title>
+
+  <link rel="stylesheet" href="../src/css/home.css">
+  <link rel="stylesheet" href="../src/css/public-courses.css">
+</head>
+
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="./home-student.html" class="logo-link">
+        <img src="../src/images/site-logo.png" alt="logo">
+      </a>
+
+      <div class="search">
+        <input id="searchPublicCourses" placeholder="Search public courses…" />
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="icon-btn">🔔</button>
+      <button class="icon-btn">💬</button>
+
+      <div class="profile">
+        <div class="avatar avatar-sm"></div>
+        <div class="profile-info">
+          <div class="profile-name" id="fullNameTop"></div>
+          <div class="profile-role" id="roleTop"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <ul class="nav-list">
+        <li class="nav-item" onclick="location.href='./home-student.html'">Dashboard</li>
+        <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+        <li class="nav-item active" onclick="location.href='./public-courses.html'">Public Courses</li>
+        <li class="nav-item">Challenges</li>
+        <li class="nav-item">Leaderboard</li>
+        <li class="nav-item">Community</li>
+        <li class="nav-item">Settings</li>
+        <a id="logout"><li class="nav-item">Logout</li></a>
+      </ul>
+      <button class="collapse-btn">⮜</button>
+    </nav>
+
+    <!-- CONTENT -->
+    <main class="content-area">
+
+      <!-- HEADER CARD -->
+      <section class="card welcome">
+        <h2>Public Courses</h2>
+        <p class="muted">
+          Explore available courses. View details or enroll when ready.
+        </p>
+      </section>
+
+      <!-- PUBLIC COURSES GRID -->
+      <section class="card">
+        <h1>Available Courses</h1>
+
+
+
+        <div id="publicCoursesContainer" class="courses-grid"></div>
+
+        <!-- TEMPLATE -->
+        <template id="publicCourseCardTemplate">
+          <div class="course-card public-course-card">
+            <img class="thumbnail" src="../src/assets/default-course-thumbnail.jpg" alt="Course thumbnail">
+
+            <div class="card-content">
+              <h3 class="title"></h3>
+              <h5 class="instructorName"></h5>
+              <p class="category"></p>
+              <p class="description"></p>
+            </div>
+
+            <div class="btn-group">
+              <button class="ghost view-course">View</button>
+              <button class="primary enroll-course">Enroll</button>
+            </div>
+          </div>
+        </template>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="../src/js/public-courses.js"></script>
+ <script type="module" src="../src/js/home.js"></script>
+</body>
+</html>
