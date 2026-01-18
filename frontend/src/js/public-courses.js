@@ -1,26 +1,19 @@
-
 document.addEventListener("DOMContentLoaded", async () => {
-    const coursesContainer = document.getElementById("publicCoursesContainer");
-    const studentId = localStorage.getItem("userId"); // optional but useful
-    const template = document.getElementById("publicCourseCardTemplate");
-    const card = template.content.cloneNode(true);
-    document.getElementById("publicCoursesContainer").appendChild(card);
+  const coursesContainer = document.getElementById("publicCoursesContainer");
+  const studentId = localStorage.getItem("userId");
+  const courseId = localStorage.getItem("selectedCourseId");
 
-  
   if (!coursesContainer) {
     console.error("Missing #publicCoursesContainer in HTML");
     return;
   }
 
   try {
-    // Fetch public courses (excluding enrolled ones if studentId exists)
     const res = await fetch(
       `http://localhost:5000/api/courses/public${studentId ? `?studentId=${studentId}` : ""}`
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch public courses");
-    }
+    if (!res.ok) throw new Error("Failed to fetch public courses");
 
     const courses = await res.json();
 
@@ -29,48 +22,60 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    coursesContainer.innerHTML = "";
+    coursesContainer.innerHTML = ""; // Clear container before appending
 
     courses.forEach(course => {
-        const template = document.getElementById("publicCourseCardTemplate");
-        const card = template.content.cloneNode(true);
+      const template = document.getElementById("publicCourseCardTemplate");
+      const card = template.content.cloneNode(true);
 
-        card.querySelector(".title").textContent = course.title;
-        card.querySelector(".instructorName").textContent = `${course.instructor.firstName} ${course.instructor.lastName}`;
-        card.querySelector(".category").textContent = course.category;
-        card.querySelector(".description").textContent = course.subTitle || "";
+      // Fill card data
+      card.querySelector(".title").textContent = course.title;
+      card.querySelector(".instructorName").textContent =
+        `${course.instructor.firstName} ${course.instructor.lastName}`;
+      card.querySelector(".category").textContent = course.category;
+      card.querySelector(".description").textContent = course.subTitle || "";
 
-        // Enroll button
-        const enrollBtn = card.querySelector(".enroll-course");
-        enrollBtn.addEventListener("click", async () => {
-            const studentId = localStorage.getItem("userId");
-            if (!studentId) return alert("Login first.");
+      const thumbnailImg = card.querySelector(".thumbnail");
+      thumbnailImg.src = course.thumbnail
+        ? `http://localhost:5000${course.thumbnail}`
+        : "../src/assets/default-course-thumbnail.jpg";
 
-            try {
-                const joinRes = await fetch("http://localhost:5000/api/courses/join", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ courseCode: course.courseCode, studentId })
-                });
+      thumbnailImg.alt = `${course.title} Thumbnail`;
 
-                const data = await joinRes.json();
-                if (!joinRes.ok) throw new Error(data.message || "Join failed");
+      // Enroll button
+      const enrollBtn = card.querySelector(".enroll-course");
+      enrollBtn.addEventListener("click", async () => {
+        const studentId = localStorage.getItem("userId");
+        if (!studentId) return alert("Login first.");
 
-                alert("Joined course successfully");
-                enrollBtn.closest(".course-card").remove();
-            } catch (err) {
-                alert(err.message);
-            }
-        });
+        try {
+          const joinRes = await fetch("http://localhost:5000/api/courses/join", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ courseCode: course.courseCode, studentId })
+          });
 
-        // View button (optional)
-        const viewBtn = card.querySelector(".view-course");
-        viewBtn.addEventListener("click", () => {
-            // Navigate or open course detail
-            window.location.href = `/courses/${course.courseCode}`;
-        });
+          const data = await joinRes.json();
+          if (!joinRes.ok) throw new Error(data.message || "Join failed");
 
-        coursesContainer.appendChild(card);
+          alert("Joined course successfully");
+          enrollBtn.closest(".course-card").remove();
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+
+      // View button
+      const viewBtn = card.querySelector(".view-course");
+      viewBtn.addEventListener("click", () => {
+        localStorage.setItem("courseViewMode", "public");
+        localStorage.setItem("selectedCourseId", course._id);
+
+        window.location.href = "courses-view-student-overview.html";
+      });
+
+
+      coursesContainer.appendChild(card);
     });
 
   } catch (err) {

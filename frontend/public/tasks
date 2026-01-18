@@ -1,2 +1,1 @@
-- the submit activity point system has bug, the first submission does not register the points on 
-    the mongodb userProgress and only works when I submit for the second time
+- remove necessary elements if the mode is public remove leave btn and the tabs only the overview

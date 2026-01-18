@@ -6,5 +6,11 @@ document.querySelectorAll(".nav-item").forEach(item => {
 });
 
 document.getElementById("back-btn").addEventListener("click", () => {
-  window.location.href = "./joined-courses-student.html";
+  if(localStorage.getItem("courseViewMode") === "public") {
+    window.location.href = "./public-courses.html";
+    return;
+  } else {
+    window.location.href = "./joined-courses-student.html";
+  }
+
 });
