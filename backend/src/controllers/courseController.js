@@ -227,36 +227,47 @@ export const deleteCourse = async (req, res) => {
 
 
 export const joinCourse = async (req, res) => {
-  console.log("joinCourse hit with body:", req.body);
-  console.log("JOIN CONTROLLER REACHED");
+  console.log("JOIN CONTROLLER REACHED", req.body);
 
   try {
     const { courseCode, studentId } = req.body;
-    if (!courseCode || !studentId) return res.status(400).json({ message: "courseCode and studentId are required" });
 
-    const course = await Course.findOne({ courseCode });
-    if (!course) return res.status(404).json({ message: "Course not found" });
-
-    if (course.accessibility === "private") {
-      return res.status(403).json({ message: "Private course" });
+    if (!courseCode || !studentId) {
+      return res.status(400).json({
+        message: "courseCode and studentId are required"
+      });
     }
 
-    if (course.students.includes(studentId)) return res.status(400).json({ message: "Already enrolled" });
+    const course = await Course.findOne({ courseCode });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
 
-    // add student
+    // already enrolled (ObjectId-safe)
+    if (course.students.some(id => id.toString() === studentId)) {
+      return res.status(400).json({ message: "Already enrolled" });
+    }
+
     course.students.push(studentId);
     await course.save();
 
-    // add course to student
-    await User.findByIdAndUpdate(studentId, { $addToSet: { enrolledCourses: course._id } });
+    await User.findByIdAndUpdate(
+      studentId,
+      { $addToSet: { enrolledCourses: course._id } }
+    );
 
-    return res.status(200).json({ message: "Joined successfully", courseId: course._id });
+    return res.status(200).json({
+      message: "Joined successfully",
+      courseId: course._id
+    });
 
   } catch (err) {
     console.error("Error joining course:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 export const getEnrolledCourses = async (req, res) => {
   try {
