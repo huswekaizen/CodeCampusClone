@@ -31,13 +31,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const studentId = localStorage.getItem("userId");
 
         const res = await fetch(
-          `http://localhost:5000/api/courses/${courseId}/enroll`,
+          `http://localhost:5000/api/courses/join`, // ✅ correct route
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ studentId })
+            body: JSON.stringify({ 
+              studentId, 
+              courseCode: loadedCourse.courseCode // important, backend checks courseCode
+            })
           }
         );
+
 
         const data = await res.json();
 
