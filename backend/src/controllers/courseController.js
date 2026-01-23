@@ -380,7 +380,7 @@ export const getPublicCourses = async (req, res) => {
       accessibility: "public",
       _id: { $nin: enrolledCourses }
     })
-      .select("title subTitle category description example thumbnail instructor")
+      .select("title subTitle category description example thumbnail instructor courseCode")
       .populate({
         path: "instructor",
         model: "User",

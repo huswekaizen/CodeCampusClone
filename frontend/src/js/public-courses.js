@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const coursesContainer = document.getElementById("publicCoursesContainer");
   const studentId = localStorage.getItem("userId");
-  const courseId = localStorage.getItem("selectedCourseId");
 
   if (!coursesContainer) {
     console.error("Missing #publicCoursesContainer in HTML");
@@ -27,7 +26,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     courses.forEach(course => {
       const template = document.getElementById("publicCourseCardTemplate");
       const card = template.content.cloneNode(true);
-
+      console.log("courseCode: ", course.courseCode)
+      
       // Fill card data
       card.querySelector(".title").textContent = course.title;
       card.querySelector(".instructorName").textContent =
@@ -45,24 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Enroll button
       const enrollBtn = card.querySelector(".enroll-course");
       enrollBtn.addEventListener("click", async () => {
-        const studentId = localStorage.getItem("userId");
-        if (!studentId) return alert("Login first.");
-
-        try {
-          const joinRes = await fetch("http://localhost:5000/api/courses/join", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ courseCode: course.courseCode, studentId })
-          });
-
-          const data = await joinRes.json();
-          if (!joinRes.ok) throw new Error(data.message || "Join failed");
-
-          alert("Joined course successfully");
-          enrollBtn.closest(".course-card").remove();
-        } catch (err) {
-          alert(err.message);
-        }
+        enrollCourse(studentId, course.courseCode);
       });
 
       // View button
@@ -83,3 +66,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     coursesContainer.innerHTML = "<p>Something broke. Blame reality.</p>";
   }
 });
+
+async function enrollCourse(studentId, courseCode) {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/courses/join`, // ✅ correct route
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          studentId, 
+          courseCode: courseCode // important, backend checks courseCode
+        })
+      }
+    );
+
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Failed to enroll");
+      return;
+    }
+
+    alert("Enrolled successfully.");
+    localStorage.setItem("courseViewMode", "private");
+    window.location.reload();
+  } catch (err) {
+    console.error(err);
+    alert("Error enrolling.");
+  }
+}
