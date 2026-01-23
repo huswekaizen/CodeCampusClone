@@ -394,3 +394,76 @@ export const getPublicCourses = async (req, res) => {
   }
 };
 
+export const getInstructorUniqueStudentCount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await Course.aggregate([
+      {
+        $match: {
+          instructor: new mongoose.Types.ObjectId(id)
+        }
+      },
+      {
+        $unwind: "$students"
+      },
+      {
+        $group: {
+          _id: "$students" // dedupe students across courses
+        }
+      },
+      {
+        $count: "totalStudents"
+      }
+    ]);
+
+    res.status(200).json({
+      totalStudents: result[0]?.totalStudents || 0
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to count students" });
+  }
+};
+
+export const getInstructorUniqueStudents = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const students = await Course.aggregate([
+      { $match: { instructor: new mongoose.Types.ObjectId(id) } },
+      { $unwind: "$students" },
+      {
+        $group: {
+          _id: "$students"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "student"
+        }
+      },
+      { $unwind: "$student" },
+      {
+        $project: {
+          _id: 0,
+          studentId: "$student._id",
+          firstName: "$student.firstName",
+          lastName: "$student.lastName",
+          username: "$student.username"
+        }
+      }
+    ]);
+
+    res.status(200).json(students);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch students" });
+  }
+};
+
+
+

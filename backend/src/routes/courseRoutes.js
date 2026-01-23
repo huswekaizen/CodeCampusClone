@@ -6,7 +6,7 @@ import fs from "fs";
 import path from "path";
 import { /*createCourse,*/ getCourseWithActivities, getInstructorCourses, editCourse, deleteCourse,
          joinCourse, getEnrolledCourses, leaveCourse, createCourseWithActivities, getCourseLeaderboard,
-         getPublicCourses } from "../controllers/courseController.js";
+         getPublicCourses, getInstructorUniqueStudentCount, getInstructorUniqueStudents } from "../controllers/courseController.js";
 
 const router = express.Router();
 
@@ -49,6 +49,8 @@ router.get("/instructors/:id/published-courses", getInstructorCourses);
 router.get("/students/:id/enrolled-courses", getEnrolledCourses);
 router.get("/courses/:courseId/leaderboard", getCourseLeaderboard);
 router.get("/courses/public", getPublicCourses);
+router.get("/courses/:id/totalStudents", getInstructorUniqueStudentCount);  
+router.get("/courses/:id/totalStudentsNames", getInstructorUniqueStudents);
 
 router.put("/courses/:id/edit", upload.single("thumbnail"), editCourse);
 

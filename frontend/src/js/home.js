@@ -79,7 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    const userId = localStorage.getItem("userId");
+
     const fullNameTop = document.getElementById("fullNameTop");
     const roleTop = document.getElementById("roleTop");
     const fullNameProfile = document.getElementById("fullNameProfile");
@@ -110,10 +112,14 @@ document.addEventListener('DOMContentLoaded', () => {
       .filter(Boolean)
       .forEach(el => el.textContent = role);
 
+  await loadPublishedCourses(userId);
+  await loadTotalStudents(userId);
+  await loadStudentsDebug(userId); // TEMP, for verification
+
 });
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const userId = localStorage.getItem("userId") || "";
+
+async function loadPublishedCourses(userId) {
   const publishedCourseList = document.getElementById("publishedCourseList");
   const publishedCourseCountProfile = document.getElementById("publishedCourseCountProfile");
   try {
@@ -126,7 +132,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to load published courses:", err);
     publishedCourseList.textContent = "0";
   }
-});
+}
+
+async function loadTotalStudents(userId) {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/courses/${userId}/totalStudents`
+    );
+    const data = await res.json();
+
+    console.log("TOTAL STUDENTS COUNT:", data.totalStudents);
+    document.getElementById("enrolledStudentsCount").textContent =
+      data.totalStudents || 0;
+  } catch (err) {
+    console.error("Failed to load total students:", err);
+  }
+}
+async function loadStudentsDebug(userId) {
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/courses/${userId}/totalStudentsNames`
+    );
+    const students = await res.json();
+
+    console.log("UNIQUE STUDENTS LIST:");
+    console.table("students names:", students);
+
+    // sanity check
+    console.log("Students counted:", students.length);
+  } catch (err) {
+    console.error("Failed to load students list:", err);
+  }
+}
+
 
 export async function updateEnrolledCourseCount() {
   const userId = localStorage.getItem("userId") || "";
