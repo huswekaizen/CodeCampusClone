@@ -465,5 +465,64 @@ export const getInstructorUniqueStudents = async (req, res) => {
   }
 };
 
+export const getInstructorLeaderboard = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const leaderboard = await User.aggregate([
+      // only students
+      { $match: { role: "student" } },
+
+      // explode courseProgress
+      { $unwind: "$courseProgress" },
+
+      // join course to check instructor
+      {
+        $lookup: {
+          from: "courses",
+          localField: "courseProgress.course",
+          foreignField: "_id",
+          as: "course"
+        }
+      },
+      { $unwind: "$course" },
+
+      // keep only instructor's courses
+      {
+        $match: {
+          "course.instructor": new mongoose.Types.ObjectId(id)
+        }
+      },
+
+      // aggregate per student
+      {
+        $group: {
+          _id: "$_id",
+          firstName: { $first: "$firstName" },
+          lastName: { $first: "$lastName" },
+          totalPoints: { $sum: "$courseProgress.points" },
+          completedActivities: {
+            $sum: { $size: "$courseProgress.completedActivities" }
+          }
+        }
+      },
+
+      // sort leaderboard
+      {
+        $sort: {
+          totalPoints: -1,
+          completedActivities: -1
+        }
+      }
+    ]);
+
+    res.status(200).json(leaderboard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load leaderboard" });
+  }
+};
+
+
 
 
