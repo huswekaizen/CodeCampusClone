@@ -38,10 +38,11 @@
   <div class="layout" role="main">
     <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
       <ul class="nav-list">
-        <li class="nav-item" onclick="location.href='./home-instructor.html'">Home</li>
-        <li class="nav-item" onclick="location.href='./courses-instructor.html'">Courses</li>
+        <li class="nav-item" onclick="location.href='./home-student.html'">Home</li>
+        <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+        <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
         <li class="nav-item">Challenges</li>
-        <li class="nav-item active">Leaderboard</li>
+        <li class="nav-item active" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
         <li class="nav-item">Community</li>
         <li class="nav-item">Settings</li>
         <a id="logout"><li class="nav-item">Logout</li></a>
@@ -53,7 +54,7 @@
       <!-- Welcome / Summary -->
         <section class="leaderboard-container">
             <header class="leaderboard-header">
-                <h1>Your Students Leaderboard</h1>
+                <h1>All Students Leaderboard</h1>
                 <p>Ranking based on total points and completed activities</p>
             </header>
 
@@ -95,6 +96,6 @@
   </div>
 
   <script type="module" src="../src/js/home.js"></script>
-  <script type="module" src="../src/js/leaderboard-instructor.js"></script>
+  <script type="module" src="../src/js/leaderboard-student.js"></script>
 </body>
 </html>

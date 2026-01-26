@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <td>${s.firstName} ${s.lastName}</td>
         <td>${s.totalPoints}</td>
         <td>${s.completedActivities}</td>
+        <td>${s.coursesJoined}</td>
       `;
 
       tbody.appendChild(tr);

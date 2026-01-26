@@ -468,29 +468,68 @@ export const getInstructorUniqueStudents = async (req, res) => {
 export const getInstructorLeaderboard = async (req, res) => {
   try {
     const { id } = req.params;
+    const instructorId = new mongoose.Types.ObjectId(id);
 
     const leaderboard = await User.aggregate([
       // only students
       { $match: { role: "student" } },
 
-      // explode courseProgress
-      { $unwind: "$courseProgress" },
+      // explode enrolled courses (SOURCE OF TRUTH)
+      { $unwind: "$enrolledCourses" },
 
-      // join course to check instructor
+      // join course
       {
         $lookup: {
           from: "courses",
-          localField: "courseProgress.course",
+          localField: "enrolledCourses",
           foreignField: "_id",
           as: "course"
         }
       },
       { $unwind: "$course" },
 
-      // keep only instructor's courses
+      // keep only this instructor’s courses
       {
         $match: {
-          "course.instructor": new mongoose.Types.ObjectId(id)
+          "course.instructor": instructorId
+        }
+      },
+
+      // LEFT JOIN courseProgress for that course
+      {
+        $lookup: {
+          from: "users",
+          let: { userId: "$_id", courseId: "$course._id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$userId"] } } },
+            { $unwind: { path: "$courseProgress", preserveNullAndEmptyArrays: true } },
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$courseProgress.course", "$$courseId"]
+                }
+              }
+            },
+            {
+              $project: {
+                points: "$courseProgress.points",
+                completedActivities: "$courseProgress.completedActivities"
+              }
+            }
+          ],
+          as: "progress"
+        }
+      },
+
+      // normalize missing progress
+      {
+        $addFields: {
+          points: { $ifNull: [{ $first: "$progress.points" }, 0] },
+          completedActivitiesCount: {
+            $size: {
+              $ifNull: [{ $first: "$progress.completedActivities" }, []]
+            }
+          }
         }
       },
 
@@ -500,14 +539,19 @@ export const getInstructorLeaderboard = async (req, res) => {
           _id: "$_id",
           firstName: { $first: "$firstName" },
           lastName: { $first: "$lastName" },
-          totalPoints: { $sum: "$courseProgress.points" },
-          completedActivities: {
-            $sum: { $size: "$courseProgress.completedActivities" }
-          }
+          totalPoints: { $sum: "$points" },
+          completedActivities: { $sum: "$completedActivitiesCount" },
+          coursesJoined: { $addToSet: "$course._id" }
         }
       },
 
-      // sort leaderboard
+      {
+        $addFields: {
+          coursesJoined: { $size: "$coursesJoined" }
+        }
+      },
+
+      // ranking
       {
         $sort: {
           totalPoints: -1,
@@ -522,6 +566,7 @@ export const getInstructorLeaderboard = async (req, res) => {
     res.status(500).json({ message: "Failed to load leaderboard" });
   }
 };
+
 
 
 

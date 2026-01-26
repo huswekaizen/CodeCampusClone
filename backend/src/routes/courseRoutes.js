@@ -49,8 +49,8 @@ router.get("/instructors/:id/published-courses", getInstructorCourses);
 router.get("/students/:id/enrolled-courses", getEnrolledCourses);
 router.get("/courses/:courseId/leaderboard", getCourseLeaderboard);
 router.get("/courses/public", getPublicCourses);
-router.get("/courses/:id/totalStudents", getInstructorUniqueStudentCount);  
-router.get("/courses/:id/totalStudentsNames", getInstructorUniqueStudents);
+router.get("/instructors/:id/totalStudents", getInstructorUniqueStudentCount);  
+router.get("/instructors/:id/totalStudentsNames", getInstructorUniqueStudents);
 router.get("/instructors/:id/leaderboard", getInstructorLeaderboard);
 
 

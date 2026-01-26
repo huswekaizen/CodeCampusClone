@@ -137,7 +137,7 @@ async function loadPublishedCourses(userId) {
 async function loadTotalStudents(userId) {
   try {
     const res = await fetch(
-      `http://localhost:5000/api/courses/${userId}/totalStudents`
+      `http://localhost:5000/api/instructors/${userId}/totalStudents`
     );
     const data = await res.json();
 
@@ -151,7 +151,7 @@ async function loadTotalStudents(userId) {
 async function loadStudentsDebug(userId) {
   try {
     const res = await fetch(
-      `http://localhost:5000/api/courses/${userId}/totalStudentsNames`
+      `http://localhost:5000/api/instructors/${userId}/totalStudentsNames`
     );
     const students = await res.json();
 
