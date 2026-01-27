@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const instructorId = localStorage.getItem("userId");
-  if (!instructorId) return;
 
-  loadLeaderboard(`http://localhost:5000/api/instructors/${instructorId}/leaderboard`);
+  loadLeaderboard(`http://localhost:5000/api/students/globalLeaderboard`);
+  
 });
 
 

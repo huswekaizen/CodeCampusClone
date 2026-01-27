@@ -566,6 +566,61 @@ export const getInstructorLeaderboard = async (req, res) => {
     res.status(500).json({ message: "Failed to load leaderboard" });
   }
 };
+export const getStudentGlobalLeaderboard = async (req, res) => {
+  try {
+    const leaderboard = await User.aggregate([
+      // only students
+      { $match: { role: "student" } },
+
+      // explode courseProgress but keep lazy students
+      {
+        $unwind: {
+          path: "$courseProgress",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+
+      // aggregate per student
+      {
+        $group: {
+          _id: "$_id",
+          firstName: { $first: "$firstName" },
+          lastName: { $first: "$lastName" },
+
+          totalPoints: {
+            $sum: { $ifNull: ["$courseProgress.points", 0] }
+          },
+
+          completedActivities: {
+            $sum: {
+              $size: {
+                $ifNull: ["$courseProgress.completedActivities", []]
+              }
+            }
+          },
+
+          coursesJoined: {
+            $first: { $size: { $ifNull: ["$enrolledCourses", []] } }
+          }
+        }
+      },
+
+      // ranking logic
+      {
+        $sort: {
+          totalPoints: -1,
+          completedActivities: -1,
+          coursesJoined: -1
+        }
+      }
+    ]);
+
+    res.status(200).json(leaderboard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load student leaderboard" });
+  }
+};
 
 
 
