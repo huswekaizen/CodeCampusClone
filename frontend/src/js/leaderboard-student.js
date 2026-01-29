@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function loadLeaderboard(url) {
+  const userId = localStorage.getItem("userId");
+
   try {
     const res = await fetch(url);
     const students = await res.json();
@@ -20,8 +22,17 @@ async function loadLeaderboard(url) {
       return;
     }
 
+    const myIndex = students.findIndex(
+      s => s._id === userId
+    );
+
     students.forEach((s, index) => {
       const tr = document.createElement("tr");
+
+      if (index === myIndex) {
+        tr.classList.add("current-user"); // highlight yourself
+      }
+
       tr.innerHTML = `
         <td>${index + 1}</td>
         <td>${s.firstName} ${s.lastName}</td>
@@ -29,8 +40,12 @@ async function loadLeaderboard(url) {
         <td>${s.completedActivities}</td>
         <td>${s.coursesJoined}</td>
       `;
+
       tbody.appendChild(tr);
     });
+
+    console.log("Your rank:", myIndex + 1);
+
   } catch (err) {
     console.error("Failed to load leaderboard", err);
   }
