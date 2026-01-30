@@ -172,7 +172,6 @@ html {
 }
 
 .current-user {
-  outline: 2px solid var(--accent);
   background: rgba(58, 141, 255, 0.15);
   font-weight: 700;
 }

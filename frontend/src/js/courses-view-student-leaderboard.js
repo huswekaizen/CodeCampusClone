@@ -3,6 +3,7 @@ const tbody = document.getElementById("leaderboard-body");
 const emptyState = document.getElementById("leaderboard-empty");
 
 async function loadLeaderboard() {
+  const userId = localStorage.getItem("userId");
   try {
     const res = await fetch(
       `http://localhost:5000/api/courses/${courseId}/leaderboard`
@@ -19,15 +20,23 @@ async function loadLeaderboard() {
 
     tbody.innerHTML = "";
 
+    const myIndex = data.findIndex(
+      s => s.userId.toString() === userId
+    );
+
     data.forEach((student, index) => {
-      tbody.innerHTML += `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${student.name}</td>
-          <td>${student.points}</td>
-          <td>${student.completedCount} ${student.completedCount === 1 ? "activity" : "activities"}</td>
-        </tr>
+      const tr = document.createElement("tr");
+
+      if (index === myIndex) {
+        tr.classList.add("current-user"); // highlight yourself
+      }
+      tr.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${student.name}</td>
+        <td>${student.points}</td>
+        <td>${student.completedCount} ${student.completedCount === 1 ? "activity" : "activities"}</td>
       `;
+      tbody.appendChild(tr);
     });
 
   } catch (err) {
