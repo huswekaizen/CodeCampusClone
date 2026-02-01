@@ -22,23 +22,26 @@
             </div>
             <div class="sign-in-container">
                 <h2>Sign In</h2>
-                <div class="form-box">
-                    <div class="textbox">
-                        <input type="text" placeholder="Username / Email" name="username" value="" id="username">
-                    </div>
+                <form id="login-form">
+                    <div class="form-box">
+                        <div class="textbox">
+                            <input type="text" placeholder="Username / Email" name="username" value="" id="username">
+                        </div>
 
-                    <div class="textbox">
-                        <input type="password" placeholder="Password" name="password" value="" id="password">
-                    </div>
+                        <div class="textbox">
+                            <input type="password" placeholder="Password" name="password" value="" id="password">
+                        </div>
 
-                    <div class="login-actions">
-                        <button type="button" id="login-button" class="primary">Log In</button>
-                        <a id="create-account" href="signUp.html">Create Account</a>
+                        <div class="login-actions">
+                            <button type="submit" class="primary">Log In</button>
+                            <a id="create-account" href="signUp.html">Create Account</a>
+                        </div>
+                        <div>
+                            <p id="errorMessage" class="form-message" role="status" aria-live="polite"></p>
+                        </div>
                     </div>
-                    <div>
-                        <p id="errorMessage" class="form-message" role="status" aria-live="polite"></p>
-                    </div>
-                </div>
+                </form>
+                
             </div>
         </section>
     </main>
