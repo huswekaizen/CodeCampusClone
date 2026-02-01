@@ -9,6 +9,7 @@
 
   <title>Home — Student — CodeCampus</title>
   <link rel="stylesheet" href="../src/css/home.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-leaderboard.css" />
 </head>
 <body>
   <div class="background-image" aria-hidden="true"></div>
@@ -110,9 +111,23 @@
 
         <aside class="right-column">
           <div class="card leaderboard" aria-labelledby="leaderboard-heading">
-            <div class="card-header"><h3 id="leaderboard-heading">Leaderboard</h3></div>
-            <ol class="leader-list"></ol>
+            <div class="card-header">
+              <h3 id="leaderboard-heading">Leaderboard</h3>
+            </div>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Student</th>
+          
+              </tr>
+            </thead>
+            <table class="leaderboard-table">
+              <tbody id="leaderboard-body">
+                <!-- JS injects rows -->
+              </tbody>
+            </table>
           </div>
+
 
           <div class="card profile-card" aria-labelledby="profile-heading">
             <h3 id="profile-heading">Profile</h3>

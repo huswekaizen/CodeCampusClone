@@ -1,7 +1,10 @@
+import { loadLeaderboard } from "./leaderboard-student.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     const userId = localStorage.getItem("userId");
     
     studentHomeLoad(`http://localhost:5000/api/students/globalLeaderboard`, userId);
+    loadLeaderboard(`http://localhost:5000/api/students/globalLeaderboard`, { compact: true });
 });
 
 async function studentHomeLoad(url, userId) {

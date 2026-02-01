@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-async function loadLeaderboard(url) {
+export async function loadLeaderboard(url, options = {}) {
+  const { compact = false } = options;
   const userId = localStorage.getItem("userId");
 
   try {
@@ -13,38 +14,39 @@ async function loadLeaderboard(url) {
     const students = await res.json();
 
     const tbody = document.getElementById("leaderboard-body");
-    const emptyState = document.getElementById("leaderboard-empty");
+    if (!tbody) return;
 
     tbody.innerHTML = "";
 
-    if (!students.length) {
-      emptyState.classList.remove("hidden");
-      return;
-    }
-
-    const myIndex = students.findIndex(
-      s => s._id === userId
-    );
+    const myIndex = students.findIndex(s => s._id === userId);
 
     students.forEach((s, index) => {
       const tr = document.createElement("tr");
 
       if (index === myIndex) {
-        tr.classList.add("current-user"); // highlight yourself
+        tr.classList.add("current-user");
       }
 
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${s.firstName} ${s.lastName}</td>
-        <td>${s.totalPoints}</td>
-        <td>${s.completedActivities}</td>
-        <td>${s.coursesJoined}</td>
-      `;
+      // HOME PAGE (compact)
+      if (compact) {
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${s.firstName} ${s.lastName}</td>
+        `;
+      } 
+      // FULL LEADERBOARD PAGE
+      else {
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${s.firstName} ${s.lastName}</td>
+          <td>${s.totalPoints}</td>
+          <td>${s.completedActivities}</td>
+          <td>${s.coursesJoined}</td>
+        `;
+      }
 
       tbody.appendChild(tr);
     });
-
-    console.log("Your rank:", myIndex + 1);
 
   } catch (err) {
     console.error("Failed to load leaderboard", err);
