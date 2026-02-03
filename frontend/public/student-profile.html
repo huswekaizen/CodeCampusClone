@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <title>Home — Student — CodeCampus</title>
+  <link rel="stylesheet" href="../src/css/student-profile.css">
+  <link rel="stylesheet" href="../src/css/home.css">
+  <link rel="stylesheet" href="../src/css/home-student.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-leaderboard.css" />
+</head>
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+    <header class="topbar" role="banner">
+        <div class="topbar-left">
+            <a href="#" class="logo-link" aria-label="Home">
+            <img id="site-logo" src="../src/images/site-logo.png" alt="logo placeholder">
+            </a>
+            <div class="search">
+            <input id="search" placeholder="Search…" aria-label="Search">
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="icon-btn" id="notifications" title="Notifications">🔔</button>
+            <button class="icon-btn" id="messages" title="Messages">💬</button>
+
+            <div class="profile" aria-hidden="true">
+            <div class="avatar avatar-sm" aria-hidden="true"></div>
+            <div class="profile-info">
+                <div id="fullNameTop" class="profile-name">Student Name</div>
+                <div id="roleTop" class="profile-role">Student</div>
+            </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="layout">
+        <div class="left-column">
+            <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
+                <ul class="nav-list">
+                <li class="nav-item active" onclick="location.href='./home-student.html'">Home</li>
+                <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+                <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
+                <li class="nav-item">Challenges</li>
+                <li class="nav-item" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
+                <li class="nav-item">Community</li>
+                <li class="nav-item">Settings</li>
+                <a id="logout"><li class="nav-item">Logout</li></a>
+                </ul>
+                <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
+            </nav>
+        </div>
+
+
+        <main class="content-area">
+            <section class="card profile-editor">
+
+                <!-- Header -->
+                <div class="profile-editor-header">
+                    <div class="profile-avatar-block">
+                        <div class="profile-avatar-lg">
+                            <img src="../src/images/default-avatar.png" alt="Avatar">
+                        </div>
+                        <button class="ghost small">Change Avatar</button>
+                    </div>
+
+                    <div class="profile-identity">
+                        <div class="name-role">
+                            <span class="name-lg">Student Name</span>
+                            <span class="role-lg">Student</span>
+                        </div>
+                        <span class="muted">@username</span>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="profile-editor-body">
+
+                    <div class="profile-panel">
+                        <h3>Basic Information</h3>
+
+                        <div class="field">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter full name">
+                        </div>
+
+                        <div class="field">
+                            <label>Username</label>
+                            <input type="text" placeholder="Enter username">
+                        </div>
+
+                        <div class="field">
+                            <label>Email</label>
+                            <input type="email" placeholder="Enter email">
+                        </div>
+                    </div>
+
+                    <div class="profile-panel">
+                        <h3>Security</h3>
+
+                        <div class="field">
+                            <label>Current Password</label>
+                            <input type="password" placeholder="••••••••">
+                        </div>
+
+                        <div class="field">
+                            <label>New Password</label>
+                            <input type="password" placeholder="••••••••">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Actions -->
+                <div class="profile-editor-actions">
+                    <button class="ghost">Cancel</button>
+                    <button class="primary">Save Changes</button>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    
+
+  <!-- JOIN COURSE MODAL -->
+  <div id="joinCourseModal" class="modal-overlay">
+    <div class="modal-content">
+      <h2>Join a Course</h2>
+      <p class="muted">Enter the course code provided by your instructor.</p>
+
+      <input 
+        type="text" 
+        id="joinCodeInput" 
+        placeholder="Enter course code" 
+        class="modal-input"
+      >
+
+      <div class="modal-actions">
+        <button id="submitJoinCode" class="primary">Join</button>
+        <button id="closeModal" class="ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="module" src="../src/js/home.js"></script>
+  <script type="module" src="../src/js/home-student.js"></script>
+  <script type="module" src="../src/js/joined-courses-student.js"></script>
+  <script type="module" src="../src/js/join-course.js"></script>
+</body>
+</html>
