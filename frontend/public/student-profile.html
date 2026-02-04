@@ -44,7 +44,7 @@
         <div class="left-column">
             <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
                 <ul class="nav-list">
-                <li class="nav-item active" onclick="location.href='./home-student.html'">Home</li>
+                <li class="nav-item" onclick="location.href='./home-student.html'">Home</li>
                 <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
                 <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
                 <li class="nav-item">Challenges</li>
@@ -63,20 +63,23 @@
 
                 <!-- Header -->
                 <div class="profile-editor-header">
-                    <div class="profile-avatar-block">
-                        <div class="profile-avatar-lg">
-                            <img src="../src/images/default-avatar.png" alt="Avatar">
+                    <div class="profile-identity-block">
+                        <div class="profile-avatar-block">
+                            <div class="profile-avatar-lg">
+                                <img src="../src/images/default-avatar.png" alt="Avatar">
+                            </div>
+                            <button class="ghost small">Change Avatar</button>
                         </div>
-                        <button class="ghost small">Change Avatar</button>
-                    </div>
 
-                    <div class="profile-identity">
-                        <div class="name-role">
-                            <span class="name-lg">Student Name</span>
-                            <span class="role-lg">Student</span>
+                        <div class="profile-identity">
+                            <div class="name-role">
+                                <span class="name-lg">Student Name</span>
+                                <span class="role-lg">Student</span>
+                            </div>
+                            <span class="muted">@username</span>
                         </div>
-                        <span class="muted">@username</span>
                     </div>
+                    <button id="edit-btn" class="primary">Edit profile</button>
                 </div>
 
                 <!-- Body -->
@@ -86,8 +89,13 @@
                         <h3>Basic Information</h3>
 
                         <div class="field">
-                            <label>Full Name</label>
-                            <input type="text" placeholder="Enter full name">
+                            <label>First Name</label>
+                            <input type="text" placeholder="Enter first name">
+                        </div>
+
+                        <div class="field">
+                            <label>Last Name</label>
+                            <input type="text" placeholder="Enter last name">
                         </div>
 
                         <div class="field">
@@ -113,15 +121,21 @@
                             <label>New Password</label>
                             <input type="password" placeholder="••••••••">
                         </div>
+
+                        <div class="field">
+                            <label>Confirm New Password</label>
+                            <input type="password" placeholder="••••••••">
+                        </div>
                     </div>
 
                 </div>
 
                 <!-- Actions -->
                 <div class="profile-editor-actions">
-                    <button class="ghost">Cancel</button>
-                    <button class="primary">Save Changes</button>
+                    <button id="cancel-btn" class="ghost" disabled>Cancel</button>
+                    <button id="save-btn" class="primary" disabled>Save Changes</button>
                 </div>
+
 
             </section>
 
@@ -150,7 +164,7 @@
     </div>
   </div>
 
-
+  <script type="module" src="../src/js/student-profile.js"></script>
   <script type="module" src="../src/js/home.js"></script>
   <script type="module" src="../src/js/home-student.js"></script>
   <script type="module" src="../src/js/joined-courses-student.js"></script>

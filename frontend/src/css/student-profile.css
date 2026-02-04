@@ -6,6 +6,7 @@
 /* HEADER */
 .profile-editor-header {
   display: flex;
+  justify-content: space-between;
   gap: 24px;
   align-items: center;
   margin-bottom: 28px;
@@ -39,6 +40,13 @@
   flex-direction: column;
   gap: 6px;
 }
+
+.profile-identity-block {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
 
 .name-role {
   display: flex;
