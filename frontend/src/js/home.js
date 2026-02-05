@@ -1,6 +1,8 @@
 
 const role = localStorage.getItem('role');
 const username = localStorage.getItem('username');
+const userId = localStorage.getItem("userId") || "";
+
 
 if (!username) {
   window.location.href = '/frontend/public/index.html';
@@ -166,8 +168,7 @@ async function loadStudentsDebug(userId) {
 }
 
 
-export async function updateEnrolledCourseCount() {
-  const userId = localStorage.getItem("userId") || "";
+export async function updateEnrolledCourseCount(userid) {
   const enrolledCourseList = document.getElementById("enrolledCoursesCount");
   try {
     const res = await fetch(`http://localhost:5000/api/students/${userId}/enrolled-courses`);

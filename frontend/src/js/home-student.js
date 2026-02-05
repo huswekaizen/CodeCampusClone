@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function studentHomeLoad(url, userId) {
 
-
     try {
         const res = await fetch(url);
         const students = await res.json();

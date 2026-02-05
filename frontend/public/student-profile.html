@@ -58,111 +58,81 @@
         </div>
 
 
+         <!-- CONTENT -->
         <main class="content-area">
-            <section class="card profile-editor">
+            <section class="card profile-view">
 
-                <!-- Header -->
-                <div class="profile-editor-header">
-                    <div class="profile-identity-block">
-                        <div class="profile-avatar-block">
-                            <div class="profile-avatar-lg">
-                                <img src="../src/images/default-avatar.png" alt="Avatar">
-                            </div>
-                            <button class="ghost small">Change Avatar</button>
-                        </div>
+                <!-- HEADER -->
+                <div class="profile-view-header">
+                <div class="profile-basic">
+                    <img class="profile-avatar" src="../src/images/default-avatar.png" alt="Avatar">
 
-                        <div class="profile-identity">
-                            <div class="name-role">
-                                <span class="name-lg">Student Name</span>
-                                <span class="role-lg">Student</span>
-                            </div>
-                            <span class="muted">@username</span>
-                        </div>
+                    <div class="profile-meta">
+                    <h1 id="fullName">Student Name</h1>
+                    <span class="role">Student</span>
+                    <span class="username">@username</span>
                     </div>
-                    <button id="edit-btn" class="primary">Edit profile</button>
                 </div>
 
-                <!-- Body -->
-                <div class="profile-editor-body">
-
-                    <div class="profile-panel">
-                        <h3>Basic Information</h3>
-
-                        <div class="field">
-                            <label>First Name</label>
-                            <input type="text" placeholder="Enter first name">
-                        </div>
-
-                        <div class="field">
-                            <label>Last Name</label>
-                            <input type="text" placeholder="Enter last name">
-                        </div>
-
-                        <div class="field">
-                            <label>Username</label>
-                            <input type="text" placeholder="Enter username">
-                        </div>
-
-                        <div class="field">
-                            <label>Email</label>
-                            <input type="email" placeholder="Enter email">
-                        </div>
-                    </div>
-
-                    <div class="profile-panel">
-                        <h3>Security</h3>
-
-                        <div class="field">
-                            <label>Current Password</label>
-                            <input type="password" placeholder="••••••••">
-                        </div>
-
-                        <div class="field">
-                            <label>New Password</label>
-                            <input type="password" placeholder="••••••••">
-                        </div>
-
-                        <div class="field">
-                            <label>Confirm New Password</label>
-                            <input type="password" placeholder="••••••••">
-                        </div>
-                    </div>
-
+                <button class="primary"
+                        onclick="location.href='./student-edit-profile.html'">
+                    Edit Profile
+                </button>
                 </div>
 
-                <!-- Actions -->
-                <div class="profile-editor-actions">
-                    <button id="cancel-btn" class="ghost" disabled>Cancel</button>
-                    <button id="save-btn" class="primary" disabled>Save Changes</button>
+                <!-- INFO -->
+                <div class="profile-view-body">
+
+                <div class="info-card">
+                    <h3>Account Information</h3>
+
+                    <div class="info-row">
+                        <span>Username</span>
+                        <span id="email">student@email.com</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>First Name</span>
+                        <span id="firstName">Student</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Last Name</span>
+                        <span id="lastName">User</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Joined</span>
+                        <span id="joinedDate">January 2026</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Status</span>
+                        <span class="status active">Active</span>
+                    </div>
                 </div>
 
+                <div class="info-card">
+                    <h3>Activity</h3>
+
+                    <div class="info-row">
+                        <span>Courses Joined</span>
+                        <span id="courseCount">0</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span>Leaderboard Rank</span>
+                        <span id="rank">—</span>
+                    </div>
+                </div>
+
+                </div>
 
             </section>
-
         </main>
 
     </div>
     
-
-  <!-- JOIN COURSE MODAL -->
-  <div id="joinCourseModal" class="modal-overlay">
-    <div class="modal-content">
-      <h2>Join a Course</h2>
-      <p class="muted">Enter the course code provided by your instructor.</p>
-
-      <input 
-        type="text" 
-        id="joinCodeInput" 
-        placeholder="Enter course code" 
-        class="modal-input"
-      >
-
-      <div class="modal-actions">
-        <button id="submitJoinCode" class="primary">Join</button>
-        <button id="closeModal" class="ghost">Cancel</button>
-      </div>
-    </div>
-  </div>
 
   <script type="module" src="../src/js/student-profile.js"></script>
   <script type="module" src="../src/js/home.js"></script>
