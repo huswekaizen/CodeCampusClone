@@ -9,6 +9,7 @@
 
   <title>Joined Courses — Student — CodeCampus</title>
   <link rel="stylesheet" href="../src/css/home.css">
+  <link rel="stylesheet" href="../src/css/home-student.css">
   <link rel="stylesheet" href="../src/css/joined-courses-student.css">
 </head>
 <body>
@@ -42,19 +43,41 @@
   <!-- LAYOUT -->
   <div class="layout" role="main">
     <!-- SIDEBAR -->
-    <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
-      <ul class="nav-list">
-        <li class="nav-item" onclick="location.href='./home-student.html'">Home</li>
-        <li class="nav-item active">Joined Courses</li>
-        <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
-        <li class="nav-item">Challenges</li>
-        <li class="nav-item" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
-        <li class="nav-item">Community</li>
-        <li class="nav-item">Settings</li>
-        <a id="logout"><li class="nav-item">Logout</li></a>
-      </ul>
-      <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
-    </nav>
+    <div class="left-column">
+      <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li class="nav-item active" onclick="location.href='./home-student.html'">Home</li>
+          <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+          <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
+          <li class="nav-item">Challenges</li>
+          <li class="nav-item" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
+          <li class="nav-item">Community</li>
+          <li class="nav-item">Settings</li>
+          <a id="logout"><li class="nav-item">Logout</li></a>
+        </ul>
+        <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
+      </nav>
+
+      <div class="card profile-card" aria-labelledby="profile-heading">
+        <div class="profile-header">
+          <h3 id="profile-heading">Profile</h3>
+          <button onclick="location.href='./student-profile.html'">🖊️</button>
+        </div>
+        <div class="profile-large">
+          <div class="avatar-lg"></div>
+          <div class="profile-card-info">
+            <div id="fullNameProfile" class="name-lg">Student Name</div>
+            <div id="roleProfile" class="role-lg">Student</div>
+          </div>
+        </div>
+        <div class="profile-meta">
+          <div><strong>Courses:</strong> <span data-value>0</span></div>
+          <div><strong>Challenges:</strong> <span data-value>0</span></div>
+        </div>
+      </div>
+    </div>
+
+    
 
     <!-- CONTENT -->
     <main class="content-area">

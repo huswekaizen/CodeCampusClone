@@ -69,7 +69,7 @@ export const getUserWithCourses = async (req, res) => {
         },
         select: "title category description example thumbnail" // optional
       })
-      .select("username firstName lastName createdCourses");
+      .select("username firstName lastName createdAt createdCourses");
 
     if (!user) return res.status(404).json({ message: "User not found" });
 

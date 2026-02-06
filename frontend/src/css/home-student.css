@@ -3,6 +3,10 @@
     gap: 30px;
 }
 
+.profile-card {
+    width: 270px;
+}
+
 .profile-header {
     display: flex;
     justify-content: space-between;
