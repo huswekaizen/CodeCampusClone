@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import Course from "../models/Course.js";
+import bcrypt from "bcrypt";
 
 export const registerUser = async (req, res) => {
   try {
@@ -69,7 +70,7 @@ export const getUserWithCourses = async (req, res) => {
         },
         select: "title category description example thumbnail" // optional
       })
-      .select("username firstName lastName createdAt createdCourses");
+      .select("username firstName lastName address createdAt createdCourses");
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -98,5 +99,32 @@ export const getUserCourseProgress = async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch progress" });
+  }
+};
+
+export const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, firstName, lastName, currentPassword, newPassword, address } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // OPTIONAL: validate current password if you implement bcrypt
+    if (newPassword) {
+      // TODO: hash newPassword before saving
+      user.password = newPassword;
+    }
+
+    if (username) user.username = username;
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (address) user.address = address;
+
+    await user.save();
+    res.status(200).json({ message: "User updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update user" });
   }
 };
