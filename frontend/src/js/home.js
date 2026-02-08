@@ -1,8 +1,6 @@
 
-const role = localStorage.getItem('role');
-const username = localStorage.getItem('username');
-const userId = localStorage.getItem("userId") || "";
-
+const username = localStorage.getItem("username");
+const role = localStorage.getItem("role");
 
 if (!username) {
   window.location.href = '/frontend/public/index.html';
@@ -15,11 +13,10 @@ if (!username) {
 document.addEventListener('DOMContentLoaded', async () => {
   const userId = localStorage.getItem("userId");
 
-
+  await updateEnrolledCourseCount(userId);
   await loadPublishedCourses(userId);
   await loadTotalStudents(userId);
   await loadStudentsDebug(userId); // TEMP, for verification
-  await fetchStudentData(`http://localhost:5000/api/users/${userId}/details`);
   await initUI();
   await sideBarUI();
 });
@@ -90,109 +87,4 @@ async function sideBarUI(){
   }
 }
 
-async function fetchStudentData(url) {
 
-    try {
-        const res = await fetch(url);
-        const student = await res.json();
-
-        
-        const fullNameTop = document.getElementById("fullNameTop");
-        const roleTop = document.getElementById("roleTop");
-        const fullNameProfile = document.getElementById("fullNameProfile");
-        const instructorName = document.getElementById("instructorName");
-        const studentName = document.getElementById("studentName");
-        const roleProfile = document.getElementById("roleProfile");
-
-        const firstName = student?.firstName || "";
-        const lastName = student?.lastName || "";
-        const username = student?.username || "";
-        const role = student?.role || "";
-        const id = student?._id || "";
-        const fullName = `${firstName} ${lastName}`.trim();
-
-        console.log("firstName:", firstName);
-        console.log("lastName:", lastName);
-        console.log("role:", role);
-        console.log("username:", username);
-        console.log("fullName:", fullName);
-        console.log("id:", id);
-
-
-        [fullNameTop, fullNameProfile, instructorName, studentName]
-          .filter(Boolean)
-          .forEach(el => el.textContent = fullName);
-
-        [roleTop, roleProfile]
-          .filter(Boolean)
-          .forEach(el => el.textContent = role);
-
-    } catch (err) {
-        console.error("Failed to load student data", err);
-    }
-}
-
-
-async function loadPublishedCourses(userId) {
-  const publishedCourseList = document.getElementById("publishedCourseList");
-  const publishedCourseCountProfile = document.getElementById("publishedCourseCountProfile");
-  try {
-    const res = await fetch(`http://localhost:5000/api/instructors/${userId}/published-courses`);
-    const data = await res.json();
-    console.log(data); // check what comes back
-    publishedCourseList.textContent = data.count || 0;
-    publishedCourseCountProfile.textContent = data.count || 0;
-  } catch (err) {
-    console.error("Failed to load published courses:", err);
-    publishedCourseList.textContent = "0";
-  }
-}
-
-async function loadTotalStudents(userId) {
-  try {
-    const res = await fetch(
-      `http://localhost:5000/api/instructors/${userId}/totalStudents`
-    );
-    const data = await res.json();
-
-    console.log("TOTAL STUDENTS COUNT:", data.totalStudents);
-    document.getElementById("enrolledStudentsCount").textContent =
-      data.totalStudents || 0;
-  } catch (err) {
-    console.error("Failed to load total students:", err);
-  }
-}
-async function loadStudentsDebug(userId) {
-  try {
-    const res = await fetch(
-      `http://localhost:5000/api/instructors/${userId}/totalStudentsNames`
-    );
-    const students = await res.json();
-
-    console.log("UNIQUE STUDENTS LIST:");
-    console.table("students names:", students);
-
-    // sanity check
-    console.log("Students counted:", students.length);
-  } catch (err) {
-    console.error("Failed to load students list:", err);
-  }
-}
-
-
-export async function updateEnrolledCourseCount(userid) {
-  const enrolledCourseList = document.getElementById("enrolledCoursesCount");
-  try {
-    const res = await fetch(`http://localhost:5000/api/students/${userId}/enrolled-courses`);
-    const data = await res.json();
-    console.log(data); // check what comes back
-    enrolledCourseList.textContent = data.count || 0;
-  } catch (err) {
-    console.error("Failed to load enrolled courses:", err);
-    enrolledCourseList.textContent = "0";
-  }
-}
-
-document.addEventListener("DOMContentLoaded", async () => {
-  await updateEnrolledCourseCount();
-});

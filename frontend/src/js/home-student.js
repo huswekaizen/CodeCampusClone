@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     studentHomeLoad(`http://localhost:5000/api/students/globalLeaderboard`, userId);
     loadLeaderboard(`http://localhost:5000/api/students/globalLeaderboard`, { compact: true });
+    fetchCourseCount(`http://localhost:5000/api/students/${userId}/enrolled-courses`);
+
 });
 
 async function studentHomeLoad(url, userId) {
@@ -28,5 +30,19 @@ async function studentHomeLoad(url, userId) {
 
     } catch (err) {
         console.error("Failed to load leaderboard", err);
+    }
+}
+
+async function fetchCourseCount(url) {
+
+    try {
+        const res = await fetch(url);
+        const students = await res.json();
+
+        const courseCount = document.getElementById("enrolledCoursesCount");
+
+        courseCount.textContent = students.count || "N/A";
+    } catch (err) {
+        console.error("Failed to load enrolled courses count", err);
     }
 }
