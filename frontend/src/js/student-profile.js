@@ -18,6 +18,7 @@ async function fetchStudentData(url) {
         const firstName = document.getElementById("firstName");
         const lastName = document.getElementById("lastName");
         const fullName = document.getElementById("fullName");
+        const role = document.getElementById("role");
         const joinedDate = document.getElementById("joinedDate");
 
         const joinedDateObj = new Date(student.createdAt);
@@ -30,6 +31,7 @@ async function fetchStudentData(url) {
         firstName.textContent = student?.firstName || "N/A";
         lastName.textContent = student?.lastName || "N/A";
         fullName.textContent = `${student?.firstName || ""} ${student?.lastName || ""}`.trim() || "N/A";
+        role.textContent = student?.role || "N/A";
 
 
     } catch (err) {

@@ -12,10 +12,21 @@ if (!username) {
   window.location.href = '/frontend/public/home-student.html';
 }
 
+document.addEventListener('DOMContentLoaded', async () => {
+  const userId = localStorage.getItem("userId");
+
+
+  await loadPublishedCourses(userId);
+  await loadTotalStudents(userId);
+  await loadStudentsDebug(userId); // TEMP, for verification
+  await fetchStudentData(`http://localhost:5000/api/users/${userId}/details`);
+  await initUI();
+  await sideBarUI();
+});
 
 
 // header scroll handler: toggles .scrolled on the .topbar
-document.addEventListener('DOMContentLoaded', () => {
+async function initUI() {
   const topbar = document.querySelector('.topbar');
   if (!topbar) return;
 
@@ -42,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
-});
+}
 
 const logoutButton = document.getElementById('logout');
 
@@ -58,7 +69,7 @@ logoutButton.addEventListener('click', () => {
 });
 
 
-document.addEventListener('DOMContentLoaded', () => {
+async function sideBarUI(){
   const collapseBtn = document.getElementById('collapseBtn');
   const sidebar = document.getElementById('sidebar');
 
@@ -77,48 +88,49 @@ document.addEventListener('DOMContentLoaded', () => {
     search.addEventListener('focus', () => search.style.boxShadow = '0 8px 30px rgba(58,141,255,0.06)');
     search.addEventListener('blur', () => search.style.boxShadow = 'none');
   }
-});
+}
+
+async function fetchStudentData(url) {
+
+    try {
+        const res = await fetch(url);
+        const student = await res.json();
+
+        
+        const fullNameTop = document.getElementById("fullNameTop");
+        const roleTop = document.getElementById("roleTop");
+        const fullNameProfile = document.getElementById("fullNameProfile");
+        const instructorName = document.getElementById("instructorName");
+        const studentName = document.getElementById("studentName");
+        const roleProfile = document.getElementById("roleProfile");
+
+        const firstName = student?.firstName || "";
+        const lastName = student?.lastName || "";
+        const username = student?.username || "";
+        const role = student?.role || "";
+        const id = student?._id || "";
+        const fullName = `${firstName} ${lastName}`.trim();
+
+        console.log("firstName:", firstName);
+        console.log("lastName:", lastName);
+        console.log("role:", role);
+        console.log("username:", username);
+        console.log("fullName:", fullName);
+        console.log("id:", id);
 
 
+        [fullNameTop, fullNameProfile, instructorName, studentName]
+          .filter(Boolean)
+          .forEach(el => el.textContent = fullName);
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const userId = localStorage.getItem("userId");
+        [roleTop, roleProfile]
+          .filter(Boolean)
+          .forEach(el => el.textContent = role);
 
-    const fullNameTop = document.getElementById("fullNameTop");
-    const roleTop = document.getElementById("roleTop");
-    const fullNameProfile = document.getElementById("fullNameProfile");
-    const instructorName = document.getElementById("instructorName");
-    const studentName = document.getElementById("studentName");
-    const roleProfile = document.getElementById("roleProfile");
-
-    const firstName = localStorage.getItem("firstName") || "";
-    const lastName = localStorage.getItem("lastName") || "";
-    const username = localStorage.getItem("username") || "";
-    const role = localStorage.getItem("role") || "";
-    const id = localStorage.getItem("userId") || "";
-    const fullName = `${firstName} ${lastName}`.trim();
-
-    console.log("firstName:", firstName);
-    console.log("lastName:", lastName);
-    console.log("role:", role);
-    console.log("username:", username);
-    console.log("fullName:", fullName);
-    console.log("id:", id);
-
-
-    [fullNameTop, fullNameProfile, instructorName, studentName]
-      .filter(Boolean)
-      .forEach(el => el.textContent = fullName);
-
-    [roleTop, roleProfile]
-      .filter(Boolean)
-      .forEach(el => el.textContent = role);
-
-  await loadPublishedCourses(userId);
-  await loadTotalStudents(userId);
-  await loadStudentsDebug(userId); // TEMP, for verification
-
-});
+    } catch (err) {
+        console.error("Failed to load student data", err);
+    }
+}
 
 
 async function loadPublishedCourses(userId) {

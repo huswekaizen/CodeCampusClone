@@ -70,7 +70,7 @@ export const getUserWithCourses = async (req, res) => {
         },
         select: "title category description example thumbnail" // optional
       })
-      .select("username firstName lastName address createdAt createdCourses");
+      .select("username firstName lastName address role createdAt createdCourses");
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -102,19 +102,13 @@ export const getUserCourseProgress = async (req, res) => {
   }
 };
 
-export const editUser = async (req, res) => {
+export const editUserProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const { username, firstName, lastName, currentPassword, newPassword, address } = req.body;
+    const { username, firstName, lastName, address } = req.body;
 
     const user = await User.findById(id);
     if (!user) return res.status(404).json({ message: "User not found" });
-
-    // OPTIONAL: validate current password if you implement bcrypt
-    if (newPassword) {
-      // TODO: hash newPassword before saving
-      user.password = newPassword;
-    }
 
     if (username) user.username = username;
     if (firstName) user.firstName = firstName;
@@ -122,9 +116,36 @@ export const editUser = async (req, res) => {
     if (address) user.address = address;
 
     await user.save();
-    res.status(200).json({ message: "User updated successfully" });
+    res.status(200).json({ message: "Profile updated successfully" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Failed to update user" });
+    res.status(500).json({ message: "Failed to update profile" });
+  }
+};
+
+export const editUserSecurity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const user = await User.findById(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Current password is incorrect" });
+    }
+
+    user.password = await bcrypt.hash(newPassword, 10);
+    await user.save();
+
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to update password" });
   }
 };

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadStudentData(`http://localhost:5000/api/users/${userId}/details`);
 
     document.getElementById("save-btn").addEventListener("click", () => {
-        editStudentProfile(`http://localhost:5000/api/users/${userId}/edit`);
+        editStudentProfile(`http://localhost:5000/api/users/${userId}/profile`);
     });
 });
 
@@ -39,6 +39,7 @@ async function editStudentProfile(url) {
     }
 
     alert("Profile updated successfully");
+    window.location.href = "student-profile.html";
 }
 
 
