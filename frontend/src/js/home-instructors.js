@@ -1,3 +1,4 @@
+import { loadLeaderboard } from "./leaderboard-instructor.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const userId = localStorage.getItem("userId");
@@ -5,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadPublishedCourses(userId);
   loadTotalStudents(userId);
   loadStudentsDebug(userId); // TEMP, for verification
+  loadLeaderboard(`http://localhost:5000/api/instructors/${userId}/leaderboard`, { compact: true });
 });
 
 async function loadPublishedCourses(userId) {

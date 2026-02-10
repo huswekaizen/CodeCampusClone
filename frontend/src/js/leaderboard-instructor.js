@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-async function loadLeaderboard(url) {
+export async function loadLeaderboard(url, options = {}) {
+  const { compact = false } = options;
+
   try {
     const res = await fetch(url);
     const students = await res.json();
@@ -23,13 +25,21 @@ async function loadLeaderboard(url) {
 
     students.forEach((s, index) => {
       const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${s.firstName} ${s.lastName}</td>
-        <td>${s.totalPoints}</td>
-        <td>${s.completedActivities}</td>
-        <td>${s.coursesJoined}</td>
-      `;
+      if(compact) {
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${s.firstName} ${s.lastName}</td>
+        `;
+      } else {
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${s.firstName} ${s.lastName}</td>
+          <td>${s.totalPoints}</td>
+          <td>${s.completedActivities}</td>
+          <td>${s.coursesJoined}</td>
+        `;
+      }
+      
       tbody.appendChild(tr);
     });
   } catch (err) {

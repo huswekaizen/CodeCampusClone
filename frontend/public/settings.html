@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>Home — Student — CodeCampus</title>
+    <link rel="stylesheet" href="../src/css/home.css">
+    <link rel="stylesheet" href="../src/css/home-student.css">
+
+    <link rel="stylesheet" href="../src/css/student-edit-profile.css">
+</head>
+<body>
+  <div class="background-image" aria-hidden="true"></div>
+
+    <header class="topbar" role="banner">
+        <div class="topbar-left">
+            <a href="#" class="logo-link" aria-label="Home">
+            <img id="site-logo" src="../src/images/site-logo.png" alt="logo placeholder">
+            </a>
+            <div class="search">
+            <input id="search" placeholder="Search…" aria-label="Search">
+            </div>
+        </div>
+
+        <div class="topbar-right">
+            <button class="icon-btn" id="notifications" title="Notifications">🔔</button>
+            <button class="icon-btn" id="messages" title="Messages">💬</button>
+
+            <div class="profile" aria-hidden="true">
+            <div class="avatar avatar-sm" aria-hidden="true"></div>
+            <div class="profile-info">
+                <div id="fullNameTop" class="profile-name">Student Name</div>
+                <div id="roleTop" class="profile-role">Student</div>
+            </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="layout">
+        <div class="left-column">
+            <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
+                <ul class="nav-list">
+                <li class="nav-item" onclick="location.href='./home-student.html'">Home</li>
+                <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+                <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
+                <li class="nav-item">Challenges</li>
+                <li class="nav-item" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
+                <li class="nav-item">Community</li>
+                <li class="nav-item active" onclick="location.href='./settings.html'">Settings</li>
+                <a id="logout"><li class="nav-item">Logout</li></a>
+                </ul>
+                <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
+            </nav>
+
+            <div class="card profile-card" aria-labelledby="profile-heading">
+                <div class="profile-header">
+                    <h3 id="profile-heading">Profile</h3>
+                    <button onclick="location.href='./student-profile.html'">🖊️</button>
+                </div>
+                <div class="profile-large">
+                    <div class="avatar-lg"></div>
+                        <div class="profile-card-info">
+                        <div id="fullNameProfile" class="name-lg">Student Name</div>
+                        <div id="roleProfile" class="role-lg">Student</div>
+                    </div>
+                </div>
+                <div class="profile-meta">
+                    <div><strong>Courses:</strong> <span data-value>0</span></div>
+                    <div><strong>Challenges:</strong> <span data-value>0</span></div>
+                </div>
+            </div>
+        </div>
+
+
+        <main class="content-area">
+            <section class="card profile-editor">
+               <div>
+                    <h1>Security and Account</h1>
+               </div>
+               <div class="profile-panel-security">
+
+                    <div class="field">
+                        <label>Current Password</label>
+                        <input type="password" id="currentPassword" placeholder="••••••••">
+                    </div>
+
+                    <div class="field">
+                        <label>New Password</label>
+                        <input type="password" id="newPassword" placeholder="••••••••">
+                    </div>
+
+                    <div class="field">
+                        <label>Confirm New Password</label>
+                        <input type="password" id="confirmNewPassword" placeholder="••••••••">
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+    
+
+    <script src="../src/js/header-fetch.js"></script>
+
+</body>
+</html>
