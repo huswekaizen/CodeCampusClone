@@ -13,10 +13,6 @@ if (!username) {
 document.addEventListener('DOMContentLoaded', async () => {
   const userId = localStorage.getItem("userId");
 
-  await updateEnrolledCourseCount(userId);
-  await loadPublishedCourses(userId);
-  await loadTotalStudents(userId);
-  await loadStudentsDebug(userId); // TEMP, for verification
   await initUI();
   await sideBarUI();
 });

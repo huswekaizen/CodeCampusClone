@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 export const registerUser = async (req, res) => {
   try {
     const { username, firstName, lastName, password, age, role, address } = req.body;
+
     if (!username || !firstName || !lastName || !password || !age || !role || !address) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -14,8 +15,12 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    const user = new User({ username, firstName, lastName, password, age, role, address });
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({ username, firstName, lastName, password: hashedPassword, age, role, address });
+
     await user.save();
+
     res.status(201).json({ message: "Registered successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -33,9 +38,11 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
-    if (user.password !== password) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
+
 
     // ✅ Send role (and maybe name) back to frontend
     res.status(200).json({

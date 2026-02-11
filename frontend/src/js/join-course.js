@@ -1,5 +1,5 @@
 import { loadJoinedCourses } from "./joined-courses-student.js";
-import { updateEnrolledCourseCount } from "./home.js";
+import { fetchCourseCount } from "./home-student.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("joinCourseModal");
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Only refresh if the page actually has joined courses
       loadJoinedCourses?.();
-      updateEnrolledCourseCount?.();
+      fetchCourseCount?.();
 
     } catch (err) {
       console.error(err);

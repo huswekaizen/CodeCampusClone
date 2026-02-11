@@ -33,7 +33,7 @@ async function studentHomeLoad(url, userId) {
     }
 }
 
-async function fetchCourseCount(url) {
+export async function fetchCourseCount(url) {
 
     try {
         const res = await fetch(url);
