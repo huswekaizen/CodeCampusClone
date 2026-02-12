@@ -7,16 +7,26 @@ const activitySchema = new mongoose.Schema({
     enum: ["Easy", "Medium", "Hard"],
     required: true
   },
+
+  points: {
+    type: Number,
+    min: 1,
+    max: 100,
+    required: true
+  },
+  
   description: String,
 
-  functionName: {
-    type: String,
-    required: true // e.g. "sum"
-  },
-
-  testCases: [
+  sampleTests: [
     {
       input: [mongoose.Schema.Types.Mixed], // parameters
+      expected: mongoose.Schema.Types.Mixed
+    }
+  ],
+
+  validationTests: [
+    {
+      input: [mongoose.Schema.Types.Mixed],
       expected: mongoose.Schema.Types.Mixed
     }
   ],

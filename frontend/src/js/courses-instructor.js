@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       // populate data
       clone.querySelector(".title").textContent = course.title;
       clone.querySelector(".subTitle").textContent = course.subTitle || "No subtitle";
-      clone.querySelector(".category").textContent = `Category: ${course.category}`;
+      clone.querySelector(".category").textContent = `${course.category}`;
       clone.querySelector(".description").textContent = course.description || "No description provided.";
       clone.querySelector(".example").textContent = course.example || "No example provided";
       clone.querySelector(".thumbnail").src = course.thumbnail

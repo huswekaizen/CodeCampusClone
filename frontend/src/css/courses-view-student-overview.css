@@ -224,6 +224,24 @@ button.ghost:active {
   transform: scale(0.97);
 }
 
+.primary {
+  margin-top: 12px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid var(--accent-hover);
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  transition: 200ms ease;
+  align-self: flex-start;
+  width: auto
+}.primary:hover {
+  background: var(--accent-hover);
+  border-color: #64b2ff;
+}
+
 .leave {
   margin-top: 12px;
   padding: 6px 14px;

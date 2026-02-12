@@ -9,6 +9,8 @@
 
   <title>Home — Student — CodeCampus</title>
   <link rel="stylesheet" href="../src/css/home.css">
+  <link rel="stylesheet" href="../src/css/home-student.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-leaderboard.css" />
 </head>
 <body>
   <div class="background-image" aria-hidden="true"></div>
@@ -38,23 +40,45 @@
   </header>
 
   <div class="layout" role="main">
-    <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
-      <ul class="nav-list">
-        <li class="nav-item active">Dashboard</li>
-        <li class="nav-item"  onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
-        <li class="nav-item">Challenges</li>
-        <li class="nav-item">Leaderboard</li>
-        <li class="nav-item">Community</li>
-        <li class="nav-item">Settings</li>
-        <a id="logout"><li class="nav-item">Logout</li></a>
-      </ul>
-      <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
-    </nav>
+    <div class="left-column">
+      <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
+        <ul class="nav-list">
+          <li class="nav-item active" onclick="location.href='./home-student.html'">Home</li>
+          <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+          <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
+          <li class="nav-item">Challenges</li>
+          <li class="nav-item" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
+          <li class="nav-item">Community</li>
+          <li class="nav-item" onclick="location.href='./settings.html'">Settings</li>
+          <a id="logout"><li class="nav-item">Logout</li></a>
+        </ul>
+        <button class="collapse-btn" id="collapseBtn" aria-pressed="false">⮜</button>
+      </nav>
+
+      <div class="card profile-card" aria-labelledby="profile-heading">
+        <div class="profile-header">
+          <h3 id="profile-heading">Profile</h3>
+          <button onclick="location.href='./student-profile.html'">🖊️</button>
+        </div>
+        <div class="profile-large">
+          <div class="avatar-lg"></div>
+          <div class="profile-card-info">
+            <div id="fullNameProfile" class="name-lg">Student Name</div>
+            <div id="roleProfile" class="role-lg">Student</div>
+          </div>
+        </div>
+        <div class="profile-meta">
+          <div><strong>Courses:</strong> <span data-value>0</span></div>
+          <div><strong>Challenges:</strong> <span data-value>0</span></div>
+        </div>
+      </div>
+    </div>
+    
 
     <main class="content-area">
       <!-- Welcome / Summary -->
       <section class="card welcome" aria-labelledby="welcome-heading">
-        <h2 id="welcome-heading">Welcome, Student</h2>
+        <h2 id="welcome-heading">Welcome, <span id="studentName"></span></h2>
         <p class="muted">This is your dashboard. Fill these containers with real data.</p>
         <div class="quick-actions">
           <!-- Student primary action: Join Course -->
@@ -71,18 +95,18 @@
           <div class="stat-sub muted">In progress</div>
         </div>
         <div class="stat card">
-          <div class="stat-title">Challenges</div>
-          <div class="stat-value" data-value>0</div>
+          <div class="stat-title">Activities</div>
+          <div class="stat-value" data-value><span id="activitiesCount"></span></div>
           <div class="stat-sub muted">Solved</div>
         </div>
         <div class="stat card">
-          <div class="stat-title">XP</div>
-          <div class="stat-value" data-value>0</div>
+          <div class="stat-title">Overall Points</div>
+          <div class="stat-value" data-value><span id="overallPointsCount"></span></div>
           <div class="stat-sub muted">Next level: 0</div>
         </div>
         <div class="stat card">
           <div class="stat-title">Rank</div>
-          <div class="stat-value" data-value>0</div>
+          <div class="stat-value" data-value><span id="rankCount"></span></div>
           <div class="stat-sub muted">—</div>
         </div>
       </section>
@@ -93,7 +117,7 @@
           <div class="card courses" aria-labelledby="courses-heading">
             <div class="card-header">
               <h3 id="courses-heading">Recommended Courses</h3>
-              <a class="link" href="#">View all</a>
+              <a class="link" href="public-courses.html">View all</a>
             </div>
             <ul class="course-list" aria-live="polite"></ul>
           </div>
@@ -109,24 +133,26 @@
 
         <aside class="right-column">
           <div class="card leaderboard" aria-labelledby="leaderboard-heading">
-            <div class="card-header"><h3 id="leaderboard-heading">Leaderboard</h3></div>
-            <ol class="leader-list"></ol>
+            <div class="card-header">
+              <h3 id="leaderboard-heading">Leaderboard</h3>
+            </div>
+            
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Student</th>
+            
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+                <!-- JS injects rows -->
+              </tbody>
+            </table>
           </div>
 
-          <div class="card profile-card" aria-labelledby="profile-heading">
-            <h3 id="profile-heading">Profile</h3>
-            <div class="profile-large">
-              <div class="avatar-lg"></div>
-              <div class="profile-card-info">
-                <div id="fullNameProfile" class="name-lg">Student Name</div>
-                <div id="roleProfile" class="role-lg">Student</div>
-              </div>
-            </div>
-            <div class="profile-meta">
-              <div><strong>Courses:</strong> <span data-value>0</span></div>
-              <div><strong>Challenges:</strong> <span data-value>0</span></div>
-            </div>
-          </div>
+
+          
         </aside>
       </section>
     </main>
@@ -152,8 +178,9 @@
     </div>
   </div>
 
-
-  <script  src="../src/js/home.js"></script>
+  <script type="module" src="../src/js/header-fetch.js"></script>
+  <script type="module" src="../src/js/home.js"></script>
+  <script type="module" src="../src/js/home-student.js"></script>
   <script type="module" src="../src/js/joined-courses-student.js"></script>
   <script type="module" src="../src/js/join-course.js"></script>
 </body>

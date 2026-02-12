@@ -1,23 +1,39 @@
+const userId = localStorage.getItem("userId");
 const courseId = localStorage.getItem("selectedCourseId");
 
-function renderActivity(activity) {
+async function getCompletedActivities() {
+  const res = await fetch(
+    `http://localhost:5000/api/users/${userId}/progress/${courseId}`
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch progress");
+
+  const data = await res.json();
+  return data.completedActivities || [];
+}
+
+function renderActivity(activity, completedActivities) {
+  const isCompleted = completedActivities.includes(activity._id);
+
   return `
-    <li class="activity-card">
+    <li class="activity-card ${isCompleted ? "completed" : ""}">
       <div class="activity-difficulty">${activity.difficulty}</div>
 
       <div class="activity-content">
         <div class="activity-title">${activity.title}</div>
-        ${ activity.output ? `<div class="activity-output">Output: ${activity.output}</div>` : "" }
       </div>
 
       <div class="activity-actions">
-        <button class="start-btn" data-id="${activity._id}">Start Activity</button>
+        <button 
+          class="start-btn"
+          data-id="${activity._id}"
+        >
+          ${isCompleted ? "Completed" : "Start Activity"}
+        </button>
       </div>
     </li>
   `;
 }
-
-
 
 function clearRenderActivities(activities) {
   const activitiesList = document.getElementById("activitiesList");
@@ -28,18 +44,25 @@ function clearRenderActivities(activities) {
   });
 }
 
+
 async function loadActivities() {
   try {
-    if (!courseId) {
-      console.error("No course ID found.");
-      return;
-    }
+    const [activitiesRes, completedActivities] = await Promise.all([
+      fetch(`http://localhost:5000/api/activities/course/${courseId}`),
+      getCompletedActivities()
+    ]);
 
-    const res = await fetch(`http://localhost:5000/api/activities/${courseId}`);
-    if (!res.ok) throw new Error("Failed to fetch activities");
+    if (!activitiesRes.ok) throw new Error("Failed to fetch activities");
 
-    const activities = await res.json();
-    clearRenderActivities(activities);
+    const activities = await activitiesRes.json();
+    const activitiesList = document.getElementById("activitiesList");
+
+    activitiesList.innerHTML = "";
+
+    activities.forEach(activity => {
+      activitiesList.innerHTML += renderActivity(activity, completedActivities);
+    });
+
   } catch (err) {
     console.error(err);
     alert("Failed to load activities.");

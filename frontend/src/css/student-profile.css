@@ -1,0 +1,80 @@
+.profile-view {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* HEADER */
+.profile-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-basic {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.profile-meta h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.profile-meta .role {
+  display: block;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.profile-meta .username {
+  font-size: 0.85rem;
+  opacity: 0.6;
+}
+
+/* BODY */
+.profile-view-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-card {
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.info-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+/* STATUS */
+.status.active {
+  color: #3cff9a;
+  font-weight: 500;
+}

@@ -63,6 +63,18 @@
             </div>
           </div>
 
+          <div class="row two-cols">
+            <div class="field">
+              <label for="accessibility">Accessibility</label>
+              <div class="textbox select">
+                <select id="accessibility" name="accessibility">
+                  <option>public</option>
+                  <option>private</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div class="field">
             <label for="description">Description</label>
             <div class="textbox">
@@ -119,6 +131,15 @@
                   </select>
                 </div>
               </div>
+              
+
+              <div class="field small-field">
+                <label>Points</label>
+                <div class="textbox">
+                  <input type="number" class="activity-points" name="activityPoints" min="1" max="100" placeholder="Points for this activity (1-100)">
+                </div>
+              </div>
+
 
               <div class="activity-details">
                 <div class="field small-field act-desc">
@@ -129,20 +150,21 @@
                 </div>
 
                 <div class="field small-field">
-                  <label>Function name (required)</label>
+                  <label>Sample Tests (JSON)</label>
                   <div class="textbox">
-                    <input class="activity-function" placeholder="e.g. sumNumbers">
+                    <textarea class="activity-sample-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
                   </div>
                 </div>
 
-              </div>
-
-              <div class="field small-field">
-                <label>Test cases (JSON)</label>
-                <div class="textbox">
-                  <textarea class="activity-tests"
-                    placeholder='[{ "input":[1,2] (depending on the function parameters), "expected":3 }]'></textarea>
+                <div class="field small-field">
+                  <label>Validation Tests (JSON)</label>
+                  <div class="textbox">
+                    <textarea class="activity-validation-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
+                  </div>
                 </div>
+
               </div>
 
 
@@ -162,6 +184,14 @@
                 </div>
               </div>
 
+              <div class="field small-field">
+                <label>Points</label>
+                <div class="textbox">
+                  <input type="number" class="activity-points" name="activityPoints" min="1" max="100" placeholder="Points for this activity">
+                </div>
+              </div>
+
+
               <div class="activity-details">
                 <div class="field small-field act-desc">
                   <label>Activity description</label>
@@ -170,12 +200,22 @@
                   </div>
                 </div>
 
-                <div class="field small-field act-exercise">
-                  <label>Desired output / Example I/O</label>
+                <div class="field small-field">
+                  <label>Sample Tests (JSON)</label>
                   <div class="textbox">
-                    <textarea class="activity-output" name="activityOutput" placeholder="Expected output or example input/output..."></textarea>
+                    <textarea class="activity-sample-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
                   </div>
                 </div>
+
+                <div class="field small-field">
+                  <label>Validation Tests (JSON)</label>
+                  <div class="textbox">
+                    <textarea class="activity-validation-tests"
+                      placeholder='[{ "input":[1,2], "expected":3 }]'></textarea>
+                  </div>
+                </div>
+
               </div>
 
               <div class="activity-right">
@@ -205,6 +245,7 @@
             <div class="preview-field"><strong>Title:</strong> <span id="previewTitleValue"></span></div>
             <div class="preview-field"><strong>Subtitle:</strong> <span id="previewSubtitleValue"></span></div>
             <div class="preview-field"><strong>Category:</strong> <span id="previewCategoryValue"></span></div>
+            <div class="preview-field"><strong>Accessibility:</strong> <span id="previewAccessibilityValue"></span></div>
             <div class="preview-field"><strong>Description:</strong> <p id="previewDescriptionValue"></p></div>
             <div class="preview-field"><strong>Example:</strong> <p id="previewExampleValue"></p></div>
             <div class="preview-field"><strong>Thumbnail:</strong>
@@ -222,7 +263,7 @@
               <button type="button" class="ghost" data-go-step="2">← Back</button>
             </div>
             <div class="right-actions">
-              <button type="button" class="primary" id="createCourseBtn">Create Course</button>
+              <button type="submit" class="primary" >Create Course</button>
             </div>
           </div>
         </section>

@@ -64,16 +64,22 @@ body {
   gap: 18px;
   transition: border var(--transition), background var(--transition);
 }
-.preview-section:hover {
+/*.preview-section:hover {
   border-color: var(--accent);
   background: #121a32;
-}
+}*/
 .preview-section h3 {
   font-size: 18px;
   color: var(--accent-hover);
   border-left: 3px solid var(--accent);
   padding-left: 10px;
   margin-bottom: 10px;
+}
+
+.preview-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Fields */
@@ -330,14 +336,14 @@ button.ghost:hover {
   background: #1e293b;
 }
 
+
+
 /* === EDIT MODE STYLES FOR ACTIVITIES === */
 .preview-activities-list li .edit-mode {
   display: flex;
   flex-direction: column;
   margin-top: 14px;
-  background: #0f1529;
-  border: 1px solid var(--border);
-  padding: 20px;
+  background: transparent;
   border-radius: var(--radius);
 }
 
@@ -493,170 +499,25 @@ button.ghost:hover {
   transition: var(--transition);
 }
 
-/* === ACTIVITY FORM TEMPLATE (MATCHES EDIT MODE) === */
-.activity-form {
-  background: #0f1529;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-  margin: 12px 0;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Title Input */
-.activity-title-input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius);
+/* Show sample and validation tests */
+.preview-activities-list li .view-sample-tests,
+.preview-activities-list li .view-validation-tests {
+  display: block;         /* ensure visible */
+  white-space: pre-wrap;  /* preserve JSON formatting */
+  color: var(--text);     
   background: #1a2238;
-  border: 1px solid #2c3550;
-  color: var(--text);
-  font-size: 15px;
-}
-.activity-title-input:focus {
-  border-color: var(--accent);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
-}
-
-/* Description */
-.activity-desc-input {
-  width: 100%;
-  min-height: 90px;
-  padding: 12px;
+  padding: 10px;
   border-radius: var(--radius);
-  background: #1a2238;
-  border: 1px solid #2c3550;
-  color: var(--text);
   font-size: 14px;
-  resize: vertical;
+  overflow-x: auto;       /* scroll if too wide */
+  margin-top: 8px;
 }
-.activity-desc-input:focus {
-  border-color: var(--accent);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
-}
-
-/* Type Dropdown */
-.activity-difficulty-input, .edit-difficulty {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: var(--radius);
-  background: #1a2238;
-  border: 1px solid #2c3550;
-  color: var(--text);
-  font-size: 14px;
-}
-.activity-difficulty-input:focus, .edit-difficulty:focus {
-  border-color: var(--accent);
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
-}
-
-/* Save + Remove Buttons */
-.activity-form button {
-  align-self: flex-end;
-  padding: 8px 16px;
-  border-radius: var(--radius);
-  background: var(--accent);
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.activity-form button:hover {
-  background: var(--accent-hover);
-}
-
-/* Remove button specifically */
-.activity-form button.remove-activity {
-  background: #ff4b5c;
-}
-.activity-form button.remove-activity:hover {
-  background: #ff6b78;
-}
-/* Activiity View UI */
-/* ============================
-   ACTIVITY VIEW (VIEW MODE)
-   ============================ */
-
-.preview-activities-list li .view-mode {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-/* Title */
-.view-title {
-  font-size: 16px;
-  font-weight: 600;
+.preview-activities-list li .view-difficulty {
+  display: inline-block;
   color: var(--accent-hover);
-  display: block;
-  margin-bottom: 4px;
-}
-
-/* Description */
-.view-desc {
-  color: var(--text-muted);
-  font-size: 14px;
-  line-height: 1.5;
-  background: #0f1529;
-  border: 1px solid var(--border);
-  padding: 12px 14px;
-  border-radius: var(--radius);
-}
-  
-/* Output Example */
-.view-output-example {
-  background: #10182e;
-  padding: 10px 14px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,0.05);
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Type label */
-.view-type {
   font-size: 13px;
-  font-weight: 600;
-  padding: 4px 10px;
-  background: rgba(58, 141, 255, 0.1);
-  color: var(--accent-hover);
-  width: fit-content;
-  border-radius: 8px;
-  margin-top: 4px;
+  margin-top: 6px;
 }
-
-/* Header inside each activity */
-.activity-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-/* Delete button */
-.delete-activity {
-  background: #ff4b5c;
-  border: none;
-  color: white;
-  padding: 5px 9px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  transition: 0.2s ease;
-}
-
-.delete-activity:hover {
-  background: #ff6b78;
-}
-
 
 
 /* ==== ANIMATIONS ==== */

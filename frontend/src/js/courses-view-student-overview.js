@@ -7,6 +7,72 @@ const courseInstructor = document.getElementById("course-instructor");
 let courseId = localStorage.getItem("selectedCourseId");
 let loadedCourse = null;
 
+const mode = localStorage.getItem("courseViewMode") === "private"
+  ? "private"
+  : "public";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  if (!courseId) {
+    alert("No course selected.");
+    window.location.href = "./joined-courses-student.html";
+    return;
+  }
+
+  const actionBtn = document.getElementById("leave-btn");
+
+  if (mode === "public") {
+    // turn Leave into Enroll
+    actionBtn.textContent = "Enroll";
+    actionBtn.classList.remove("leave");
+    actionBtn.classList.add("primary");
+
+    actionBtn.onclick = async () => {
+      try {
+        const studentId = localStorage.getItem("userId");
+
+        const res = await fetch(
+          `http://localhost:5000/api/courses/join`, // ✅ correct route
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              studentId, 
+              courseCode: loadedCourse.courseCode // important, backend checks courseCode
+            })
+          }
+        );
+
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || "Failed to enroll");
+          return;
+        }
+
+        alert("Enrolled successfully.");
+        localStorage.setItem("courseViewMode", "private");
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+        alert("Error enrolling.");
+      }
+    };
+
+    // also kill tabs that make no sense
+    document.querySelector('[data-page="activities"]')?.remove();
+    document.querySelector('[data-page="leaderboard"]')?.remove();
+  }
+
+  if (mode === "private") {
+    // keep Leave behavior
+    actionBtn.addEventListener("click", leaveCourse);
+  }
+
+  await loadCourseData();
+});
+
+
 async function loadCourseData() {
   try {
     const res = await fetch(`http://localhost:5000/api/courses/${courseId}/details`);
@@ -35,17 +101,24 @@ async function loadCourseData() {
   }
 }
 
-document.getElementById("leave-btn").addEventListener("click", async () => {
+async function leaveCourse() {
+  const confirmLeave = confirm(
+    "Are you sure you want to leave this course?\nYou will lose access to its content."
+  );
+
+  if (!confirmLeave) return;
+
   try {
     const studentId = localStorage.getItem("userId");
 
-    const res = await fetch(`http://localhost:5000/api/courses/${courseId}/leave-course`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ studentId })
-    });
+    const res = await fetch(
+      `http://localhost:5000/api/courses/${courseId}/leave-course`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ studentId })
+      }
+    );
 
     const data = await res.json();
 
@@ -56,13 +129,12 @@ document.getElementById("leave-btn").addEventListener("click", async () => {
 
     alert("Successfully left the course.");
     window.location.href = "./joined-courses-student.html";
-
   } catch (err) {
     console.error(err);
     alert("Error leaving course.");
   }
+}
 
-});
 
 document.addEventListener("DOMContentLoaded", async () => {
   if (!courseId) {

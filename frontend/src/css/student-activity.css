@@ -25,7 +25,7 @@ body {
 }
 
 .page {
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 20px auto;
   padding: 0 20px;
 }
@@ -63,21 +63,11 @@ body {
 }
 
 .editor-section {
-  flex: 7; /* wider editor */
+  flex: 5; /* wider editor */
   background: #0f1529;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   overflow: auto;
-}
-
-.output-section {
-  flex: 3; /* smaller output panel */
-  background: #0f1529;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
 }
 
 #editor {
@@ -116,7 +106,7 @@ body {
   font-size: 13px;
   color: rgb(130, 135, 151);
   background: transparent;
-  padding: 12px;
+  padding: 16px;
   overflow-y: auto;
   white-space: pre-wrap;
 }
@@ -139,6 +129,16 @@ button.primary:hover {
   background: var(--accent-hover);
 }
 
+.primaryBtnRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+
+
+
 #activity-difficulty {
   display: inline-block;
   padding: 8px;
@@ -156,4 +156,201 @@ button.primary:hover {
   border-color: rgba(72, 187, 120, 0.25);
   background: rgba(72, 187, 120, 0.15);
   color: #48bb78;
+}
+
+#activity-points {
+  display: inline-block;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #41321c;
+
+  background: linear-gradient(
+    135deg,
+    #ffea8a,
+    #ffd700,
+    #ffb700
+  );
+
+  border-radius: 999px;
+
+  box-shadow:
+    0 0 6px rgba(255, 215, 0, 0.8),
+    0 0 12px rgba(255, 200, 0, 0.6),
+    0 0 20px rgba(255, 180, 0, 0.4);
+
+  text-shadow:
+    0 0 4px rgba(255, 255, 200, 0.8);
+
+  margin-top: 6px;
+}
+
+
+/* Panel container */
+.side-panel {
+  flex: 3;
+  background: #0f1529;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Tabs already styled earlier, just ensure layout */
+.tab-buttons {
+  display: flex;
+  gap: 6px;
+  padding: 12px;
+}
+
+.panel {
+  display: none;
+
+  /* kill flex behavior entirely */
+  flex: none;
+
+  width: 100%;
+  height: 100%;
+
+  padding: 12px;
+  margin: 0;
+
+  text-align: left;
+  white-space: pre-wrap;
+  overflow-y: auto;
+
+  font-family: 'Fira Code', monospace;
+  font-size: 13px;
+  color: rgb(130, 135, 151);
+}
+
+.panel.active {
+  display: block;
+}
+
+.panel pre {
+  margin: 0;
+  padding: 0;
+}
+
+.pass{
+  margin-top: 28px;
+}
+.fail{
+  margin-top: 28px;
+}
+.test-box {
+  margin: 16px 0 16px 0;
+}
+
+.test-summary.pass {
+  font-weight: 600;
+  margin-top: 25px;
+}
+
+/* ===== Instruction / Output Toggle Buttons ===== */
+
+.output-section > div {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: transparent;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.instruction-btn,
+.output-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition),
+    border-color var(--transition),
+    box-shadow var(--transition);
+}
+
+/* Hover state */
+.instruction-btn:hover,
+.output-btn:hover {
+  color: var(--accent-hover);
+  border-color: rgba(100, 178, 255, 0.4);
+}
+
+/* Active / selected tab */
+.instruction-btn.active,
+.output-btn.active {
+  background: rgba(58, 141, 255, 0.15);
+  color: var(--accent-hover);
+  border-color: rgba(58, 141, 255, 0.5);
+}
+
+/* Keyboard focus */
+.instruction-btn:focus-visible,
+.output-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.35);
+}
+.test-case {
+  margin-bottom: 8px;
+  font-family: 'Fira Code', monospace;
+}
+
+.test-header {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.test-header.pass {
+  color: #4ade80; /* soft green */
+}
+
+.test-header.fail {
+  color: #f87171; /* soft red */
+}
+
+.test-box {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 2px;
+  font-size: 0.85rem;
+}
+
+.label {
+  min-width: 60px;
+  color: #9ca3af; /* gray label */
+}
+
+.content {
+  background: #11182a; /* subtle dark */
+  padding: 3px 6px;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.test-summary {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-top: 6px;
+  color: #3b82f6; /* soft blue for summary */
+}
+.test-summary.pass {
+  color: #4ade80; /* soft green */
+}
+
+.test-summary.fail {
+  color: #f87171; /* soft red */
 }

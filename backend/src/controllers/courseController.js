@@ -3,8 +3,9 @@ console.log("Course import check:", Course);
 
 import User from "../models/User.js";
 import Activity from "../models/Activity.js";
+import mongoose from "mongoose";
 
-export const createCourse = async (req, res) => {
+/*export const createCourse = async (req, res) => {
   try {
     const { title, subTitle, category, description, example, instructorId } = req.body;
 
@@ -33,7 +34,69 @@ export const createCourse = async (req, res) => {
     console.error("Error in createCourse:", error);
     res.status(500).json({ message: "Error creating course", error: error.message });
   }
+};*/
+
+export const createCourseWithActivities = async (req, res) => {
+  try {
+    // Course data
+    let course = req.body.course;
+    let activities = req.body.activities;
+
+    // If FormData strings, parse them
+    if (course && typeof course === "string") course = JSON.parse(course);
+    if (activities && typeof activities === "string") activities = JSON.parse(activities);
+
+    if (!course) return res.status(400).json({ error: "Missing course data" });
+    activities = activities || []; // <-- make sure it's always an array
+
+    const {
+      title, subTitle, category, accessibility, description, example, instructorId
+    } = course;
+
+    if (!instructorId) return res.status(400).json({ error: "Missing instructorId" });
+
+    // Handle thumbnail
+    const thumbnail = req.file
+      ? `/uploads/${req.file.filename}`
+      : req.existingThumbnail
+        ? `/uploads/${req.existingThumbnail}`
+        : course.thumbnail || null;
+
+
+    // Create course
+    const createdCourse = await Course.create({
+      title,
+      subTitle,
+      category,
+      description,
+      example,
+      accessibility: accessibility || "private",
+      thumbnail,
+      instructor: instructorId
+    });
+
+
+    // Create activities if any
+    if (activities.length > 0) {
+      const activitiesWithCourse = activities.map(a => ({
+        ...a,
+        course: createdCourse._id
+      }));
+      const createdActivities = await Activity.insertMany(activitiesWithCourse);
+      createdCourse.activities.push(...createdActivities.map(a => a._id));
+      await createdCourse.save();
+    }
+
+    // Link course to instructor
+    await User.findByIdAndUpdate(instructorId, { $push: { createdCourses: createdCourse._id } });
+
+    res.status(201).json(createdCourse);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
 export const getCourseWithActivities = async (req, res) => {
   try {
@@ -43,14 +106,15 @@ export const getCourseWithActivities = async (req, res) => {
       .populate({
         path: "activities",
         model: "Activity",
-        select: "title description difficulty outputExample"
+        select: "title description points difficulty sampleTests validationTests"
       })
       .populate({
         path: "instructor",       // <-- populate instructor
         model: "User",
         select: "firstName lastName"
       })
-      .select("title subTitle category description thumbnail example activities courseCode");
+      .select("title subTitle category description thumbnail example activities courseCode")
+      .lean();
 
     if (!course) return res.status(404).json({ message: "Course not found" });
 
@@ -62,7 +126,7 @@ export const getCourseWithActivities = async (req, res) => {
 };
 
 // GET /api/instructors/:id/published-courses
-export const getPublishedCourses = async (req, res) => {
+export const getInstructorCourses = async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -73,7 +137,7 @@ export const getPublishedCourses = async (req, res) => {
     // Find instructor and their course references
     const instructor = await User.findById(id).populate({
       path: "createdCourses",
-      select: "title subTitle category description example thumbnail"
+      select: "title subTitle category accessibility description example thumbnail"
     });
 
 
@@ -163,32 +227,47 @@ export const deleteCourse = async (req, res) => {
 
 
 export const joinCourse = async (req, res) => {
-  console.log("joinCourse hit with body:", req.body);
-  console.log("JOIN CONTROLLER REACHED");
+  console.log("JOIN CONTROLLER REACHED", req.body);
 
   try {
     const { courseCode, studentId } = req.body;
-    if (!courseCode || !studentId) return res.status(400).json({ message: "courseCode and studentId are required" });
+
+    if (!courseCode || !studentId) {
+      return res.status(400).json({
+        message: "courseCode and studentId are required"
+      });
+    }
 
     const course = await Course.findOne({ courseCode });
-    if (!course) return res.status(404).json({ message: "Course not found" });
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
 
-    if (course.students.includes(studentId)) return res.status(400).json({ message: "Already enrolled" });
+    // already enrolled (ObjectId-safe)
+    if (course.students.some(id => id.toString() === studentId)) {
+      return res.status(400).json({ message: "Already enrolled" });
+    }
 
-    // add student
     course.students.push(studentId);
     await course.save();
 
-    // add course to student
-    await User.findByIdAndUpdate(studentId, { $addToSet: { enrolledCourses: course._id } });
+    await User.findByIdAndUpdate(
+      studentId,
+      { $addToSet: { enrolledCourses: course._id } }
+    );
 
-    return res.status(200).json({ message: "Joined successfully", courseId: course._id });
+    return res.status(200).json({
+      message: "Joined successfully",
+      courseId: course._id
+    });
 
   } catch (err) {
     console.error("Error joining course:", err);
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+
 
 export const getEnrolledCourses = async (req, res) => {
   try {
@@ -252,3 +331,298 @@ export const leaveCourse = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getCourseLeaderboard = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+
+    // Find users who have progress for this course
+    const users = await User.find({
+      "courseProgress.course": courseId
+    }).select("firstName lastName courseProgress");
+
+    const leaderboard = users.map(user => {
+      const progress = user.courseProgress.find(
+        p => p.course.toString() === courseId
+      );
+
+      return {
+        userId: user._id,
+        name: `${user.firstName} ${user.lastName}`,
+        points: progress?.points || 0,
+        completedCount: progress?.completedActivities.length || 0
+      };
+    });
+
+    // Rank by points
+    leaderboard.sort((a, b) => b.points - a.points);
+
+    res.status(200).json(leaderboard);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load leaderboard" });
+  }
+};
+
+export const getPublicCourses = async (req, res) => {
+  try {
+    const { studentId } = req.query; // optional
+
+    let enrolledCourses = [];
+
+    if (studentId) {
+      const user = await User.findById(studentId).select("enrolledCourses");
+      if (user) enrolledCourses = user.enrolledCourses;
+    }
+
+    const courses = await Course.find({
+      accessibility: "public",
+      _id: { $nin: enrolledCourses }
+    })
+      .select("title subTitle category description example thumbnail instructor courseCode")
+      .populate({
+        path: "instructor",
+        model: "User",
+        select: "firstName lastName"
+      });
+
+    res.status(200).json(courses);
+  } catch (err) {
+    console.error("Error fetching public courses:", err);
+    res.status(500).json({ message: "Failed to fetch public courses" });
+  }
+};
+
+export const getInstructorUniqueStudentCount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await Course.aggregate([
+      {
+        $match: {
+          instructor: new mongoose.Types.ObjectId(id)
+        }
+      },
+      {
+        $unwind: "$students"
+      },
+      {
+        $group: {
+          _id: "$students" // dedupe students across courses
+        }
+      },
+      {
+        $count: "totalStudents"
+      }
+    ]);
+
+    res.status(200).json({
+      totalStudents: result[0]?.totalStudents || 0
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to count students" });
+  }
+};
+
+export const getInstructorUniqueStudents = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const students = await Course.aggregate([
+      { $match: { instructor: new mongoose.Types.ObjectId(id) } },
+      { $unwind: "$students" },
+      {
+        $group: {
+          _id: "$students"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "student"
+        }
+      },
+      { $unwind: "$student" },
+      {
+        $project: {
+          _id: 0,
+          studentId: "$student._id",
+          firstName: "$student.firstName",
+          lastName: "$student.lastName",
+          username: "$student.username"
+        }
+      }
+    ]);
+
+    res.status(200).json(students);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to fetch students" });
+  }
+};
+
+export const getInstructorLeaderboard = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const instructorId = new mongoose.Types.ObjectId(id);
+
+    const leaderboard = await User.aggregate([
+      // only students
+      { $match: { role: "student" } },
+
+      // explode enrolled courses (SOURCE OF TRUTH)
+      { $unwind: "$enrolledCourses" },
+
+      // join course
+      {
+        $lookup: {
+          from: "courses",
+          localField: "enrolledCourses",
+          foreignField: "_id",
+          as: "course"
+        }
+      },
+      { $unwind: "$course" },
+
+      // keep only this instructor’s courses
+      {
+        $match: {
+          "course.instructor": instructorId
+        }
+      },
+
+      // LEFT JOIN courseProgress for that course
+      {
+        $lookup: {
+          from: "users",
+          let: { userId: "$_id", courseId: "$course._id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$_id", "$$userId"] } } },
+            { $unwind: { path: "$courseProgress", preserveNullAndEmptyArrays: true } },
+            {
+              $match: {
+                $expr: {
+                  $eq: ["$courseProgress.course", "$$courseId"]
+                }
+              }
+            },
+            {
+              $project: {
+                points: "$courseProgress.points",
+                completedActivities: "$courseProgress.completedActivities"
+              }
+            }
+          ],
+          as: "progress"
+        }
+      },
+
+      // normalize missing progress
+      {
+        $addFields: {
+          points: { $ifNull: [{ $first: "$progress.points" }, 0] },
+          completedActivitiesCount: {
+            $size: {
+              $ifNull: [{ $first: "$progress.completedActivities" }, []]
+            }
+          }
+        }
+      },
+
+      // aggregate per student
+      {
+        $group: {
+          _id: "$_id",
+          firstName: { $first: "$firstName" },
+          lastName: { $first: "$lastName" },
+          totalPoints: { $sum: "$points" },
+          completedActivities: { $sum: "$completedActivitiesCount" },
+          coursesJoined: { $addToSet: "$course._id" }
+        }
+      },
+
+      {
+        $addFields: {
+          coursesJoined: { $size: "$coursesJoined" }
+        }
+      },
+
+      // ranking
+      {
+        $sort: {
+          totalPoints: -1,
+          completedActivities: -1
+        }
+      }
+    ]);
+
+    res.status(200).json(leaderboard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load leaderboard" });
+  }
+};
+export const getStudentGlobalLeaderboard = async (req, res) => {
+  try {
+    const leaderboard = await User.aggregate([
+      // only students
+      { $match: { role: "student" } },
+
+      // explode courseProgress but keep lazy students
+      {
+        $unwind: {
+          path: "$courseProgress",
+          preserveNullAndEmptyArrays: true
+        }
+      },
+
+      // aggregate per student
+      {
+        $group: {
+          _id: "$_id",
+          firstName: { $first: "$firstName" },
+          lastName: { $first: "$lastName" },
+
+          totalPoints: {
+            $sum: { $ifNull: ["$courseProgress.points", 0] }
+          },
+
+          completedActivities: {
+            $sum: {
+              $size: {
+                $ifNull: ["$courseProgress.completedActivities", []]
+              }
+            }
+          },
+
+          coursesJoined: {
+            $first: { $size: { $ifNull: ["$enrolledCourses", []] } }
+          }
+        }
+      },
+
+      // ranking logic
+      {
+        $sort: {
+          totalPoints: -1,
+          completedActivities: -1,
+          coursesJoined: -1
+        }
+      }
+    ]);
+
+    res.status(200).json(leaderboard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to load student leaderboard" });
+  }
+};
+
+
+
+
+

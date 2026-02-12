@@ -7,48 +7,52 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  <title>Joined Courses — Student — CodeCampus</title>
+  <title>Public Courses — CodeCampus</title>
+
   <link rel="stylesheet" href="../src/css/home.css">
   <link rel="stylesheet" href="../src/css/home-student.css">
-  <link rel="stylesheet" href="../src/css/joined-courses-student.css">
+  <link rel="stylesheet" href="../src/css/public-courses.css">
 </head>
+
 <body>
   <div class="background-image" aria-hidden="true"></div>
 
   <!-- HEADER -->
-  <header class="topbar" role="banner">
+  <header class="topbar">
     <div class="topbar-left">
-      <a href="./home-student.html" class="logo-link" aria-label="Home">
-        <img id="site-logo" src="../src/images/site-logo.png" alt="logo">
+      <a href="./home-student.html" class="logo-link">
+        <img src="../src/images/site-logo.png" alt="logo">
       </a>
+
       <div class="search">
-        <input id="search" placeholder="Search…" aria-label="Search courses">
+        <input id="searchPublicCourses" placeholder="Search public courses…" />
       </div>
     </div>
 
     <div class="topbar-right">
-      <button class="icon-btn" id="notifications" title="Notifications">🔔</button>
-      <button class="icon-btn" id="messages" title="Messages">💬</button>
+      <button class="icon-btn">🔔</button>
+      <button class="icon-btn">💬</button>
 
       <div class="profile">
         <div class="avatar avatar-sm"></div>
         <div class="profile-info">
-          <div id="fullNameTop" class="profile-name"></div>
-          <div id="roleTop" class="profile-role">student</div>
+          <div class="profile-name" id="fullNameTop"></div>
+          <div class="profile-role" id="roleTop"></div>
         </div>
       </div>
     </div>
   </header>
 
   <!-- LAYOUT -->
-  <div class="layout" role="main">
+  <div class="layout">
+
     <!-- SIDEBAR -->
     <div class="left-column">
       <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
         <ul class="nav-list">
           <li class="nav-item" onclick="location.href='./home-student.html'">Home</li>
-          <li class="nav-item active" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
-          <li class="nav-item" onclick="location.href='./public-courses.html'">Public Courses</li>
+          <li class="nav-item" onclick="location.href='./joined-courses-student.html'">Joined Courses</li>
+          <li class="nav-item active" onclick="location.href='./public-courses.html'">Public Courses</li>
           <li class="nav-item">Challenges</li>
           <li class="nav-item" onclick="location.href='./leaderboard-student.html'">Leaderboard</li>
           <li class="nav-item">Community</li>
@@ -77,72 +81,51 @@
       </div>
     </div>
 
-    
-
     <!-- CONTENT -->
     <main class="content-area">
-      <section class="card welcome" aria-labelledby="joined-courses-heading">
-        <h2 id="joined-courses-heading">Joined Courses</h2>
-        <p class="muted">Access the courses you’ve enrolled in and continue your learning journey.</p>
-        <div class="quick-actions">
-          <button id="primaryAction" class="primary">Join Course</button>
-        </div>
+
+      <!-- HEADER CARD -->
+      <section class="card welcome">
+        <h2>Public Courses</h2>
+        <p class="muted">
+          Explore available courses. View details or enroll when ready.
+        </p>
       </section>
 
-      <!-- JOINED COURSES GRID -->
-      <section class="card" aria-label="Joined courses list">
-        <h1>My Enrolled Courses</h1>
-        <div id="emptyJoinedCourses"></div>
+      <!-- PUBLIC COURSES GRID -->
+      <section class="card">
+        <h1>Available Courses</h1>
 
-        <!-- Container for all joined courses -->
-        <div id="joinedCoursesContainer" class="courses-grid"></div>
 
-        <!-- Hidden template card -->
-        <template id="joinedCourseCardTemplate">
-          <div class="course-card">
-            <img class="thumbnail" src="../src/assets/default-course-thumbnail.jpg" alt="Course Thumbnail">
+
+        <div id="publicCoursesContainer" class="courses-grid"></div>
+
+        <!-- TEMPLATE -->
+        <template id="publicCourseCardTemplate">
+          <div class="course-card public-course-card">
+            <img class="thumbnail" src="../src/assets/default-course-thumbnail.jpg" alt="Course thumbnail">
+
             <div class="card-content">
               <h3 class="title"></h3>
               <h5 class="instructorName"></h5>
               <p class="category"></p>
               <p class="description"></p>
-              <p class="progress"></p>
             </div>
+
             <div class="btn-group">
-              <button class="view" id="view-btn">View</button>
+              <button class="ghost view-course">View</button>
+              <button class="primary enroll-course">Enroll</button>
             </div>
           </div>
         </template>
 
       </section>
+
     </main>
   </div>
 
-  <!-- JOIN COURSE MODAL -->
-  <div id="joinCourseModal" class="modal-overlay">
-    <div class="modal-content">
-      <h2>Join a Course</h2>
-      <p class="muted">Enter the course code provided by your instructor.</p>
-
-      <input 
-        type="text" 
-        id="joinCodeInput" 
-        placeholder="Enter course code" 
-        class="modal-input"
-      >
-
-      <div class="modal-actions">
-        <button id="submitJoinCode" class="primary">Join</button>
-        <button id="closeModal" class="ghost">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="../src/js/home.js"></script>
   <script src="../src/js/header-fetch.js"></script>
-  <script type="module" src="../src/js/join-course.js"></script>
-  <script type="module" src="../src/js/joined-courses-student.js"></script>
-  <script type="module" src="../src/js/joined-courses-page.js"></script>
-
+  <script type="module" src="../src/js/public-courses.js"></script>
+  <script type="module" src="../src/js/home.js"></script>
 </body>
 </html>

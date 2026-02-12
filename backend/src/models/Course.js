@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   subTitle: { type: String, required: true },
+  accessibility: { type: String, enum: ['public', 'private'], default: 'private' },
   category: { type: String, required: true },
   description: { type: String, required: true },
   thumbnail: { type: String}, // stores image URL or path

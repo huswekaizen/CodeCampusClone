@@ -8,6 +8,8 @@
   <meta http-equiv="Expires" content="0" />
   <title>Home — Instructor — CodeCampus</title>
   <link rel="stylesheet" href="../src/css/home.css" />
+  <link rel="stylesheet" href="../src/css/courses-view-student-leaderboard.css" />
+
 </head>
 <body>
   <div class="background-image" aria-hidden="true"></div>
@@ -37,10 +39,10 @@
   <div class="layout" role="main">
     <nav class="sidebar" id="sidebar" aria-label="Primary navigation">
       <ul class="nav-list">
-        <li class="nav-item active">Dashboard</li>
+        <li class="nav-item active">Home</li>
         <li class="nav-item" onclick="location.href='./courses-instructor.html'">Courses</li>
         <li class="nav-item">Challenges</li>
-        <li class="nav-item">Leaderboard</li>
+        <li class="nav-item" onclick="location.href='./leaderboard-instructor.html'">Leaderboard</li>
         <li class="nav-item">Community</li>
         <li class="nav-item">Settings</li>
         <a id="logout"><li class="nav-item">Logout</li></a>
@@ -51,8 +53,8 @@
     <main class="content-area">
       <!-- Welcome / Summary -->
       <section class="card welcome" aria-labelledby="welcome-heading">
-        <h2 id="welcome-heading">Welcome, Instructor</h2>
-        <p class="muted">This is your instructor dashboard. Create and manage your courses.</p>
+        <h2 id="welcome-heading">Welcome, <span><span id="instructorName"></span></span></h2>
+        <p class="muted">Create and manage your courses.</p>
         <div class="quick-actions">
           <!-- Instructor primary action: Create Course -->
           <button id="primaryAction" class="primary" onclick="location.href='./create-course.html'">Create Course</button>
@@ -69,19 +71,10 @@
         </div>
         <div class="stat card">
           <div class="stat-title">Students</div>
-          <div class="stat-value" data-value><span>0</span></div>
+          <div class="stat-value" data-value><span id="enrolledStudentsCount"></span></div>
           <div class="stat-sub muted">Enrolled</div>
         </div>
-        <div class="stat card">
-          <div class="stat-title">Earnings</div>
-          <div class="stat-value" data-value><span>$0</span></div>
-          <div class="stat-sub muted">This period</div>
-        </div>
-        <div class="stat card">
-          <div class="stat-title">Feedback</div>
-          <div class="stat-value" data-value>0</div>
-          <div class="stat-sub muted">Avg rating</div>
-        </div>
+        
       </section>
 
       <!-- Panels: empty containers for you to populate -->
@@ -108,8 +101,22 @@
             <div class="card-header">
               <h3 id="leaderboard-heading">Leaderboard</h3>
             </div>
-            <ol class="leader-list"></ol>
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Student</th>
+            
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+                <!-- JS injects rows -->
+              </tbody>
+            </table>
           </div>
+
+
+
           <div class="card profile-card" aria-labelledby="profile-heading">
             <h3 id="profile-heading">Profile</h3>
             <div class="profile-large">
@@ -120,7 +127,7 @@
               </div>
             </div>
             <div class="profile-meta">
-              <div><strong>Courses:</strong> <span data-value>0</span></div>
+              <div><strong>Courses:</strong> <span data-value id="publishedCourseCountProfile"></span></div>
               <div><strong>Students:</strong> <span data-value>0</span></div>
             </div>
           </div>
@@ -129,6 +136,8 @@
     </main>
   </div>
 
-  <script src="../src/js/home.js"></script>
+  <script type="module" src="../src/js/home.js"></script>
+  <script type="module" src="../src/js/header-fetch.js"></script>
+  <script type="module" src="../src/js/home-instructors.js"></script>
 </body>
 </html>

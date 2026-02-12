@@ -17,6 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Step Validation =====
   function validateStepAndGo(nextStep) {
     const currentStep = document.querySelector(".step-panel:not(.hidden)");
+
+    // Step 2 (Activities) is optional, so skip validation if on step 2
+    if (currentStep.id === "step-2-panel") {
+      goToStep(nextStep);
+      return;
+    }
+
     const inputs = currentStep.querySelectorAll("input, textarea, select");
     const areAllFilled = Array.from(inputs).every(input => input.value.trim() !== "");
 
@@ -24,8 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Fill in all fields before creating the course, genius.");
       return;
     }
+
     goToStep(nextStep);
   }
+
 
   document.getElementById("nextToActivities")?.addEventListener("click", () => validateStepAndGo(2));
   document.getElementById("nextToAssessment")?.addEventListener("click", () => validateStepAndGo(3));
@@ -84,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("previewTitleValue").textContent = document.getElementById("title").value;
     document.getElementById("previewSubtitleValue").textContent = document.getElementById("subTitle").value;
     document.getElementById("previewCategoryValue").textContent = document.getElementById("category").value;
+    document.getElementById("previewAccessibilityValue").textContent = document.getElementById("accessibility").value;
     document.getElementById("previewDescriptionValue").textContent = document.getElementById("description").value;
     document.getElementById("previewExampleValue").textContent = document.getElementById("example").value;
 
@@ -97,90 +107,149 @@ document.addEventListener("DOMContentLoaded", () => {
     previewList.innerHTML = "";
 
     allActivities.forEach((act, i) => {
-      const title = act.querySelector(".activity-title")?.value || "(Untitled)";
-      const difficulty = act.querySelector(".activity-difficulty")?.value || "(No difficulty)";
-      const desc = act.querySelector(".activity-description")?.value || "(No description)";
-      const functionName = act.querySelector(".activity-function")?.value || "(No function)";
-      const tests = act.querySelector(".activity-tests")?.value || "[]";
+        const title = act.querySelector(".activity-title")?.value.trim();
+        const difficulty = act.querySelector(".activity-difficulty")?.value || "(No difficulty)";
+        const desc = act.querySelector(".activity-description")?.value || "(No description)";
+        const points = act.querySelector(".activity-points")?.value || 1;
+        const sampleRaw = act.querySelector(".activity-sample-tests")?.value || "";
+        const validationRaw = act.querySelector(".activity-validation-tests")?.value || "";
 
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <strong>${i + 1}. ${title}</strong> (${difficulty})
-        <p>${desc}</p>
-        <code>Function: ${functionName}</code>
-        <pre>${tests}</pre>
-      `;
-      previewList.appendChild(li);
+        if (!title) {
+          alert(`Proceed without Activity? Because Activity #${i + 1} is missing a title`);
+          return; // Skip entirely if no title and no other fields touched
+        }
+        // Parse both sample and validation tests
+        let sampleTests = [], validationTests = [];
+
+        // Convert newlines into array objects
+        if (sampleRaw.trim()) {
+          sampleTests = sampleRaw.split("\n").map(line => {
+            try { return JSON.parse(line); } catch { return line.trim(); }
+          }).filter(Boolean);
+        }
+
+        if (validationRaw.trim()) {
+          validationTests = validationRaw.split("\n").map(line => {
+            try { return JSON.parse(line); } catch { return line.trim(); }
+          }).filter(Boolean);
+        }
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${i + 1}. ${title || "(Untitled)"}</strong> (${difficulty}) - Points: ${points}
+          <p>${desc}</p>
+          <pre class="view-tests">
+      Sample Tests: ${JSON.stringify(sampleTests, null, 2)}
+      Validation Tests: ${JSON.stringify(validationTests, null, 2)}
+          </pre>
+        `;
+        previewList.appendChild(li);
     });
+
   });
 
   // ===== Create Course & Activities =====
-  document.getElementById("createCourseBtn")?.addEventListener("click", async () => {
+  const form = document.getElementById("courseWizard");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
     try {
-      // Course form data
-      const formData = new FormData();
-      formData.append("title", document.getElementById("title").value);
-      formData.append("subTitle", document.getElementById("subTitle").value);
-      formData.append("category", document.getElementById("category").value);
-      formData.append("description", document.getElementById("description").value);
-      formData.append("example", document.getElementById("example").value);
-      formData.append("instructorId", userId);
+      // ===== Course Data =====
+      const courseData = {
+        title: document.getElementById("title").value.trim(),
+        subTitle: document.getElementById("subTitle").value.trim(),
+        category: document.getElementById("category").value.trim(),
+        accessibility: document.getElementById("accessibility").value,
+        description: document.getElementById("description").value.trim(),
+        example: document.getElementById("example").value.trim(),
+        instructorId: userId
+      };
 
-      if (fileInput?.files[0]) formData.append("thumbnail", fileInput.files[0]);
+      const file = fileInput?.files[0];
+      let res;
 
-      // Create course
-      const courseRes = await fetch("http://localhost:5000/api/courses", { method: "POST", body: formData });
-      if (!courseRes.ok) {
-        const errText = await courseRes.text();
+      // ===== Activities Data =====
+      const allActivities = document.querySelectorAll("#activitiesList .activity");
+      const activitiesData = [];
+
+      allActivities.forEach((act, i) => {
+        const title = act.querySelector(".activity-title")?.value.trim();
+
+        // If no title, treat as non-existent activity
+        if (!title) return;
+
+        const difficulty = act.querySelector(".activity-difficulty")?.value;
+        const description = act.querySelector(".activity-description")?.value.trim();
+        const points = Number(act.querySelector(".activity-points")?.value);
+        const sampleRaw = act.querySelector(".activity-sample-tests")?.value.trim();
+        const validationRaw = act.querySelector(".activity-validation-tests")?.value.trim();
+
+        if (!difficulty || !description || !points) {
+          throw new Error(`Activity #${i + 1} is incomplete. Fill all fields.`);
+        }
+
+        let sampleTests = [], validationTests = [];
+        try {
+          sampleTests = sampleRaw ? JSON.parse(sampleRaw) : [];
+          validationTests = validationRaw ? JSON.parse(validationRaw) : [];
+        } catch {
+          throw new Error(`Activity #${i + 1} has invalid JSON`);
+        }
+
+        activitiesData.push({
+          title,
+          difficulty,
+          description,
+          points,
+          sampleTests,
+          validationTests
+        });
+      });
+
+
+      // ===== Send Request =====
+      if (file) {
+        const formData = new FormData();
+
+        formData.append("course", JSON.stringify(courseData));
+
+        if (activitiesData.length) {
+          formData.append("activities", JSON.stringify(activitiesData));
+        }
+
+        formData.append("thumbnail", file);
+
+        res = await fetch("http://localhost:5000/api/courses/with-activities", {
+          method: "POST",
+          body: formData
+        });
+      } else {
+        // JSON payload
+        const payload = { course: courseData };
+        if (activitiesData.length) payload.activities = activitiesData;
+
+        res = await fetch("http://localhost:5000/api/courses/with-activities", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      if (!res.ok) {
+        const errText = await res.text();
         throw new Error(errText);
       }
 
-      const course = await courseRes.json();
-
-      // Create activities
-      const allActivities = document.querySelectorAll("#activitiesList .activity");
-      for (const act of allActivities) {
-        const testsRaw = act.querySelector(".activity-tests")?.value || "[]";
-        let testCases;
-        try {
-          testCases = JSON.parse(testsRaw);
-        } catch {
-          alert("Invalid test cases JSON. Fix it.");
-          return;
-        }
-
-        const activityData = {
-          title: act.querySelector(".activity-title")?.value || "Untitled",
-          difficulty: act.querySelector(".activity-difficulty")?.value,
-          description: act.querySelector(".activity-description")?.value || "",
-          functionName: act.querySelector(".activity-function")?.value,
-          testCases,
-          courseId: course._id
-        };
-
-        if (!activityData.functionName) {
-          alert("Function name is required.");
-          return;
-        }
-
-        const activityRes = await fetch("http://localhost:5000/api/activities", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(activityData)
-        });
-        if (!activityRes.ok) {
-          const errText = await activityRes.text();
-          throw new Error(errText);
-        }
-
-      }
-
+      const createdCourse = await res.json();
       localStorage.setItem("courseCreatedSuccess", "true");
       window.location.href = "./courses-instructor.html";
 
     } catch (err) {
-      alert("Something went wrong: " + err.message);
+      alert("Error creating course: " + err.message);
       console.error(err);
     }
   });
+
+
 });

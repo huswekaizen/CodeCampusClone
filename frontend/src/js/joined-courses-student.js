@@ -47,6 +47,7 @@ export async function loadJoinedCourses() {
       // buttons
       const viewBtn = clone.querySelector(".view");
       viewBtn.addEventListener("click", () => {
+        localStorage.setItem("courseViewMode", "private");
         localStorage.setItem("selectedCourseId", course._id);
         window.location.href = "./courses-view-student-overview.html";
       });

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Course View — Leaderboard</title>
+  <link rel="stylesheet" href="../src/css/courses-view-student-overview.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-activities.css">
+  <link rel="stylesheet" href="../src/css/courses-view-student-leaderboard.css">
+</head>
+
+<body data-page="leaderboard">
+  <main class="layout">
+
+    <!-- TAB HEADER -->
+    <header class="course-header">
+        <nav class="course-nav">
+            <a href="courses-view-student-overview.html"
+            class="nav-item" data-page="overview">Overview</a>
+
+            <a href="courses-view-student-activities.html"
+            class="nav-item" data-page="activities">Activities</a>
+
+            <a href="courses-view-student-leaderboard.html"
+            class="nav-item" data-page="leaderboard">Leaderboard</a>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+     <section class="leaderboard-container">
+      <header class="leaderboard-header">
+        <h1>Course Leaderboard</h1>
+        <p>Ranking based on total points</p>
+      </header>
+
+      <div class="leaderboard-table-wrapper">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Student</th>
+              <th>Points</th>
+              <th>Progress</th>
+            </tr>
+          </thead>
+
+          <tbody id="leaderboard-body">
+            <!-- 
+              JS will inject rows here
+              Example structure per row:
+
+              <tr>
+                <td>#</td>
+                <td>Student Name</td>
+                <td>Points</td>
+                <td>Progress Bar</td>
+              </tr>
+            -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Optional empty state -->
+      <div class="leaderboard-empty hidden" id="leaderboard-empty">
+        No students enrolled yet.
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="../src/js/courses-view-student.js"></script>
+  <script src="../src/js/courses-view-student-leaderboard.js"></script>
+  
+</body>
+</html>

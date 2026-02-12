@@ -87,41 +87,149 @@ const editor = new EditorView({
 
 const output = document.getElementById("output");
 
-document.getElementById("runBtn").addEventListener("click", () => {
-  output.textContent = "";
+// 1️⃣ Fetch activity from backend
+let sampleTests = [];
+let validationTests = [];
 
-  const code = editor.state.doc.toString();
+let activityDefaultCode = "";
 
+async function loadActivity(activityId) {
   try {
-    const userFn = new Function(`
-      ${code}
-      return typeof ${activityFunctionName} === "function" ? ${activityFunctionName} : null;
-    `)();
+    const res = await fetch(`http://localhost:5000/api/activities/${activityId}`);
+    const data = await res.json();
 
-    if (!userFn) {
-      output.textContent = `❌ Function "${activityFunctionName}" is not defined.`;
-      return;
-    }
-
-    let passed = 0;
-
-    activityTestCases.forEach((test, index) => {
-      const result = userFn(...test.input);
-      const expected = test.expected;
-
-      if (JSON.stringify(result) === JSON.stringify(expected)) {
-        passed++;
-        output.textContent += `✅ Test ${index + 1} passed\n`;
-      } else {
-        output.textContent += `❌ Test ${index + 1} failed\n`;
-        output.textContent += `Expected: ${expected}, Got: ${result}\n`;
-      }
-    });
-
-    output.textContent += `\n${passed}/${activityTestCases.length} tests passed.`;
+    sampleTests = data.sampleTests || [];
+    validationTests = data.validationTests || [];
 
   } catch (err) {
-    output.textContent = "❌ Runtime error: " + err.message;
+    output.textContent = "❌ Failed to load activity: " + err.message;
+  }
+}
+
+// Load your activity on page load
+loadActivity(localStorage.getItem("selectedActivityId")); // replace with actual ID
+
+const submitBtn = document.getElementById("submitBtn");
+submitBtn.disabled = true; // Disable submit button initially
+
+const instructionBtn = document.querySelector(".instruction-btn");
+const outputBtn = document.querySelector(".output-btn");
+
+const instructionPanel = document.getElementById("instruction");
+const outputPanel = document.getElementById("output");
+
+// 2️⃣ Run button logic
+document.getElementById("runBtn").addEventListener("click", () => {
+
+  outputBtn.classList.add("active");
+  instructionBtn.classList.remove("active");
+
+  outputPanel.classList.add("active");
+  instructionPanel.classList.remove("active");
+
+  const output = document.getElementById("output");
+  output.innerHTML = "";
+
+  const code = editor.state.doc.toString();
+  window.output = output;
+
+  try {
+    const wrapper = new Function(`
+      const console = {
+        log: (...args) => window.output.textContent += args.join(" ") + "\\n"
+      };
+      ${code}
+      if (typeof solution !== "function") {
+        throw new Error("You must define a function named solution");
+      }
+      return solution;
+    `);
+
+    const userFn = wrapper();
+
+    let allPassed = true;
+    let firstFailure = null;
+
+    // === RUN TESTS ===
+    for (let i = 0; i < sampleTests.length; i++) {
+      const test = sampleTests[i];
+      let result;
+
+      try {
+        result = userFn(...test.input);
+      } catch (err) {
+        allPassed = false;
+        firstFailure = {
+          index: i,
+          error: err.message
+        };
+        break;
+      }
+
+      if (JSON.stringify(result) !== JSON.stringify(test.expected)) {
+        allPassed = false;
+        firstFailure = {
+          index: i,
+          expected: test.expected,
+          got: result
+        };
+        break;
+      }
+    }
+
+    // === RENDER UI ===
+    if (allPassed) {
+      sampleTests.forEach((_, index) => {
+        const testDiv = document.createElement("div");
+        testDiv.classList.add("test-case");
+        testDiv.innerHTML =
+          `<div class="test-header pass">✅ Test ${index + 1} passed</div>`;
+        submitBtn.disabled = false; // Enable submit button if all tests pass
+        submitBtn.style.backgroundColor = "#56ff67ca";
+        output.style.border = ".5px solid green";
+        output.style.borderRadius = "10px";
+        output.appendChild(testDiv);
+      });
+
+      const summaryDiv = document.createElement("div");
+      summaryDiv.classList.add("test-summary", "pass");
+      summaryDiv.textContent = "🎉 All tests passed. Kata completed.";
+      output.appendChild(summaryDiv);
+
+    } else {
+      const failDiv = document.createElement("div");
+      failDiv.classList.add("test-case");
+
+      if (firstFailure.error) {
+        failDiv.innerHTML = `
+          <div class="test-header fail">
+            ❌ Test ${firstFailure.index + 1} error
+          </div>
+          <div class="test-box">
+            <span class="content">${firstFailure.error}</span>
+          </div>
+        `;
+      } else {
+        failDiv.innerHTML =
+          `<div class="test-header fail">❌ Test ${firstFailure.index + 1} failed</div>` +
+          `<div class="test-box"><span class="label">Expected:</span><span class="content">${firstFailure.expected}</span></div>` +
+          `<div class="test-box"><span class="label">Got:</span><span class="content">${firstFailure.got}</span></div>`;
+        output.style.border = ".5px solid rgb(169, 72, 72)";
+        output.style.borderRadius = "10px";
+        submitBtn.disabled = true; // Keep submit button disabled if tests fail
+      }
+
+      output.appendChild(failDiv);
+
+      const summaryDiv = document.createElement("div");
+      summaryDiv.classList.add("test-summary", "fail");
+      summaryDiv.textContent = "❌ Tests failed. Kata not completed.";
+      output.appendChild(summaryDiv);
+    }
+
+  } catch (err) {
+    output.textContent += "\n❌ Runtime error: " + err.message + "\n";
+    output.style.border = ".5px solid rgb(169, 72, 72)";
+    output.style.borderRadius = "10px";
   }
 });
-

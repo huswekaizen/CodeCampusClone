@@ -1,0 +1,300 @@
+/* === ACTIVITY FORM TEMPLATE (MATCHES EDIT MODE) === */
+.activity-form {
+  background: #0f1529;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 12px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title Input */
+.activity-title-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 15px;
+}
+.activity-title-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Description */
+.activity-desc-input {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+  resize: vertical;
+}
+.activity-desc-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Type Dropdown */
+.activity-difficulty-input, .edit-difficulty {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+}
+.activity-difficulty-input:focus, .edit-difficulty:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+/* Save + Remove Buttons */
+.activity-form button {
+  align-self: flex-end;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.activity-form button:hover {
+  background: var(--accent-hover);
+}
+
+/* Remove button specifically */
+.activity-form button.remove-activity {
+  background: #ff4b5c;
+}
+.activity-form button.remove-activity:hover {
+  background: #ff6b78;
+}
+
+.edit-activity {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.edit-activity:hover {
+  background: var(--accent-hover);
+
+}
+
+.save-activity {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.save-activity:hover {
+  background: var(--accent-hover);
+}
+
+.cancel-edit {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: var(--transition);
+}
+
+.cancel-edit:hover {
+  color: #ff6b6b;
+  border-color: #ff6b6b;
+}
+
+
+/* ============================
+   ACTIVITY VIEW (VIEW MODE)
+   ============================ */
+
+.preview-activities-list li .view-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Title */
+.view-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent-hover);
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Description */
+.view-desc {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  background: #0f1529;
+  border: 1px solid var(--border);
+  padding: 12px 14px;
+  border-radius: var(--radius);
+}
+  
+/* Output Example */
+.view-output-example {
+  background: #10182e;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Type label */
+.view-type {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: rgba(58, 141, 255, 0.1);
+  color: var(--accent-hover);
+  width: fit-content;
+  border-radius: 8px;
+  margin-top: 4px;
+}
+
+/* Header inside each activity */
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+/* Delete button */
+.delete-activity {
+  background: #ff4b5c;
+  border: none;
+  color: white;
+  padding: 5px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: 0.2s ease;
+}
+
+.delete-activity:hover {
+  background: #ff6b78;
+}
+input.activity-input,
+textarea.activity-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.activity-form input.activity-input:focus,
+.activity-form textarea.activity-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+.activity-tests-input {
+  min-height: 120px;
+  resize: vertical;
+}
+.view-function,
+.view-tests {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: #10182e;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 13px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+code.activity-input,
+pre.activity-input {
+  display: block;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+
+.view-desc,
+.view-function,
+.view-tests {
+  margin-bottom: 12px;
+}
+
+.view-difficulty,
+.view-type {
+  margin-top: 6px;
+}
+
+/* === EDIT MODE SPACING + INPUT STYLES === */
+.edit-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-mode input,
+.edit-mode textarea,
+.edit-mode select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  background: #1a2238;
+  border: 1px solid #2c3550;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.edit-mode textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.edit-mode input:focus,
+.edit-mode textarea:focus,
+.edit-mode select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(58, 141, 255, 0.25);
+}
+
+

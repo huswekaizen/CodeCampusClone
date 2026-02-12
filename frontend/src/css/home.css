@@ -411,6 +411,7 @@ body{
   transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
+
 .modal-input:focus {
   border-color: #00bfff;
   box-shadow: 0 0 10px rgba(0, 191, 255, 0.4);

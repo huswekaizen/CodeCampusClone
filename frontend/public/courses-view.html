@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>View Course — Instructor — CodeCampus</title>
   <link rel="stylesheet" href="../src/css/courses-view.css">
+  <link rel="stylesheet" href="../src/css/courses-view-activities.css">
 </head>
 <body>
   <main class="layout">
@@ -20,7 +21,11 @@
 
       <!-- Course Details -->
       <section class="preview-section">
-        <h3>Course Details</h3>
+        <div class="preview-section-header">
+          <h3>Course Details</h3>
+          <button class="primary" id="editBtn">Edit Course</button>
+        </div>
+
 
         <div class="preview-field">
           <strong>SubTitle</strong>
@@ -55,7 +60,9 @@
       <section class="preview-section">
         <div class="activities-header">
           <h3>Activities</h3>
-          <button id="addActivityBtn" class="addActivityBtn">+</button>
+          <div>
+            <button id="addActivityBtn" class="addActivityBtn">+</button>
+          </div>
         </div>
         <ul class="preview-activities-list" id="activities-list"></ul>
       </section>
@@ -65,8 +72,27 @@
         <li class="activity-form">
           <div class="edit-mode">
             <input class="activity-title-input" placeholder="Activity Title">
+
+            <input 
+              type="number" 
+              class="activity-points-input" 
+              placeholder="Points (1-100)" 
+              min="1" 
+              max="100"
+            >
+
             <textarea class="activity-desc-input" placeholder="Description"></textarea>
-            <textarea class="edit-output-example" placeholder="Output / Example"></textarea>
+
+            <textarea
+              class="activity-sample-tests-input"
+              placeholder='Sample Tests JSON (e.g. [{"input":[1,2],"expected":3}])'
+            ></textarea>
+
+            <textarea
+              class="activity-validation-tests-input"
+              placeholder='Validation Tests JSON (e.g. [{"input":[2,3],"expected":5}])'
+            ></textarea>
+
             <select class="activity-difficulty-input">
               <option value="Easy">Easy</option>
               <option value="Medium">Medium</option>
@@ -74,19 +100,17 @@
             </select>
 
             <div class="activity-buttons">
-              <button class="save-activity">Save</button>
+              <button class="create-activity">Create</button>
               <button class="remove-activity">Remove</button>
             </div>
-
           </div>
         </li>
       </template>
 
-
       <!-- Buttons -->
       <div class="wizard-actions">
         <button class="ghost" id="backBtn">← Back</button>
-        <button class="primary" id="editBtn">Edit Course</button>
+        
       </div>
     </div>
   </main>

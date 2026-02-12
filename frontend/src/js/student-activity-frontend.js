@@ -1,0 +1,58 @@
+const activityId = localStorage.getItem("selectedActivityId");
+const activityTitle = document.getElementById("activity-title");
+const activityDescription = document.getElementById("activity-description");
+const activityDifficulty = document.getElementById("activity-difficulty");
+const activityPoints = document.getElementById("activity-points");
+const activityOutputExample = document.getElementById("activity-output-example");
+
+const instruction = document.getElementById("instruction");
+const output = document.getElementById("output");
+
+document.addEventListener("DOMContentLoaded", async () => {
+// get the activity id from the course-view-student-activities.js localStorage first
+
+   try {
+        const res = await fetch (`http://localhost:5000/api/activities/${localStorage.getItem("selectedActivityId")}`);
+        const activities = await res.json();
+
+        activityTitle.textContent = activities.title || "N/A";
+        activityDifficulty.textContent = activities.difficulty || "N/A";
+        activityPoints.textContent = ` ${activities.points || "N/A"} pts`;
+        instruction.textContent = activities.description || "N/A";
+        
+
+   } catch (err) {
+     console.error(err);    
+   }
+});
+
+document.getElementById("backBtn")?.addEventListener("click", () => {
+  const confirmGoBack = confirm("Going back to course activities page will lose your progress. Are you sure?");
+  if (confirmGoBack) {
+    window.location.href = "courses-view-student-activities.html";
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const instructionBtn = document.querySelector(".instruction-btn");
+  const outputBtn = document.querySelector(".output-btn");
+
+  const instructionPanel = document.getElementById("instruction");
+  const outputPanel = document.getElementById("output");
+
+  instructionBtn.addEventListener("click", () => {
+    instructionBtn.classList.add("active");
+    outputBtn.classList.remove("active");
+
+    instructionPanel.classList.add("active");
+    outputPanel.classList.remove("active");
+  });
+
+  outputBtn.addEventListener("click", () => {
+    outputBtn.classList.add("active");
+    instructionBtn.classList.remove("active");
+
+    outputPanel.classList.add("active");
+    instructionPanel.classList.remove("active");
+  });
+});
